@@ -49,6 +49,20 @@
     ethtool
     pciutils  # lspci
     usbutils  # lsusb
+
+    # python development
+    python3
+    poetry
+
+    # general development
+    awscli2
+    osv-scanner
+    docker
+    vscode  
+
+    # enterprise
+    slack 
+  
   ];
 
   programs.git = {
