@@ -64,6 +64,37 @@
     slack 
   
   ];
+ 
+  programs.kitty.enable = true;  # requires for default Hyprland config
+ 
+  wayland.windowManager.hyprland = {
+    enable = true;
+    # use Hyprland from NixOS module
+
+    settings = {
+    "$mod" = "SUPER";
+    bind = 
+      [
+        "$mod, F, exec, firefox"
+        ", Print, exec, grimblast copy area"
+      ]
+      ++ (
+        # workspaces
+        # binds $mod + [shift +] {1..9} to workspaces {1..9}
+        builtins.concatLists (builtins.genList (i:
+          let ws = i + 1;
+          in [
+            "$mod, code:1${toString i}, workspace, ${toString ws}"
+            "$mod SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
+          ]
+        )
+        9)
+      );
+    };
+  };
+  # https://wiki.hypr.land/Nix/Hyprland-on-Home-Manager/
+  home.sessionVariables.NIXOS_OZONE_WL = "1";
+  wayland.windowManager.hyprland.systemd.variables = ["--all"];
 
   programs.git = {
     enable = true;
@@ -94,6 +125,7 @@
   };
 
   programs.alacritty = {
+    enable = true;
     settings = {
       env.TERM = "xterm-256color";
       selection.save_to_clipboard = true;
