@@ -56,6 +56,7 @@
 
     # general development
     awscli2
+    aws-vault
     osv-scanner
     docker
     vscode  
