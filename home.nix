@@ -51,7 +51,8 @@
     usbutils  # lsusb
 
     # python development
-    python3
+    python313
+    python313Packages.pip
     poetry
 
     # general development
@@ -63,7 +64,7 @@
 
     # enterprise
     slack 
-  
+    teams-for-linux  # boo :( 
   ];
  
   programs.kitty.enable = true;  # requires for default Hyprland config

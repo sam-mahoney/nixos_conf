@@ -108,6 +108,7 @@
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     git
+    wireguard-tools
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -125,6 +126,7 @@
     enable = true;
     settings = {
       X11Forwarding = true;
+      AllowAgentForwarding = true;
       PermitRootLogin = "no";
       PasswordAuthentication = false;  # passwords suck
     };
@@ -136,7 +138,11 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
-
+  
+  environment.shellAliases = {
+    vpn-up = "wg-quick up wg0";
+    vpn-down = "wg-quick down wg0";
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
