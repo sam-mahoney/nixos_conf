@@ -45,11 +45,22 @@
     LC_TIME = "en_GB.UTF-8";
   };
 
-  # Enable the X11 windowing system.
+  # Enable Hyprland
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+  };
+
+  # Enable the X11 windowing system
   services.xserver.enable = true;
 
-  # Enable the GNOME Desktop Environment.
-  services.displayManager.gdm.enable = true;
+  # Enable SDDM display manager
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
+  };
+
+  # Enable the GNOME Desktop Environment
   services.desktopManager.gnome.enable = true;
 
   # Configure keymap in X11
@@ -87,17 +98,26 @@
   users.users.mahoney = {
     isNormalUser = true;
     description = "mahoney";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "camera" ];
     packages = with pkgs; [
     #  thunderbird
     ];
   };
+
+  services.teamviewer.enable = true;  # remove this after IT 
 
   # Install firefox.
   programs.firefox.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  # Fonts
+  fonts.packages = with pkgs; [
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.fira-code
+    font-awesome
+  ];
 
   home-manager.backupFileExtension = "hm-backup";
 
