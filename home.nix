@@ -342,6 +342,25 @@
     '';
   };
 
+  # Enable polkit agent
+  systemd.user.services.polkit-gnome-authentication-agent-1 = {
+    Unit = {
+      Description = "polkit-gnome-authentication-agent-1";
+      Wants = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      Restart = "on-failure";
+      RestartSec = 1;
+      TimeoutStopSec = 10;
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+  };
+
   services.dunst = {
     enable = true;
     settings = {
@@ -522,23 +541,41 @@
         "$mod, F, exec, firefox"
         "$mod, B, exec, brave"
 
-        # Move focus
+        # Move focus (arrow keys)
         "$mod, left, movefocus, l"
         "$mod, right, movefocus, r"
         "$mod, up, movefocus, u"
         "$mod, down, movefocus, d"
 
-        # Move windows
+        # Move focus (vim keys)
+        "$mod, h, movefocus, l"
+        "$mod, l, movefocus, r"
+        "$mod, k, movefocus, u"
+        "$mod, j, movefocus, d"
+
+        # Move windows (arrow keys)
         "$mod SHIFT, left, movewindow, l"
         "$mod SHIFT, right, movewindow, r"
         "$mod SHIFT, up, movewindow, u"
         "$mod SHIFT, down, movewindow, d"
 
-        # Resize windows
+        # Move windows (vim keys)
+        "$mod SHIFT, h, movewindow, l"
+        "$mod SHIFT, l, movewindow, r"
+        "$mod SHIFT, k, movewindow, u"
+        "$mod SHIFT, j, movewindow, d"
+
+        # Resize windows (arrow keys)
         "$mod CTRL, left, resizeactive, -20 0"
         "$mod CTRL, right, resizeactive, 20 0"
         "$mod CTRL, up, resizeactive, 0 -20"
         "$mod CTRL, down, resizeactive, 0 20"
+
+        # Resize windows (vim keys)
+        "$mod CTRL, h, resizeactive, -20 0"
+        "$mod CTRL, l, resizeactive, 20 0"
+        "$mod CTRL, k, resizeactive, 0 -20"
+        "$mod CTRL, j, resizeactive, 0 20"
 
         # Fullscreen
         "$mod, F11, fullscreen, 0"
