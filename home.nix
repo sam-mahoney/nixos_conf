@@ -597,11 +597,12 @@
 
   programs.git = {
     enable = true;
-    userName = "Sam Mahoney";
-    userEmail = "mahoney@cmui.co.uk";  # default to personal
-
-   extraConfig = {
-     core.sshCommand = "ssh -i ~/.ssh/helios_personal_ed25519";
+    settings = {
+      user = {
+        name = "Sam Mahoney";
+        email = "mahoney@cmui.co.uk";  # default to personal
+      };
+      core.sshCommand = "ssh -i ~/.ssh/helios_personal_ed25519";
     };
   
   includes = [
