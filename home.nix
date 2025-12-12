@@ -510,12 +510,12 @@
       # Keybindings
       bind = [
         # Applications
-        "$mod, Q, exec, alacritty"
-        "$mod, C, killactive,"
+        "$mod, A, exec, alacritty"
+        "$mod, Q, killactive,"
         "$mod, M, exit,"
         "$mod, E, exec, thunar"
         "$mod, V, togglefloating,"
-        "$mod, R, exec, rofi -show drun"
+        "$mod, R, exec, rofi -show drun"  # TODO change to super + space
         "$mod, P, pseudo,"
         "$mod, J, togglesplit,"
         "$mod, F, exec, firefox"
