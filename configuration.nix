@@ -54,14 +54,23 @@
   # Enable the X11 windowing system
   services.xserver.enable = true;
 
-  # Enable SDDM display manager
-  services.displayManager.sddm = {
+  # Enable greetd display manager with tuigreet
+  services.greetd = {
     enable = true;
-    wayland.enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --remember-session --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions:${config.services.displayManager.sessionData.desktops}/share/xsessions";
+        user = "greeter";
+      };
+    };
   };
 
   # Enable the GNOME Desktop Environment
   services.desktopManager.gnome.enable = true;
+  
+  # Enable GNOME keyring for authentication
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.greetd.enableGnomeKeyring = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -129,6 +138,7 @@
     wget
     git
     wireguard-tools
+    polkit_gnome
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

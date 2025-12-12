@@ -430,6 +430,7 @@
         "dunst"
         "nm-applet --indicator"
         "swww-daemon"
+        "/run/current-system/sw/libexec/polkit-gnome-authentication-agent-1"
       ];
 
       # Environment variables
@@ -515,7 +516,7 @@
         "$mod, M, exit,"
         "$mod, E, exec, thunar"
         "$mod, V, togglefloating,"
-        "$mod, R, exec, rofi -show drun"  # TODO change to super + space
+        "$mod, R, exec, rofi -show drun"  
         "$mod, P, pseudo,"
         "$mod, J, togglesplit,"
         "$mod, F, exec, firefox"
