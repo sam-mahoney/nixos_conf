@@ -187,7 +187,7 @@
         "SHIFT, Print, exec, grimblast copy screen"  # Screenshot full screen
         
         # --- Lock Screen ---
-        "$mod, L, exec, loginctl lock-session"   # Lock screen manually
+        "$mod, ESCAPE, exec, loginctl lock-session"   # Lock screen manually
       ] ++ (
         # --- Dynamic Workspace Bindings (1-9) ---
         # Generates keybindings for workspaces 1-9
