@@ -1,185 +1,45 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, ... }:
 
+# === NixOS System Configuration ===
+# Main configuration file for the Helios system
+# This file imports modular configuration from ./modules/nixos/
+#
+# After editing, rebuild the system with:
+#   sudo nixos-rebuild switch --flake .#helios
+#
+# For more information:
+#   - NixOS Manual: https://nixos.org/manual/nixos/stable/
+#   - Configuration options: https://search.nixos.org/options
+
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
-
-  # Enable flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];  
-
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  boot.initrd.luks.devices."luks-ffeb8c8b-0b47-4b51-9d3a-d21ca17e832a".device = "/dev/disk/by-uuid/ffeb8c8b-0b47-4b51-9d3a-d21ca17e832a";
-  networking.hostName = "helios";
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
-  networking.networkmanager.enable = true;
-
-  # Set your time zone.
-  time.timeZone = "Europe/London";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_GB.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_GB.UTF-8";
-    LC_IDENTIFICATION = "en_GB.UTF-8";
-    LC_MEASUREMENT = "en_GB.UTF-8";
-    LC_MONETARY = "en_GB.UTF-8";
-    LC_NAME = "en_GB.UTF-8";
-    LC_NUMERIC = "en_GB.UTF-8";
-    LC_PAPER = "en_GB.UTF-8";
-    LC_TELEPHONE = "en_GB.UTF-8";
-    LC_TIME = "en_GB.UTF-8";
-  };
-
-  # Enable Hyprland
-  programs.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-  };
-
-  # Enable the X11 windowing system
-  services.xserver.enable = true;
-
-  # Enable greetd display manager with tuigreet
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-session --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions:${config.services.displayManager.sessionData.desktops}/share/xsessions";
-        user = "greeter";
-      };
-    };
-  };
-
-  # Enable the GNOME Desktop Environment
-  services.desktopManager.gnome.enable = true;
-  
-  # Enable GNOME keyring for authentication
-  services.gnome.gnome-keyring.enable = true;
-  security.pam.services.greetd.enableGnomeKeyring = true;
-
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "gb";
-    variant = "";
-  };
-
-  # Configure console keymap
-  console.keyMap = "uk";
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  # Enable sound with pipewire.
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.mahoney = {
-    isNormalUser = true;
-    description = "mahoney";
-    extraGroups = [ "networkmanager" "wheel" "video" "camera" ];
-    packages = with pkgs; [
-    #  thunderbird
-    ];
-  };
-
-  services.teamviewer.enable = true;  # remove this after IT 
-
-  # Install firefox.
-  programs.firefox.enable = true;
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # Fonts
-  fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
-    nerd-fonts.fira-code
-    font-awesome
+  imports = [
+    # === Hardware Configuration ===
+    # Auto-generated hardware-specific settings
+    # Contains filesystem mounts, boot settings, kernel modules
+    ./hardware-configuration.nix
+    
+    # === Modular Configuration ===
+    # System configuration split into logical modules
+    ./modules/nixos/boot.nix        # Bootloader and disk encryption
+    ./modules/nixos/networking.nix  # Network configuration
+    ./modules/nixos/locale.nix      # Timezone and language settings
+    ./modules/nixos/desktop.nix     # Desktop environment and display manager
+    ./modules/nixos/hardware.nix    # Audio, printing, and input devices
+    ./modules/nixos/users.nix       # User accounts and groups
+    ./modules/nixos/packages.nix    # System-wide packages and fonts
+    ./modules/nixos/services.nix    # System services (SSH, etc.)
   ];
 
-  home-manager.backupFileExtension = "hm-backup";
+  # === Nix Configuration ===
+  # Enable experimental features for flakes and new CLI
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  
-  environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    wget
-    git
-    wireguard-tools
-    polkit_gnome
-  ];
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  services.openssh = {
-    enable = true;
-    settings = {
-      X11Forwarding = true;
-      AllowAgentForwarding = true;
-      PermitRootLogin = "no";
-      PasswordAuthentication = false;  # passwords suck
-    };
-    openFirewall = true;
-  };
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-  
-  environment.shellAliases = {
-    vpn-up = "wg-quick up wg0";
-    vpn-down = "wg-quick down wg0";
-  };
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "25.11"; # Did you read the comment?
-
+  # === NixOS Version ===
+  # This value determines the NixOS release from which default settings
+  # for stateful data (file locations, database versions) were taken.
+  # 
+  # DO NOT CHANGE this value after installation without consulting the
+  # release notes, as it may cause compatibility issues.
+  # https://nixos.org/manual/nixos/stable/release-notes
+  system.stateVersion = "25.11";
 }
