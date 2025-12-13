@@ -26,6 +26,7 @@
         "nm-applet --indicator"  # Network manager system tray
         "swww-daemon"  # Wallpaper daemon
         "/run/current-system/sw/libexec/polkit-gnome-authentication-agent-1"  # Authentication agent
+        "hypridle"    # Idle management daemon
       ];
 
       # === Environment Variables ===
@@ -184,6 +185,9 @@
         # --- Screenshots ---
         ", Print, exec, grimblast copy area"     # Screenshot selection
         "SHIFT, Print, exec, grimblast copy screen"  # Screenshot full screen
+        
+        # --- Lock Screen ---
+        "$mod, L, exec, loginctl lock-session"   # Lock screen manually
       ] ++ (
         # --- Dynamic Workspace Bindings (1-9) ---
         # Generates keybindings for workspaces 1-9
