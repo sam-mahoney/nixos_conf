@@ -15,6 +15,9 @@
         height = 30;        # Bar height in pixels
         spacing = 4;        # Spacing between modules
         
+        # === Monitor Outputs ===
+        output = [ "DP-2" "eDP-1" ];
+        
         # === Module Placement ===
         # Left: Workspace and window information
         modules-left = ["hyprland/workspaces" "hyprland/window"];

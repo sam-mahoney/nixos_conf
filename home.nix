@@ -34,6 +34,15 @@
     ./modules/home-manager/battery-notifier.nix # Battery notifications
   ];
 
+  # === Cursor Theme ===
+  home.pointerCursor = {
+    gtk.enable = true;
+    # x11.enable = true;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Ice";
+    size = 24;
+  };
+
   # === Home Manager Version ===
   # This value determines the Home Manager release corresponding to your
   # NixOS release. It ensures compatibility between home-manager and NixOS.
