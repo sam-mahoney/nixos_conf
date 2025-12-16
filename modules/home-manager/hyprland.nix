@@ -16,7 +16,18 @@
       # Format: monitor=name,resolution@refresh,position,scale
       # "preferred" uses the monitor's preferred resolution
       # "auto" automatically positions the monitor
-      monitor = ",preferred,auto,1";
+      #
+      # To position a monitor to the left of the laptop:
+      # 1. Find monitor names with `hyprctl monitors` (e.g., eDP-1 for laptop, HDMI-A-1 for external)
+      # 2. Configure them specifically. Specific rules must come before the generic one.
+      monitor = [
+        # External Monitor (Dell U2723QE) on the left
+        "DP-2, 3840x2160@60, 0x0, 1"
+        # Laptop Monitor (Sharp) on the right
+        "eDP-1, 1920x1200@60, 3840x0, 1"
+        
+        ",preferred,auto,1"
+      ];
       
       # === Autostart Applications ===
       # Programs to launch when Hyprland starts
@@ -41,6 +52,7 @@
         kb_layout = "gb";  # British keyboard layout
         follow_mouse = 1;  # Focus follows mouse cursor
         sensitivity = 0;   # Use system pointer speed
+        natural_scroll = true;  # Natural scrolling for mouse
         
         touchpad = {
           natural_scroll = true;  # Scroll direction matches finger movement
