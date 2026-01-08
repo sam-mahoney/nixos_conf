@@ -32,6 +32,26 @@
   # TODO: Remove this after IT department setup is complete
   services.teamviewer.enable = true;
 
+  # === Docker ===
+  # Container platform for running and managing applications
+  # https://wiki.nixos.org/wiki/Docker
+  
+  virtualisation.docker = {
+    enable = true;
+    
+    # Enable rootless mode for better security (optional)
+    # rootless = {
+    #   enable = true;
+    #   setSocketVariable = true;
+    # };
+    
+    # Automatically prune old containers, images, and volumes
+    autoPrune = {
+      enable = true;
+      dates = "weekly";
+    };
+  };
+
   # === Power Management ===
   # TLP - Advanced power management for Linux laptops
   # Optimizes battery life and reduces heat/fan noise

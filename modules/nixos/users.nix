@@ -13,8 +13,7 @@
     extraGroups = [ 
       "networkmanager"  # Manage network connections without sudo
       "wheel"           # Can use sudo for administrative tasks
-      "video"           # Access video devices and modify backlight
-      "camera"          # Access camera devices
+      "docker"          # Run Docker commands without sudo
     ];
     
     # === User-Specific Packages ===
