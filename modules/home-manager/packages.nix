@@ -70,6 +70,7 @@
     osv-scanner  # Vulnerability scanner for dependencies
     docker       # Container runtime and CLI
     vscode       # Visual Studio Code editor
+    gh           # GitHub command line tool
     
     # === Enterprise Communication ===
     # Work collaboration tools
