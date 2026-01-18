@@ -6,7 +6,7 @@
   
   users.users.mahoney = {
     isNormalUser = true;  # Standard user account (not system account)
-    description = "mahoney";
+    description = "legend";
     
     # === Group Membership ===
     # Groups grant permissions and capabilities
@@ -17,11 +17,9 @@
     ];
     
     # === User-Specific Packages ===
-    # Packages installed only for this user (currently none)
-    # Prefer home-manager for user packages
     packages = with pkgs; [
-      # Example:
-      # thunderbird
+      # Packages installed only for this user (currently none)
+      # Prefer home-manager for user packages
     ];
   };
 }
