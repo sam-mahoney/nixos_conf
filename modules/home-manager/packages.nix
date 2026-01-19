@@ -80,25 +80,15 @@
     # === Hyprland Ecosystem ===
     # Wayland compositor and related tools
     waybar                  # Status bar for Wayland compositors
-    rofi                    # Application launcher with Wayland support
-    dunst                   # Lightweight notification daemon
+    ashell                  # Application launcher for Wayland
+    mako                    # Lightweight notification daemon
     libnotify               # Library for desktop notifications (notify-send)
     swww                    # Wallpaper daemon for Wayland
     wl-clipboard            # Command-line copy/paste for Wayland
-    
-    # Screenshot utilities
-    grim                    # Screenshot tool for Wayland
-    slurp                   # Select a region in Wayland
-    grimblast               # Convenience wrapper for grim + slurp
+    hyprpolkitagent         # Polkit authentication agent for Hyprland
     
     # System tray and control utilities
     networkmanagerapplet    # Network configuration GUI (nm-applet)
     pavucontrol             # PulseAudio volume control
-    brightnessctl           # Control screen brightness
-    
-    # File management
-    xfce.thunar                  # Lightweight file manager
-    xfce.thunar-volman           # Automatic management of removable media
-    xfce.thunar-archive-plugin   # Archive support in Thunar
   ];
 }

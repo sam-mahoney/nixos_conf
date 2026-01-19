@@ -33,10 +33,10 @@
       # Programs to launch when Hyprland starts
       exec-once = [
         "waybar"      # Status bar
-        "dunst"       # Notification daemon
+        "mako"        # Notification daemon
         "nm-applet --indicator"  # Network manager system tray
         "swww-daemon"  # Wallpaper daemon
-        "/run/current-system/sw/libexec/polkit-gnome-authentication-agent-1"  # Authentication agent
+        "hyprpolkitagent"  # Authentication agent
         "hypridle"    # Idle management daemon
       ];
 
@@ -136,76 +136,31 @@
 
       # === Keybindings ===
       bind = [
-        # --- Application Launchers ---
-        "$mod, A, exec, alacritty"  # Terminal emulator
-        "$mod, E, exec, thunar"     # File manager
-        "$mod, R, exec, rofi -show drun"  # Application launcher
-        "$mod, F, exec, firefox"    # Web browser
-        "$mod, B, exec, brave"      # Alternative browser
+        # Application launcher
+        "$mod, R, exec, ashell"  # Application launcher
         
-        # --- Window Management ---
+        # Window management
         "$mod, Q, killactive,"      # Close focused window
         "$mod, M, exit,"            # Exit Hyprland
         "$mod, V, togglefloating,"  # Toggle floating mode
         "$mod, P, pseudo,"          # Toggle pseudo-tiling
         "$mod, J, togglesplit,"     # Toggle split direction
-        "$mod, F11, fullscreen, 0"  # Toggle fullscreen
         
-        # --- Focus Movement (Arrow Keys) ---
-        "$mod, left, movefocus, l"   # Focus left
-        "$mod, right, movefocus, r"  # Focus right
-        "$mod, up, movefocus, u"     # Focus up
-        "$mod, down, movefocus, d"   # Focus down
-
-        # --- Focus Movement (Vim Keys) ---
-        "$mod, h, movefocus, l"  # Focus left
-        "$mod, l, movefocus, r"  # Focus right
-        "$mod, k, movefocus, u"  # Focus up
-        "$mod, j, movefocus, d"  # Focus down
-
-        # --- Window Movement (Arrow Keys) ---
-        "$mod SHIFT, left, movewindow, l"   # Move window left
-        "$mod SHIFT, right, movewindow, r"  # Move window right
-        "$mod SHIFT, up, movewindow, u"     # Move window up
-        "$mod SHIFT, down, movewindow, d"   # Move window down
-
-        # --- Window Movement (Vim Keys) ---
-        "$mod SHIFT, h, movewindow, l"  # Move window left
-        "$mod SHIFT, l, movewindow, r"  # Move window right
-        "$mod SHIFT, k, movewindow, u"  # Move window up
-        "$mod SHIFT, j, movewindow, d"  # Move window down
-
-        # --- Window Resizing (Arrow Keys) ---
-        "$mod CTRL, left, resizeactive, -20 0"   # Shrink width
-        "$mod CTRL, right, resizeactive, 20 0"   # Grow width
-        "$mod CTRL, up, resizeactive, 0 -20"     # Shrink height
-        "$mod CTRL, down, resizeactive, 0 20"    # Grow height
-
-        # --- Window Resizing (Vim Keys) ---
-        "$mod CTRL, h, resizeactive, -20 0"  # Shrink width
-        "$mod CTRL, l, resizeactive, 20 0"   # Grow width
-        "$mod CTRL, k, resizeactive, 0 -20"  # Shrink height
-        "$mod CTRL, j, resizeactive, 0 20"   # Grow height
-
-        # --- Special Workspace (Scratchpad) ---
-        "$mod, S, togglespecialworkspace, magic"       # Toggle scratchpad visibility
-        "$mod SHIFT, S, movetoworkspace, special:magic"  # Move window to scratchpad
-
-        # --- Workspace Scrolling ---
-        "$mod, mouse_down, workspace, e+1"  # Next workspace
-        "$mod, mouse_up, workspace, e-1"    # Previous workspace
-
-        # --- Screenshots ---
-        ", Print, exec, grimblast copy area"     # Screenshot selection
-        "SHIFT, Print, exec, grimblast copy screen"  # Screenshot full screen
+        # Focus movement
+        "$mod, left, movefocus, l"
+        "$mod, right, movefocus, r"
+        "$mod, up, movefocus, u"
+        "$mod, down, movefocus, d"
         
-        # --- Lock Screen ---
-        "$mod, ESCAPE, exec, loginctl lock-session"   # Lock screen manually
+        # Special workspace
+        "$mod, S, togglespecialworkspace, magic"
+        "$mod SHIFT, S, movetoworkspace, special:magic"
+        
+        # Scroll through workspaces
+        "$mod, mouse_down, workspace, e+1"
+        "$mod, mouse_up, workspace, e-1"
       ] ++ (
-        # --- Dynamic Workspace Bindings (1-9) ---
-        # Generates keybindings for workspaces 1-9
-        # $mod + [1-9] = Switch to workspace
-        # $mod + SHIFT + [1-9] = Move window to workspace
+        # Workspace bindings (1-10)
         builtins.concatLists (builtins.genList (i:
           let ws = i + 1;
           in [
@@ -216,25 +171,9 @@
       );
 
       # === Mouse Bindings ===
-      # Hold modifier and use mouse to manipulate windows
       bindm = [
-        "$mod, mouse:272, movewindow"    # Left click + drag to move
-        "$mod, mouse:273, resizewindow"  # Right click + drag to resize
-      ];
-
-      # === Media Key Bindings (Hold to Repeat) ===
-      # bindel = bind with repeat on hold
-      bindel = [
-        ", XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"  # Volume up
-        ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"  # Volume down
-        ", XF86MonBrightnessUp, exec, brightnessctl set 5%+"    # Brightness up
-        ", XF86MonBrightnessDown, exec, brightnessctl set 5%-"  # Brightness down
-      ];
-
-      # === Media Key Bindings (Toggle) ===
-      # bindl = bind that works even when locked
-      bindl = [
-        ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"  # Mute toggle
+        "$mod, mouse:272, movewindow"
+        "$mod, mouse:273, resizewindow"
       ];
 
       # === Window Rules ===
