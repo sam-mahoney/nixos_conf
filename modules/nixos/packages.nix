@@ -9,7 +9,8 @@
     # === Essential Tools ===
     vim   # Text editor (essential for emergency recovery)
     wget  # Download files from the web
-    git   # Version control system
+    git   # Version control system 
+    inotify-tools
     
     # === Networking ===
     wireguard-tools  # VPN utilities (wg, wg-quick)
