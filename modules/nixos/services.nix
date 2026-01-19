@@ -39,7 +39,7 @@
   virtualisation.docker = {
     enable = true;
     
-    Enable rootless mode for better security (optional)
+    # Enable rootless mode for better security (optional)
     rootless = {
       enable = true;
       setSocketVariable = true;
