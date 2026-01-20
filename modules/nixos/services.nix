@@ -30,7 +30,7 @@
   # === TeamViewer ===
   # Remote desktop and support software
   # TODO: Remove this after IT department setup is complete
-  services.teamviewer.enable = true;
+  services.teamviewer.enable = false;
 
   # === Docker ===
   # Container platform for running and managing applications
@@ -40,10 +40,10 @@
     enable = true;
     
     # Enable rootless mode for better security (optional)
-    # rootless = {
-    #   enable = true;
-    #   setSocketVariable = true;
-    # };
+    rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
     
     # Automatically prune old containers, images, and volumes
     autoPrune = {

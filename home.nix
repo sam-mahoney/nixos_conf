@@ -25,7 +25,6 @@
     ./modules/home-manager/packages.nix        # User packages and tools
     ./modules/home-manager/hyprland.nix        # Hyprland window manager config
     ./modules/home-manager/waybar.nix          # Status bar configuration
-    ./modules/home-manager/dunst.nix           # Notification daemon config
     ./modules/home-manager/terminal.nix        # Terminal emulators and shell
     ./modules/home-manager/git.nix             # Git and SSH configuration
     ./modules/home-manager/services.nix        # User services (polkit agent)
