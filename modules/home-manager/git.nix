@@ -53,9 +53,9 @@
     enableDefaultConfig = false;
 
     matchBlocks = {
-      # Personal GitHub — uses personal SSH key
-      "github.com-personal" = {
-        host = "github.com";
+      # Personal GitHub — plain github.com uses personal key
+      # This matches remote URLs like git@github.com:sam-mahoney/...
+      "github.com" = {
         hostname = "github.com";
         user = "git";
         identityFile = "~/.ssh/helios_personal_ed25519";
@@ -63,9 +63,9 @@
         addKeysToAgent = "yes";
       };
 
-      # Work SSH — uses work SSH key for Cydar repos
+      # Work GitHub — use "github.com-work" as the host alias
+      # Work repos use remote URLs like git@github.com-work:cydar/...
       "github.com-work" = {
-        host = "github.com-work";
         hostname = "github.com";
         user = "git";
         identityFile = "~/.ssh/helios_ed25519";
@@ -73,13 +73,8 @@
         addKeysToAgent = "yes";
       };
 
-      # Default catch-all for any other SSH host
-      # Both keys are offered so either can match
+      # Default catch-all for any other SSH host (e.g. servers)
       "*" = {
-        identityFile = [
-          "~/.ssh/helios_personal_ed25519"
-          "~/.ssh/helios_ed25519"
-        ];
         addKeysToAgent = "yes";
       };
     };
