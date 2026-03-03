@@ -14,7 +14,6 @@
       wlsunset          # Day/night gamma adjustments
       grim              # Screenshot tool
       slurp             # Region selector for screenshots
-      mako              # Notification daemon
     ];
   };
 
@@ -31,6 +30,7 @@
   # Using tuigreet for a text-based interface
   services.greetd = {
     enable = true;
+    vt = 7;  # Use VT7 — avoids boot message bleed-through on VT1
     settings = {
       default_session = {
         # tuigreet provides a terminal-based login screen
@@ -41,6 +41,17 @@
         user = "greeter";  # User account for the greeter process
       };
     };
+  };
+
+  # Suppress systemd status messages on greetd's VT
+  # This prevents "Starting foo..." lines from appearing behind tuigreet
+  systemd.services.greetd.serviceConfig = {
+    StandardInput = "null";
+    StandardOutput = "null";
+    StandardError = "journal";
+    TTYReset = true;
+    TTYVHangup = true;
+    TTYVTDisallocate = true;
   };
 
   # === GNOME Keyring ===

@@ -115,8 +115,7 @@
 
       # === Startup Applications ===
       startup = [
-        { command = "noctalia-shell"; }  # Desktop shell (bar, notifications, OSD)
-        { command = "mako"; }
+        { command = "noctalia-shell"; }  # Desktop shell (bar, notifications, OSD, notifications)
         { command = "nm-applet --indicator"; }
         { command = "blueman-applet"; }  # Bluetooth tray applet
         { command = "swayidle -w timeout 120 'brightnessctl set 10%' resume 'brightnessctl set 50%' timeout 300 'swaylock -f' timeout 360 'swaymsg \"output * power off\"' resume 'swaymsg \"output * power on\"' before-sleep 'swaylock -f'"; }

@@ -72,10 +72,34 @@
       };
 
       # Default catch-all for any other SSH host
+      # Both keys are offered so either can match
       "*" = {
-        identityFile = "~/.ssh/helios_personal_ed25519";
-        identitiesOnly = true;
+        identityFile = [
+          "~/.ssh/helios_personal_ed25519"
+          "~/.ssh/helios_ed25519"
+        ];
       };
     };
+  };
+
+  # === Pre-load SSH keys at login ===
+  # Adds both keys to the agent on session start so you only enter
+  # passphrases once (at login) rather than on first use of each key.
+  systemd.user.services.ssh-add-keys = {
+    Unit = {
+      Description = "Pre-load SSH keys into agent";
+      After = [ "ssh-agent.service" ];
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = let
+        script = pkgs.writeShellScript "ssh-add-keys" ''
+          ${pkgs.openssh}/bin/ssh-add ~/.ssh/helios_personal_ed25519 2>/dev/null || true
+          ${pkgs.openssh}/bin/ssh-add ~/.ssh/helios_ed25519 2>/dev/null || true
+        '';
+      in "${script}";
+      Environment = "SSH_AUTH_SOCK=%t/ssh-agent";
+    };
+    Install.WantedBy = [ "default.target" ];
   };
 }
