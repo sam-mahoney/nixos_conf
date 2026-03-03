@@ -113,7 +113,7 @@ Noctalia keybinds are triggered via IPC calls from Sway.
 | Key | Action |
 |-----|--------|
 | `Mod+d` | Toggle app launcher |
-| `Mod+n` | Toggle notification panel |
+| `Mod+n` | Toggle notification history |
 | `Mod+o` | Toggle control center / quick settings |
 | `Mod+p` | Toggle power / session menu |
 

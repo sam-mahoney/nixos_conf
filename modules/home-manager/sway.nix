@@ -253,7 +253,8 @@
 
         # --- Noctalia Shell IPC ---
         # These trigger noctalia-shell panels via IPC
-        "${mod}+n" = "exec noctalia-shell ipc call notifications toggle";
+        # See: https://docs.noctalia.dev/getting-started/keybinds/
+        "${mod}+n" = "exec noctalia-shell ipc call notifications toggleHistory";
         "${mod}+o" = "exec noctalia-shell ipc call controlCenter toggle";
         "${mod}+p" = "exec noctalia-shell ipc call sessionMenu toggle";
       };
