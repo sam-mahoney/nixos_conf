@@ -30,7 +30,9 @@
   # Using tuigreet for a text-based interface
   services.greetd = {
     enable = true;
-    vt = 7;  # Use VT7 — avoids boot message bleed-through on VT1
+    # greetd is fixed to VT1 on NixOS 25.11+
+    # Boot log bleed-through is handled by quiet kernel params (boot.nix)
+    # and TTY cleanup (systemd service overrides below)
     settings = {
       default_session = {
         # tuigreet provides a terminal-based login screen
