@@ -132,6 +132,15 @@
         { criteria = { window_type = "dialog"; }; command = "floating enable"; }
       ];
 
+      # === Workspace Assignments ===
+      # Automatically move apps to specific workspaces when they open
+      assigns = {
+        "9" = [
+          { class = "Slack"; }      # XWayland
+          { app_id = "Slack"; }     # Wayland-native
+        ];
+      };
+
       # === Focus Behaviour ===
       focus = {
         followMouse = true;
