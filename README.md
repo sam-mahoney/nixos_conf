@@ -2,13 +2,15 @@
 
 Modular NixOS configuration for the Helios laptop (Dell Precision 5570).
 
+**Desktop:** Sway (Aerospace-inspired keybindings) · **Terminal:** Alacritty + tmux · **Theme:** Catppuccin Mocha
+
 ## 📁 Directory Structure
 
 ```
 nixos-conf/
-├── flake.nix                    # Main flake configuration (NEW MODULAR VERSION)
-├── configuration.nix            # Main NixOS config (NEW MODULAR VERSION)
-├── home.nix                     # Home Manager config (NEW MODULAR VERSION)
+├── flake.nix                    # Main flake configuration
+├── configuration.nix            # Main NixOS config
+├── home.nix                     # Home Manager config
 ├── hardware-configuration.nix   # Auto-generated hardware config
 │
 ├── modules/
@@ -16,22 +18,24 @@ nixos-conf/
 │   │   ├── boot.nix            # Bootloader and disk encryption
 │   │   ├── networking.nix      # Network settings
 │   │   ├── locale.nix          # Timezone and language
-│   │   ├── desktop.nix         # Desktop environment and display manager
+│   │   ├── desktop.nix         # Sway compositor and display manager
 │   │   ├── hardware.nix        # Audio, printing, input devices
 │   │   ├── users.nix           # User accounts and groups
 │   │   ├── packages.nix        # System-wide packages and fonts
-│   │   └── services.nix        # System services (SSH, etc.)
+│   │   └── services.nix        # System services (SSH, Docker, TLP)
 │   │
 │   └── home-manager/           # User-level configuration modules
 │       ├── packages.nix        # User packages and tools
-│       ├── hyprland.nix        # Hyprland window manager
+│       ├── sway.nix            # Sway WM (Aerospace-style keybindings)
 │       ├── waybar.nix          # Status bar
-│       ├── dunst.nix           # Notification daemon
-│       ├── terminal.nix        # Terminal emulators and shell
+│       ├── swaylock.nix        # Screen locker configuration
+│       ├── terminal.nix        # Alacritty terminal + Starship prompt
+│       ├── tmux.nix            # Terminal multiplexer
 │       ├── git.nix             # Git and SSH configuration
-│       └── services.nix        # User services (polkit agent)
+│       ├── services.nix        # User services (polkit agent)
+│       └── battery-notifier.nix # Battery level notifications
 │
-└── [legacy files]              # Old monolithic configs (backup)
+└── [legacy files]              # Old configs (backup)
     ├── flake.nix.old
     ├── configuration.nix.old
     └── home.nix.old
@@ -80,19 +84,21 @@ System-level settings are in `modules/nixos/`:
 - **`hardware.nix`** - Audio (PipeWire), printing (CUPS), touchpad
 - **`users.nix`** - User accounts, groups, and permissions
 - **`packages.nix`** - System-wide packages, fonts, and aliases
-- **`services.nix`** - System services like SSH, firewall rules
+- **`services.nix`** - System services (SSH, Docker, TLP, firewall)
 
 ### User Configuration (Home Manager)
 
 User-level settings are in `modules/home-manager/`:
 
 - **`packages.nix`** - User packages (development tools, utilities, GUI apps)
-- **`hyprland.nix`** - Hyprland window manager configuration and keybindings
+- **`sway.nix`** - Sway window manager with Aerospace-style keybindings
 - **`waybar.nix`** - Status bar appearance and modules
-- **`dunst.nix`** - Notification daemon styling and behavior
-- **`terminal.nix`** - Alacritty, Kitty, and Starship prompt
+- **`swaylock.nix`** - Screen locker with blur effects
+- **`terminal.nix`** - Alacritty terminal (auto-launches tmux)
+- **`tmux.nix`** - Terminal multiplexer configuration
 - **`git.nix`** - Git configuration with work/personal profiles
 - **`services.nix`** - User services (polkit authentication agent)
+- **`battery-notifier.nix`** - Battery level notifications
 
 ## 🔧 Common Tasks
 
@@ -116,16 +122,42 @@ home.packages = with pkgs; [
 ];
 ```
 
-### Modifying Hyprland Keybindings
+### Sway Keybindings (Aerospace-style)
 
-Edit `modules/home-manager/hyprland.nix`:
+Keybindings are in `modules/home-manager/sway.nix`. The modifier is **Alt** (matching Aerospace on macOS):
 
-```nix
-bind = [
-  # Add new keybinding
-  "$mod, T, exec, kitty"  # Super+T opens Kitty terminal
-];
-```
+| Key | Action |
+|-----|--------|
+| `Alt+Return` | Open terminal (Alacritty + tmux) |
+| `Alt+d` | Application launcher (wofi) |
+| `Alt+q` | Close window |
+| `Alt+h/j/k/l` | Focus left/down/up/right |
+| `Alt+Shift+h/j/k/l` | Move window left/down/up/right |
+| `Alt+1-9` | Switch to workspace 1-9 |
+| `Alt+Shift+1-9` | Move window to workspace 1-9 |
+| `Alt+/` | Toggle horizontal/vertical tiling |
+| `Alt+,` | Toggle tabbed/stacking (accordion) |
+| `Alt+f` | Fullscreen |
+| `Alt+Shift+f` | Toggle floating |
+| `Alt+Tab` | Workspace back-and-forth |
+| `Alt+-/=` | Resize shrink/grow |
+| `Alt+r` | Enter resize mode (hjkl to resize) |
+| `Alt+Escape` | Lock screen |
+| `Print` | Screenshot (full) |
+| `Shift+Print` | Screenshot (region) |
+
+### tmux Keybindings
+
+Prefix is **Ctrl+a** (more ergonomic than default Ctrl+b):
+
+| Key | Action |
+|-----|--------|
+| `Ctrl+a \|` | Vertical split |
+| `Ctrl+a -` | Horizontal split |
+| `Ctrl+a h/j/k/l` | Navigate panes |
+| `Ctrl+a c` | New window |
+| `Ctrl+a 1-9` | Switch to window |
+| `Ctrl+a d` | Detach session |
 
 ### Changing Waybar Appearance
 
@@ -160,22 +192,22 @@ core.sshCommand = "ssh -i ~/.ssh/your_key";
 
 ## 🎨 Customization
 
-### Hyprland Window Manager
+### Sway Window Manager
 
-Hyprland configuration uses a modular approach:
-- **General settings**: gaps, borders, layouts
-- **Animations**: bezier curves and transition effects
-- **Keybindings**: workspace navigation, window management
-- **Autostart**: programs launched on login
+Sway configuration in `modules/home-manager/sway.nix`:
 
-See `modules/home-manager/hyprland.nix` for detailed comments.
+- **Keybindings**: Aerospace-inspired (Alt modifier, hjkl navigation)
+- **Gaps & Borders**: Minimal gaps with Catppuccin Mocha accent colors
+- **Input**: GB keyboard, natural scroll touchpad, follow-mouse focus
+- **Autostart**: waybar, mako, nm-applet, swayidle, wlsunset
 
 ### Waybar Status Bar
 
-Waybar uses Catppuccin-inspired colors:
-- **Modules**: workspace, window, clock, CPU, memory, battery, network, audio
+Waybar uses Catppuccin Mocha colors with Sway-native modules:
+
+- **Modules**: sway/workspaces, sway/mode, sway/window, clock, CPU, memory, battery, network, audio
 - **Styling**: Fully customizable CSS in the `style` section
-- **Icons**: Nerd Font icons and Font Awesome
+- **Icons**: JetBrainsMono Nerd Font and Font Awesome
 
 See `modules/home-manager/waybar.nix` for all available options.
 
@@ -220,7 +252,8 @@ home-manager generations
 - [NixOS Manual](https://nixos.org/manual/nixos/stable/)
 - [NixOS Options Search](https://search.nixos.org/options)
 - [Home Manager Manual](https://nix-community.github.io/home-manager/)
-- [Hyprland Documentation](https://wiki.hyprland.org/)
+- [Sway Documentation](https://swaywm.org/)
+- [Aerospace Guide](https://nikitabobko.github.io/AeroSpace/guide) (keybinding inspiration)
 - [Nix Flakes](https://wiki.nixos.org/wiki/Flakes)
 
 ## ⚠️ Migration from Old Configuration

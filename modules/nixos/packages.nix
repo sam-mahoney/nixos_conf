@@ -17,6 +17,10 @@
     
     # === Authentication ===
     polkit_gnome  # Graphical authentication agent for privileged operations
+    
+    # === Sway Utilities ===
+    brightnessctl  # Backlight control (for laptop keys)
+    wl-clipboard   # Wayland clipboard
   ];
 
   # === Shell Aliases ===

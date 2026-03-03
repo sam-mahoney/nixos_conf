@@ -77,15 +77,19 @@
     slack             # Team communication platform
     teams-for-linux   # Microsoft Teams client for Linux
     
-    # === Hyprland Ecosystem ===
+    # === Sway Ecosystem ===
     # Wayland compositor and related tools
-    waybar                  # Status bar for Wayland compositors
-    ashell                  # Application launcher for Wayland
+    wofi                    # Application launcher for Wayland
     mako                    # Lightweight notification daemon
     libnotify               # Library for desktop notifications (notify-send)
-    swww                    # Wallpaper daemon for Wayland
     wl-clipboard            # Command-line copy/paste for Wayland
-    hyprpolkitagent         # Polkit authentication agent for Hyprland
+    grim                    # Screenshot tool
+    slurp                   # Region selection tool
+    swaylock-effects        # Screen locker with blur effects
+    swayidle                # Idle management daemon
+    wlsunset                # Day/night gamma adjustments
+    brightnessctl           # Backlight control
+    imagemagick             # Required by Noctalia for template processing
     
     # System tray and control utilities
     networkmanagerapplet    # Network configuration GUI (nm-applet)

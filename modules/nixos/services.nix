@@ -101,6 +101,11 @@
   # TLP should be the only power manager
   services.power-profiles-daemon.enable = false;
 
+  # === UPower ===
+  # D-Bus service for power device information (battery, AC adapter)
+  # Required by Noctalia shell for battery widget
+  services.upower.enable = true;
+
   # === Firewall Configuration ===
   # Uncomment to open specific ports:
   # networking.firewall.allowedTCPPorts = [ 80 443 ];

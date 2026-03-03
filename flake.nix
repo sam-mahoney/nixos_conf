@@ -38,6 +38,18 @@
       # This prevents version mismatches and reduces disk usage
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Noctalia — minimal desktop shell for Wayland (replaces waybar)
+    # Requires its own Quickshell fork (noctalia-qs)
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.noctalia-qs.follows = "noctalia-qs";
+    };
+    noctalia-qs = {
+      url = "github:noctalia-dev/noctalia-qs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   # === Outputs ===
@@ -81,8 +93,8 @@
             # Imports all home-manager modules from ./modules/home-manager/
             home-manager.users.mahoney = import ./home.nix;
             
-            # To pass additional arguments to home.nix, use:
-            # home-manager.extraSpecialArgs = { inherit inputs; };
+            # Pass flake inputs to home-manager modules (needed for noctalia)
+            home-manager.extraSpecialArgs = { inherit inputs; };
           }
         ];
       };
