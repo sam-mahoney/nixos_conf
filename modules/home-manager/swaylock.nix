@@ -3,7 +3,7 @@
 {
   # === Swaylock Configuration ===
   # Screen locker for Sway with blur effects (swaylock-effects)
-  # Replaces Hyprlock with similar visual style
+  # Screen locker for Sway with blur effects and Catppuccin styling
   #
   # Catppuccin Mocha theme matching the rest of the desktop
 

@@ -26,7 +26,7 @@
       terminal = "alacritty";
 
       # === Application Launcher ===
-      menu = "wofi --show drun --allow-images";
+      # Noctalia shell provides the launcher (Alt+d toggles it via IPC)
 
       # === Default Layout ===
       # Tabbed by default (similar to Aerospace's accordion layout)
@@ -139,7 +139,7 @@
         wrapping = "yes";
       };
 
-      # === Bar (disabled — using waybar) ===
+      # === Bar (disabled — using Noctalia shell) ===
       bars = [];
 
       # === Keybindings ===

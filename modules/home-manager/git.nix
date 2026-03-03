@@ -42,4 +42,40 @@
   # Manages SSH keys and handles authentication
   # Automatically starts with user session
   services.ssh-agent.enable = true;
+
+  # === SSH Client Configuration ===
+  # Automatically adds keys to the agent on first use
+  # After entering your passphrase once, it's cached for the session
+  programs.ssh = {
+    enable = true;
+
+    # Add keys to the running agent automatically on first use
+    addKeysToAgent = "yes";
+
+    matchBlocks = {
+      # Personal GitHub — uses personal SSH key
+      "github.com-personal" = {
+        host = "github.com";
+        hostname = "github.com";
+        user = "git";
+        identityFile = "~/.ssh/helios_personal_ed25519";
+        identitiesOnly = true;
+      };
+
+      # Work SSH — uses work SSH key for Cydar repos
+      "github.com-work" = {
+        host = "github.com-work";
+        hostname = "github.com";
+        user = "git";
+        identityFile = "~/.ssh/helios_ed25519";
+        identitiesOnly = true;
+      };
+
+      # Default catch-all for any other SSH host
+      "*" = {
+        identityFile = "~/.ssh/helios_personal_ed25519";
+        identitiesOnly = true;
+      };
+    };
+  };
 }

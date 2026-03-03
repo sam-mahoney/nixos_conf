@@ -79,7 +79,6 @@
     
     # === Sway Ecosystem ===
     # Wayland compositor and related tools
-    wofi                    # Application launcher for Wayland
     mako                    # Lightweight notification daemon
     libnotify               # Library for desktop notifications (notify-send)
     wl-clipboard            # Command-line copy/paste for Wayland

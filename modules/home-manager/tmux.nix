@@ -38,7 +38,7 @@
       sensible        # Sensible defaults everyone can agree on
       yank            # Copy to system clipboard
       {
-        # Catppuccin theme to match Sway/Waybar aesthetic
+        # Catppuccin theme to match Sway/Noctalia aesthetic
         plugin = catppuccin;
         extraConfig = ''
           set -g @catppuccin_flavor "mocha"

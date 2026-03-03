@@ -14,7 +14,6 @@
       wlsunset          # Day/night gamma adjustments
       grim              # Screenshot tool
       slurp             # Region selector for screenshots
-      wofi              # Application launcher (like rofi for Wayland)
       mako              # Notification daemon
     ];
   };

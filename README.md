@@ -2,7 +2,7 @@
 
 Modular NixOS configuration for the Helios laptop (Dell Precision 5570).
 
-**Desktop:** Sway (Aerospace-inspired keybindings) · **Terminal:** Alacritty + tmux · **Theme:** Catppuccin Mocha
+**Desktop:** Sway (Aerospace-inspired keybindings) · **Shell:** Noctalia (bar, notifications, OSD, launcher) · **Terminal:** Alacritty + tmux · **Theme:** Catppuccin Mocha
 
 ## 📁 Directory Structure
 
@@ -12,6 +12,7 @@ nixos-conf/
 ├── configuration.nix            # Main NixOS config
 ├── home.nix                     # Home Manager config
 ├── hardware-configuration.nix   # Auto-generated hardware config
+├── KEYBINDS.md                  # Full keybindings cheatsheet
 │
 ├── modules/
 │   ├── nixos/                   # System-level configuration modules
@@ -19,26 +20,21 @@ nixos-conf/
 │   │   ├── networking.nix      # Network settings
 │   │   ├── locale.nix          # Timezone and language
 │   │   ├── desktop.nix         # Sway compositor and display manager
-│   │   ├── hardware.nix        # Audio, printing, input devices
+│   │   ├── hardware.nix        # Audio, Bluetooth, printing, input devices
 │   │   ├── users.nix           # User accounts and groups
 │   │   ├── packages.nix        # System-wide packages and fonts
-│   │   └── services.nix        # System services (SSH, Docker, TLP)
+│   │   └── services.nix        # System services (SSH, Docker, TLP, UPower)
 │   │
 │   └── home-manager/           # User-level configuration modules
 │       ├── packages.nix        # User packages and tools
 │       ├── sway.nix            # Sway WM (Aerospace-style keybindings)
-│       ├── waybar.nix          # Status bar
+│       ├── noctalia.nix        # Noctalia desktop shell (bar, notifications, OSD, launcher)
 │       ├── swaylock.nix        # Screen locker configuration
 │       ├── terminal.nix        # Alacritty terminal + Starship prompt
 │       ├── tmux.nix            # Terminal multiplexer
 │       ├── git.nix             # Git and SSH configuration
 │       ├── services.nix        # User services (polkit agent)
 │       └── battery-notifier.nix # Battery level notifications
-│
-└── [legacy files]              # Old configs (backup)
-    ├── flake.nix.old
-    ├── configuration.nix.old
-    └── home.nix.old
 ```
 
 ## 🚀 Quick Start
@@ -80,11 +76,11 @@ System-level settings are in `modules/nixos/`:
 - **`boot.nix`** - Bootloader configuration and disk encryption
 - **`networking.nix`** - Hostname, NetworkManager, proxy settings
 - **`locale.nix`** - Timezone, language, and regional settings
-- **`desktop.nix`** - Hyprland, GNOME, display manager, keyboard layout
-- **`hardware.nix`** - Audio (PipeWire), printing (CUPS), touchpad
+- **`desktop.nix`** - Sway compositor, display manager (greetd), XDG portals
+- **`hardware.nix`** - Audio (PipeWire), Bluetooth, printing (CUPS), touchpad
 - **`users.nix`** - User accounts, groups, and permissions
 - **`packages.nix`** - System-wide packages, fonts, and aliases
-- **`services.nix`** - System services (SSH, Docker, TLP, firewall)
+- **`services.nix`** - System services (SSH, Docker, TLP, UPower)
 
 ### User Configuration (Home Manager)
 
@@ -92,11 +88,11 @@ User-level settings are in `modules/home-manager/`:
 
 - **`packages.nix`** - User packages (development tools, utilities, GUI apps)
 - **`sway.nix`** - Sway window manager with Aerospace-style keybindings
-- **`waybar.nix`** - Status bar appearance and modules
+- **`noctalia.nix`** - Desktop shell (bar, notifications, OSD, launcher)
 - **`swaylock.nix`** - Screen locker with blur effects
 - **`terminal.nix`** - Alacritty terminal (auto-launches tmux)
 - **`tmux.nix`** - Terminal multiplexer configuration
-- **`git.nix`** - Git configuration with work/personal profiles
+- **`git.nix`** - Git and SSH configuration (with key caching)
 - **`services.nix`** - User services (polkit authentication agent)
 - **`battery-notifier.nix`** - Battery level notifications
 
@@ -129,7 +125,7 @@ Keybindings are in `modules/home-manager/sway.nix`. The modifier is **Alt** (mat
 | Key | Action |
 |-----|--------|
 | `Alt+Return` | Open terminal (Alacritty + tmux) |
-| `Alt+d` | Application launcher (wofi) |
+| `Alt+d` | Application launcher (Noctalia) |
 | `Alt+q` | Close window |
 | `Alt+h/j/k/l` | Focus left/down/up/right |
 | `Alt+Shift+h/j/k/l` | Move window left/down/up/right |
@@ -159,16 +155,14 @@ Prefix is **Ctrl+a** (more ergonomic than default Ctrl+b):
 | `Ctrl+a 1-9` | Switch to window |
 | `Ctrl+a d` | Detach session |
 
-### Changing Waybar Appearance
+### Customising Noctalia Shell
 
-Edit `modules/home-manager/waybar.nix`:
+Edit `modules/home-manager/noctalia.nix`:
 
 ```nix
-# Modify settings for module configuration
-settings.mainBar.modules-right = [ ... ];
-
-# Modify style for CSS styling
-style = '' ... '';
+# Configure bar widgets, position, and style
+# Configure notification daemon, OSD, and app launcher
+# See: https://github.com/noctalia-dev/noctalia-shell
 ```
 
 ### Adding a New User
@@ -184,11 +178,8 @@ users.users.newuser = {
 
 ### Configuring SSH Keys
 
-Edit `modules/home-manager/git.nix`:
-
-```nix
-core.sshCommand = "ssh -i ~/.ssh/your_key";
-```
+SSH keys are managed in `modules/home-manager/git.nix` with `programs.ssh`.
+Keys are automatically cached by the SSH agent after first use (`addKeysToAgent = "yes"`).
 
 ## 🎨 Customization
 
@@ -199,17 +190,18 @@ Sway configuration in `modules/home-manager/sway.nix`:
 - **Keybindings**: Aerospace-inspired (Alt modifier, hjkl navigation)
 - **Gaps & Borders**: Minimal gaps with Catppuccin Mocha accent colors
 - **Input**: GB keyboard, natural scroll touchpad, follow-mouse focus
-- **Autostart**: waybar, mako, nm-applet, swayidle, wlsunset
+- **Autostart**: noctalia-shell, blueman-applet, mako, nm-applet, swayidle, wlsunset
 
-### Waybar Status Bar
+### Noctalia Desktop Shell
 
-Waybar uses Catppuccin Mocha colors with Sway-native modules:
+Noctalia provides a unified desktop shell with:
 
-- **Modules**: sway/workspaces, sway/mode, sway/window, clock, CPU, memory, battery, network, audio
-- **Styling**: Fully customizable CSS in the `style` section
-- **Icons**: JetBrainsMono Nerd Font and Font Awesome
+- **Bar**: Workspaces, clock, network, Bluetooth, volume, battery, system tray
+- **Notifications**: Built-in notification daemon with control centre (Alt+n / Alt+o)
+- **OSD**: On-screen display for volume and brightness
+- **Launcher**: Application launcher toggled with Alt+d
 
-See `modules/home-manager/waybar.nix` for all available options.
+See `modules/home-manager/noctalia.nix` for configuration.
 
 ## 🔍 Troubleshooting
 
@@ -253,23 +245,9 @@ home-manager generations
 - [NixOS Options Search](https://search.nixos.org/options)
 - [Home Manager Manual](https://nix-community.github.io/home-manager/)
 - [Sway Documentation](https://swaywm.org/)
+- [Noctalia Shell](https://github.com/noctalia-dev/noctalia-shell) (desktop shell)
 - [Aerospace Guide](https://nikitabobko.github.io/AeroSpace/guide) (keybinding inspiration)
 - [Nix Flakes](https://wiki.nixos.org/wiki/Flakes)
-
-## ⚠️ Migration from Old Configuration
-
-The old monolithic configuration files have been split into modules:
-
-1. **Backup old files** (already done with `.bak` extension)
-2. **Review new modular structure** in `modules/` directories
-3. **Test new configuration** with `nixos-rebuild test`
-4. **Switch to new configuration** when satisfied
-
-To revert to old configuration, you can:
-```bash
-# Use git to restore old files
-git checkout HEAD -- flake.nix configuration.nix home.nix
-```
 
 ## 📋 Notes
 

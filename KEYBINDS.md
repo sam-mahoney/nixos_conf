@@ -112,7 +112,7 @@ Noctalia keybinds are triggered via IPC calls from Sway.
 
 | Key | Action |
 |-----|--------|
-| `Mod+Space` | Toggle app launcher |
+| `Mod+d` | Toggle app launcher |
 | `Mod+n` | Toggle notification panel |
 | `Mod+o` | Toggle control center / quick settings |
 | `Mod+p` | Toggle power / session menu |
@@ -178,6 +178,8 @@ Noctalia keybinds are triggered via IPC calls from Sway.
 ## 💡 Tips
 
 - **Mod = Alt key** — inspired by Aerospace on macOS
+- **Lock the screen** with `Mod+Escape` — runs swaylock with blur effects
+- **Auto-lock**: screen dims after 2 min, locks after 5 min, display off after 6 min (swayidle). Also locks automatically before sleep/suspend.
 - **Terminals always launch tmux** — your session persists across terminal restarts
 - `tmux ls` — list all sessions from a regular shell
 - `tmux attach -t main` — reattach to your main session
