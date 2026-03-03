@@ -49,8 +49,8 @@
   programs.ssh = {
     enable = true;
 
-    # Add keys to the running agent automatically on first use
-    addKeysToAgent = "yes";
+    # Opt out of legacy default config — we set everything explicitly
+    enableDefaultConfig = false;
 
     matchBlocks = {
       # Personal GitHub — uses personal SSH key
@@ -60,6 +60,7 @@
         user = "git";
         identityFile = "~/.ssh/helios_personal_ed25519";
         identitiesOnly = true;
+        addKeysToAgent = "yes";
       };
 
       # Work SSH — uses work SSH key for Cydar repos
@@ -69,6 +70,7 @@
         user = "git";
         identityFile = "~/.ssh/helios_ed25519";
         identitiesOnly = true;
+        addKeysToAgent = "yes";
       };
 
       # Default catch-all for any other SSH host
@@ -78,6 +80,7 @@
           "~/.ssh/helios_personal_ed25519"
           "~/.ssh/helios_ed25519"
         ];
+        addKeysToAgent = "yes";
       };
     };
   };
