@@ -22,7 +22,7 @@
     
     # --- Core Settings ---
     terminal = "tmux-256color";
-    shell = "${pkgs.bash}/bin/bash";
+    shell = "${pkgs.zsh}/bin/zsh";
     baseIndex = 1;               # Windows start at 1 (not 0)
     escapeTime = 0;              # No delay after pressing Escape
     historyLimit = 50000;        # Generous scrollback

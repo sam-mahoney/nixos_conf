@@ -71,6 +71,7 @@
     docker       # Container runtime and CLI
     vscode       # Visual Studio Code editor
     gh           # GitHub command line tool
+    opencode     # AI coding agent for the terminal
     
     # === Enterprise Communication ===
     # Work collaboration tools

@@ -31,6 +31,7 @@
     ./modules/home-manager/services.nix        # User services (polkit agent)
     ./modules/home-manager/swaylock.nix        # Screen locker configuration
     ./modules/home-manager/battery-notifier.nix # Battery notifications
+    ./modules/home-manager/opencode.nix        # OpenCode AI coding agent
   ];
 
   # === Cursor Theme ===

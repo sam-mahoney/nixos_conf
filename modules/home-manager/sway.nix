@@ -93,6 +93,18 @@
         "*" = {
           bg = "#1e1e2e solid_color";  # Solid dark background
         };
+        # LG ULTRAFINE — portrait (rotated 90°), left of the Dell
+        "DP-2" = {
+          transform = "270";
+          position = "0 0";
+          resolution = "3840x2160";
+        };
+        # Dell U2723QE — landscape, to the right of the LG
+        # x-offset = LG height after rotation (2160)
+        "DP-3" = {
+          position = "2160 0";
+          resolution = "3840x2160";
+        };
       };
 
       # === Input Configuration ===

@@ -4,9 +4,13 @@
   # === User Account Configuration ===
   # Define system users and their properties
   
+  # Zsh must be enabled at the system level to be used as a login shell
+  programs.zsh.enable = true;
+
   users.users.mahoney = {
     isNormalUser = true;  # Standard user account (not system account)
     description = "legend";
+    shell = pkgs.zsh;     # Zsh as default login shell
     
     # === Group Membership ===
     # Groups grant permissions and capabilities
