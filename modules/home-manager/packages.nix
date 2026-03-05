@@ -73,6 +73,9 @@
     gh           # GitHub command line tool
     opencode     # AI coding agent for the terminal
     
+    # === Entertainment ===
+    spotify           # Music streaming client
+
     # === Enterprise Communication ===
     # Work collaboration tools
     slack             # Team communication platform
