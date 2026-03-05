@@ -41,16 +41,14 @@
 
     # --- LSP ---
     # Enable language servers for diagnostics — the AI can read errors directly.
-    # Add more as needed (rust-analyzer, nil for Nix, etc.)
+    # command must be an array; args are included in the same array.
+    # Add more as needed (rust-analyzer, pyright, etc.)
     lsp = {
       typescript = {
-        disabled = false;
-        command = "typescript-language-server";
-        args = [ "--stdio" ];
+        command = [ "typescript-language-server" "--stdio" ];
       };
       nix = {
-        disabled = false;
-        command = "nil";
+        command = [ "nil" ];
       };
     };
   };
