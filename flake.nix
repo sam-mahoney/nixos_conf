@@ -2,7 +2,7 @@
   # === NixOS Flake Configuration ===
   # Declarative system configuration using Nix Flakes
   # 
-  # This flake defines the Helios system configuration with:
+  # This flake defines the Helios and Apollo system configurations with:
   #   - NixOS system configuration
   #   - Home Manager for user-level configuration
   #   - Hardware-specific optimizations for Dell Precision 5570
@@ -58,9 +58,36 @@
     let
       # Target system architecture
       system = "x86_64-linux";
-      
+
       # Import nixpkgs for the specified system
       pkgs = import nixpkgs { inherit system; };
+
+      mkHost = { configPath, extraModules ? [ ] }:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules =
+            extraModules
+            ++ [
+              configPath
+              home-manager.nixosModules.home-manager
+              {
+                # Use system-level nixpkgs for home-manager
+                # Reduces closures and ensures consistency
+                home-manager.useGlobalPkgs = true;
+
+                # Install packages to /etc/profiles instead of ~/.nix-profile
+                # Allows better integration with NixOS
+                home-manager.useUserPackages = true;
+
+                # User-specific home-manager configuration
+                # Imports all home-manager modules from ./modules/home-manager/
+                home-manager.users.mahoney = import ./home.nix;
+
+                # Pass flake inputs to home-manager modules (needed for noctalia)
+                home-manager.extraSpecialArgs = { inherit inputs; };
+              }
+            ];
+        };
     in
     {
       checks.${system}.secret-scan = pkgs.runCommand "secret-scan" {
@@ -78,38 +105,18 @@
 
       # === NixOS Configuration: helios ===
       # Main system configuration for the Helios laptop
-      nixosConfigurations.helios = nixpkgs.lib.nixosSystem {
-        inherit system;
-        
-        modules = [
+      nixosConfigurations.helios = mkHost {
+        configPath = ./configuration.nix;
+        extraModules = [
           # Hardware-specific optimizations for Dell Precision 5570
-          # Includes power management, graphics, and thermal settings
           nixos-hardware.nixosModules.dell-precision-5570
-          
-          # Main system configuration file
-          # Imports all NixOS modules from ./modules/nixos/
-          ./configuration.nix
-          
-          # === Home Manager Integration ===
-          # Automatically deploy home-manager with nixos-rebuild
-          home-manager.nixosModules.home-manager
-          {
-            # Use system-level nixpkgs for home-manager
-            # Reduces closures and ensures consistency
-            home-manager.useGlobalPkgs = true;
-            
-            # Install packages to /etc/profiles instead of ~/.nix-profile
-            # Allows better integration with NixOS
-            home-manager.useUserPackages = true;
-            
-            # User-specific home-manager configuration
-            # Imports all home-manager modules from ./modules/home-manager/
-            home-manager.users.mahoney = import ./home.nix;
-            
-            # Pass flake inputs to home-manager modules (needed for noctalia)
-            home-manager.extraSpecialArgs = { inherit inputs; };
-          }
         ];
+      };
+
+      # === NixOS Configuration: apollo ===
+      # Main system configuration for the Apollo desktop
+      nixosConfigurations.apollo = mkHost {
+        configPath = ./configuration-apollo.nix;
       };
     };
 }
