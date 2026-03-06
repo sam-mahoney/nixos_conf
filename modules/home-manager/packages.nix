@@ -97,4 +97,26 @@
     networkmanagerapplet    # Network configuration GUI (nm-applet)
     pavucontrol             # PulseAudio volume control
   ];
+
+  # Chromium (ungoogled variant) + default extension set
+  programs.chromium = {
+    enable = true;
+    package = pkgs.ungoogled-chromium;
+    extensions = [
+      "cjpalhdlnbpafiamejdnhcphjbkeiagm" # uBlock Origin
+    ];
+  };
+
+  # Make Chromium the default browser for links and HTML files
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html" = [ "chromium-browser.desktop" "chromium.desktop" ];
+      "application/xhtml+xml" = [ "chromium-browser.desktop" "chromium.desktop" ];
+      "x-scheme-handler/http" = [ "chromium-browser.desktop" "chromium.desktop" ];
+      "x-scheme-handler/https" = [ "chromium-browser.desktop" "chromium.desktop" ];
+      "x-scheme-handler/about" = [ "chromium-browser.desktop" "chromium.desktop" ];
+      "x-scheme-handler/unknown" = [ "chromium-browser.desktop" "chromium.desktop" ];
+    };
+  };
 }

@@ -63,6 +63,19 @@
       pkgs = import nixpkgs { inherit system; };
     in
     {
+      checks.${system}.secret-scan = pkgs.runCommand "secret-scan" {
+        nativeBuildInputs = [ pkgs.gitleaks ];
+      } ''
+        export HOME="$TMPDIR"
+        cd ${self}
+        gitleaks detect \
+          --source . \
+          --no-git \
+          --redact \
+          --exit-code 1
+        touch "$out"
+      '';
+
       # === NixOS Configuration: helios ===
       # Main system configuration for the Helios laptop
       nixosConfigurations.helios = nixpkgs.lib.nixosSystem {

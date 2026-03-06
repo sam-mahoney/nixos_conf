@@ -41,57 +41,57 @@
 
       # === Gaps (Aerospace-style) ===
       gaps = {
-        inner = 6;
-        outer = 4;
+        inner = 2;
+        outer = 0;
       };
 
       # === Window Borders ===
       window = {
-        titlebar = false;  # No title bars (clean look)
-        border = 2;
+        titlebar = false;
+        border = 1;
       };
 
       floating = {
         titlebar = false;
-        border = 2;
+        border = 1;
       };
 
-      # === Colors (Catppuccin Mocha) ===
+      # === Colors (minimal black/grey) ===
       colors = {
         focused = {
-          border = "#89b4fa";
-          background = "#1e1e2e";
-          text = "#cdd6f4";
-          indicator = "#89b4fa";
-          childBorder = "#89b4fa";
+          border = "#a0a0a0";
+          background = "#000000";
+          text = "#ffffff";
+          indicator = "#a0a0a0";
+          childBorder = "#a0a0a0";
         };
         focusedInactive = {
-          border = "#45475a";
-          background = "#1e1e2e";
-          text = "#cdd6f4";
-          indicator = "#45475a";
-          childBorder = "#45475a";
+          border = "#5f5f5f";
+          background = "#000000";
+          text = "#d0d0d0";
+          indicator = "#5f5f5f";
+          childBorder = "#5f5f5f";
         };
         unfocused = {
-          border = "#313244";
-          background = "#1e1e2e";
-          text = "#a6adc8";
-          indicator = "#313244";
-          childBorder = "#313244";
+          border = "#3a3a3a";
+          background = "#000000";
+          text = "#b0b0b0";
+          indicator = "#3a3a3a";
+          childBorder = "#3a3a3a";
         };
         urgent = {
-          border = "#f38ba8";
-          background = "#1e1e2e";
-          text = "#cdd6f4";
-          indicator = "#f38ba8";
-          childBorder = "#f38ba8";
+          border = "#d75f5f";
+          background = "#000000";
+          text = "#ffffff";
+          indicator = "#d75f5f";
+          childBorder = "#d75f5f";
         };
       };
 
       # === Monitor Configuration ===
       output = {
         "*" = {
-          bg = "#1e1e2e solid_color";  # Solid dark background
+          bg = "#000000 solid_color";
         };
         # LG ULTRAFINE — portrait (rotated 90°), left of the Dell
         "DP-2" = {
@@ -131,7 +131,7 @@
         { command = "nm-applet --indicator"; }
         { command = "blueman-applet"; }  # Bluetooth tray applet
         { command = "swayidle -w timeout 120 'brightnessctl set 10%' resume 'brightnessctl set 50%' timeout 300 'swaylock -f' timeout 360 'swaymsg \"output * power off\"' resume 'swaymsg \"output * power on\"' before-sleep 'swaylock -f'"; }
-        { command = "wlsunset -l 51.5 -L -0.1"; }  # London coordinates for night light
+        # Keep startup lean: no gamma daemon by default
       ];
 
       # === Window Rules ===

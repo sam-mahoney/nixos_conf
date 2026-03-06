@@ -1,9 +1,9 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 
 {
   # === Alacritty Terminal Emulator ===
   # Fast, GPU-accelerated terminal written in Rust
-  # Configured to auto-launch tmux on every new terminal
+  # Opens regular login shells by default (tmux is optional/manual)
   # https://alacritty.org/
   programs.alacritty = {
     enable = true;
@@ -32,50 +32,29 @@
         size = 12.0;
       };
 
-      # === Catppuccin Mocha Colors ===
+      # === Geohot-style Colors (minimal black/grey/white) ===
       colors = {
         primary = {
-          background = "#1e1e2e";
-          foreground = "#cdd6f4";
+          background = "#000000";
+          foreground = "#d8d8d8";
         };
         cursor = {
-          text = "#1e1e2e";
-          cursor = "#f5e0dc";
+          text = "#000000";
+          cursor = "#c0c0c0";
         };
-        normal = {
-          black = "#45475a";
-          red = "#f38ba8";
-          green = "#a6e3a1";
-          yellow = "#f9e2af";
-          blue = "#89b4fa";
-          magenta = "#f5c2e7";
-          cyan = "#94e2d5";
-          white = "#bac2de";
-        };
-        bright = {
-          black = "#585b70";
-          red = "#f38ba8";
-          green = "#a6e3a1";
-          yellow = "#f9e2af";
-          blue = "#89b4fa";
-          magenta = "#f5c2e7";
-          cyan = "#94e2d5";
-          white = "#a6adc8";
+        selection = {
+          text = "#000000";
+          background = "#9a9a9a";
         };
       };
 
       # === Window Settings ===
       window = {
-        padding = { x = 8; y = 8; };
-        opacity = 0.95;
+        padding = { x = 4; y = 4; };
+        opacity = 1.0;
       };
 
-      # === Auto-launch tmux ===
-      # Attach to existing session or create a new one
-      terminal.shell = {
-        program = "${pkgs.zsh}/bin/zsh";
-        args = [ "-l" "-c" "tmux new-session -A -s main" ];
-      };
+      # Use default login shell behavior (no auto-attach to tmux)
     };
   };
 
@@ -90,16 +69,20 @@
       
       directory = {
         truncation_length = 3;
-        style = "bold blue";
+        style = "bold #c8c8c8";
       };
       
       git_branch = {
-        style = "bold purple";
+        style = "#9c9c9c";
+      };
+      
+      git_status = {
+        style = "#7a7a7a";
       };
       
       character = {
-        success_symbol = "[❯](bold green)";
-        error_symbol = "[❯](bold red)";
+        success_symbol = "[❯](bold #e6e6e6)";
+        error_symbol = "[❯](bold #ff8a8a)";
       };
     };
   };
@@ -121,6 +104,7 @@
       gc = "git commit";
       gp = "git push";
       gl = "git log --oneline --graph";
+      ta = "tmux attach -t main || tmux new -s main";
     };
 
     # --- History ---
@@ -145,9 +129,9 @@
       zstyle ':completion:*' list-colors "$${(s.:.)LS_COLORS}"
 
       # Group completions by category
-      zstyle ':completion:*' group-name ''''
-      zstyle ':completion:*:descriptions' format '%%F{blue}-- %%d --%%f'
-      zstyle ':completion:*:warnings' format '%%F{red}-- no matches --%%f'
+      zstyle ':completion:*' group-name ""
+      zstyle ':completion:*:descriptions' format '%F{blue}-- %d --%f'
+      zstyle ':completion:*:warnings' format '%F{red}-- no matches --%f'
 
       # Cache completions for faster results
       zstyle ':completion:*' use-cache on
@@ -174,10 +158,7 @@
 
       # Better globbing
       setopt EXTENDED_GLOB
-      setopt NOMATCH
-
-      # Correct typos in commands
-      setopt CORRECT
+      unsetopt NOMATCH   # Don't error on unmatched globs (needed for nix flake refs like .#helios)
 
       # Up/Down arrow searches history matching current input
       bindkey '^[[A' history-search-backward

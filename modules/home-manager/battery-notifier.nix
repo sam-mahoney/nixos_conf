@@ -15,7 +15,7 @@
       # Check battery level and send notification if low
       ExecStart = pkgs.writeShellScript "battery-notifier" ''
         # Find battery path (works with BAT0, BAT1, etc.)
-        BATTERY_PATH=$(find /sys/class/power_supply -name 'BAT*' | head -n 1)
+        BATTERY_PATH=$(${pkgs.findutils}/bin/find /sys/class/power_supply -name 'BAT*' | ${pkgs.coreutils}/bin/head -n 1)
         
         # Exit if no battery found (desktop systems)
         if [ -z "$BATTERY_PATH" ]; then
@@ -23,8 +23,8 @@
         fi
         
         # Read battery capacity and status
-        CAPACITY=$(cat "$BATTERY_PATH/capacity")
-        STATUS=$(cat "$BATTERY_PATH/status")
+        CAPACITY=$(${pkgs.coreutils}/bin/cat "$BATTERY_PATH/capacity")
+        STATUS=$(${pkgs.coreutils}/bin/cat "$BATTERY_PATH/status")
         
         # Send notifications based on battery level
         if [ "$STATUS" = "Discharging" ]; then

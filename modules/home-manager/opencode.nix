@@ -46,9 +46,11 @@
     lsp = {
       typescript = {
         command = [ "typescript-language-server" "--stdio" ];
+        extensions = [ "ts" "tsx" "js" "jsx" ];
       };
       nix = {
         command = [ "nil" ];
+        extensions = [ "nix" ];
       };
     };
   };

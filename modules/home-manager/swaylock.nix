@@ -3,64 +3,51 @@
 {
   # === Swaylock Configuration ===
   # Screen locker for Sway with blur effects (swaylock-effects)
-  # Screen locker for Sway with blur effects and Catppuccin styling
+  # Screen locker for Sway with blur effects and a geohot-style palette
   #
-  # Catppuccin Mocha theme matching the rest of the desktop
+  # Minimal black/grey lock screen matching the rest of the desktop
 
   home.file.".config/swaylock/config".text = ''
-    # === Effects ===
-    screenshots
+    # === Basic lock screen ===
     clock
     indicator
-    indicator-radius=100
-    indicator-thickness=7
-    effect-blur=7x5
-    effect-vignette=0.5:0.5
     grace=2
-    fade-in=0.2
+    fade-in=0.1
 
-    # === Colors (Catppuccin Mocha) ===
-    # Inside (idle)
-    inside-color=1e1e2e00
-    inside-clear-color=1e1e2e00
-    inside-caps-lock-color=1e1e2e00
-    inside-ver-color=89b4fa44
-    inside-wrong-color=f38ba844
+    # === Colors (minimal black/grey) ===
+    inside-color=000000dd
+    inside-clear-color=000000dd
+    inside-caps-lock-color=000000dd
+    inside-ver-color=000000dd
+    inside-wrong-color=000000dd
 
-    # Ring
-    ring-color=45475a
-    ring-clear-color=f9e2af
-    ring-caps-lock-color=fab387
-    ring-ver-color=89b4fa
-    ring-wrong-color=f38ba8
+    ring-color=5f5f5f
+    ring-clear-color=8a8a8a
+    ring-caps-lock-color=8a8a8a
+    ring-ver-color=a0a0a0
+    ring-wrong-color=d75f5f
 
-    # Line (between ring and inside)
     line-color=00000000
     line-clear-color=00000000
     line-caps-lock-color=00000000
     line-ver-color=00000000
     line-wrong-color=00000000
 
-    # Separator
     separator-color=00000000
 
-    # Text
-    text-color=cdd6f4
-    text-clear-color=f9e2af
-    text-caps-lock-color=fab387
-    text-ver-color=89b4fa
-    text-wrong-color=f38ba8
+    text-color=e6e6e6
+    text-clear-color=e6e6e6
+    text-caps-lock-color=e6e6e6
+    text-ver-color=e6e6e6
+    text-wrong-color=ff8080
 
-    # Key highlight
-    key-hl-color=a6e3a1
-    bs-hl-color=f38ba8
+    key-hl-color=a0a0a0
+    bs-hl-color=d75f5f
 
-    # Layout
     font=JetBrainsMono Nerd Font
-    font-size=24
+    font-size=22
 
-    # Date/Time format
-    timestr=%H:%M:%S
-    datestr=%A, %d %B %Y
+    timestr=%H:%M
+    datestr=%a %d %b %Y
   '';
 }
