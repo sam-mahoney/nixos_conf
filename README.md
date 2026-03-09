@@ -1,8 +1,11 @@
 # Helios NixOS Configuration
 
-Modular NixOS configuration for the Helios laptop (Dell Precision 5570).
+Modular NixOS configuration for multiple machines:
 
-**Desktop:** Sway (Aerospace-inspired keybindings) · **Shell:** Noctalia (bar, notifications, OSD, launcher) · **Terminal:** Alacritty + tmux · **Theme:** Catppuccin Mocha
+- `helios` — Dell Precision 5570 laptop
+- `apollo` — desktop (AMD 9950X + NVIDIA RTX 5080, gaming stack with Steam + Heroic)
+
+**Desktop:** Sway (Aerospace-inspired keybindings) · **Shell:** Noctalia (bar, notifications, OSD, launcher) · **Terminal:** Alacritty + tmux · **Theme:** Geohot-style monochrome (black/grey/white)
 
 ## 📁 Directory Structure
 
@@ -44,8 +47,11 @@ nixos-conf/
 After editing any configuration files, rebuild the system:
 
 ```bash
-# Rebuild and switch to new configuration
+# Rebuild and switch laptop
 sudo nixos-rebuild switch --flake .#helios
+
+# Rebuild and switch desktop
+sudo nixos-rebuild switch --flake .#apollo
 
 # Test configuration without switching (boot into it once)
 sudo nixos-rebuild test --flake .#helios
@@ -90,7 +96,7 @@ User-level settings are in `modules/home-manager/`:
 - **`sway.nix`** - Sway window manager with Aerospace-style keybindings
 - **`noctalia.nix`** - Desktop shell (bar, notifications, OSD, launcher)
 - **`swaylock.nix`** - Screen locker with blur effects
-- **`terminal.nix`** - Alacritty terminal (auto-launches tmux)
+- **`terminal.nix`** - Alacritty terminal (regular shells by default)
 - **`tmux.nix`** - Terminal multiplexer configuration
 - **`git.nix`** - Git and SSH configuration (with key caching)
 - **`services.nix`** - User services (polkit authentication agent)
@@ -188,7 +194,7 @@ Keys are automatically cached by the SSH agent after first use (`addKeysToAgent 
 Sway configuration in `modules/home-manager/sway.nix`:
 
 - **Keybindings**: Aerospace-inspired (Alt modifier, hjkl navigation)
-- **Gaps & Borders**: Minimal gaps with Catppuccin Mocha accent colors
+- **Gaps & Borders**: Minimal gaps with monochrome geohot-style accent colors
 - **Input**: GB keyboard, natural scroll touchpad, follow-mouse focus
 - **Autostart**: noctalia-shell, blueman-applet, mako, nm-applet, swayidle, wlsunset
 
@@ -204,6 +210,28 @@ Noctalia provides a unified desktop shell with:
 See `modules/home-manager/noctalia.nix` for configuration.
 
 ## 🔍 Troubleshooting
+
+### Secret Scanning
+
+This repo includes a `gitleaks`-based secret scanner through `flake check`.
+
+```bash
+# Run all flake checks (includes secret scan)
+nix flake check
+
+# Run only the secret scan check
+nix build .#checks.x86_64-linux.secret-scan
+```
+
+To enable local pre-commit scanning for this repo:
+
+```bash
+# Use repository-managed hooks
+git config core.hooksPath .githooks
+
+# Optional: run the hook manually
+.githooks/pre-commit
+```
 
 ### Configuration Errors
 

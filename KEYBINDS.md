@@ -133,10 +133,18 @@ Noctalia keybinds are triggered via IPC calls from Sway.
 | `Prefix + j` | Navigate pane down |
 | `Prefix + k` | Navigate pane up |
 | `Prefix + l` | Navigate pane right |
+| `Alt+h` | Navigate pane left (no prefix) |
+| `Alt+j` | Navigate pane down (no prefix) |
+| `Alt+k` | Navigate pane up (no prefix) |
+| `Alt+l` | Navigate pane right (no prefix) |
 | `Prefix + H` | Resize pane left |
 | `Prefix + J` | Resize pane down |
 | `Prefix + K` | Resize pane up |
 | `Prefix + L` | Resize pane right |
+| `Alt+Shift+h` | Resize pane left (no prefix) |
+| `Alt+Shift+j` | Resize pane down (no prefix) |
+| `Alt+Shift+k` | Resize pane up (no prefix) |
+| `Alt+Shift+l` | Resize pane right (no prefix) |
 
 ### Windows
 
@@ -180,7 +188,7 @@ Noctalia keybinds are triggered via IPC calls from Sway.
 - **Mod = Alt key** — inspired by Aerospace on macOS
 - **Lock the screen** with `Mod+Escape` — runs swaylock with blur effects
 - **Auto-lock**: screen dims after 2 min, locks after 5 min, display off after 6 min (swayidle). Also locks automatically before sleep/suspend.
-- **Terminals always launch tmux** — your session persists across terminal restarts
+- **tmux is optional per shell** — run `tmux` when you want persistent sessions
 - `tmux ls` — list all sessions from a regular shell
 - `tmux attach -t main` — reattach to your main session
 - Noctalia shell provides its own notification system, OSD, and control center — you can click the bar widgets or use the keybinds above
