@@ -82,8 +82,8 @@ All keybindings for the Helios NixOS setup. **Mod = Alt** (Aerospace-style).
 
 | Key | Action |
 |-----|--------|
-| `Mod+.` | Focus next output (monitor) |
-| `Mod+Shift+.` | Move workspace to next output |
+| `Mod+.` | Focus output to the right |
+| `Mod+Shift+.` | Move workspace to output on the right |
 
 ### Screenshots
 
@@ -127,7 +127,7 @@ Noctalia keybinds are triggered via IPC calls from Sway.
 
 | Key | Action |
 |-----|--------|
-| `Prefix + \|` | Split vertically (side by side) |
+| `Prefix + \|` or `Prefix + \\` | Split vertically (side by side) |
 | `Prefix + -` | Split horizontally (top/bottom) |
 | `Prefix + h` | Navigate pane left |
 | `Prefix + j` | Navigate pane down |
@@ -183,10 +183,18 @@ Noctalia keybinds are triggered via IPC calls from Sway.
 
 ---
 
+## 🤖 OpenCode — Terminal AI Agent
+
+| Key | Action |
+|-----|--------|
+| `Ctrl+o` | Open OpenCode leader shortcuts |
+
+---
+
 ## 💡 Tips
 
 - **Mod = Alt key** — inspired by Aerospace on macOS
-- **Lock the screen** with `Mod+Escape` — runs swaylock with blur effects
+- **Lock the screen** with `Mod+Escape` — runs swaylock
 - **Auto-lock**: screen dims after 2 min, locks after 5 min, display off after 6 min (swayidle). Also locks automatically before sleep/suspend.
 - **tmux is optional per shell** — run `tmux` when you want persistent sessions
 - `tmux ls` — list all sessions from a regular shell
