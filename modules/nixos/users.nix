@@ -4,9 +4,13 @@
   # === User Account Configuration ===
   # Define system users and their properties
   
+  # Zsh must be enabled at the system level to be used as a login shell
+  programs.zsh.enable = true;
+
   users.users.mahoney = {
     isNormalUser = true;  # Standard user account (not system account)
-    description = "mahoney";
+    description = "legend";
+    shell = pkgs.zsh;     # Zsh as default login shell
     
     # === Group Membership ===
     # Groups grant permissions and capabilities
@@ -17,11 +21,9 @@
     ];
     
     # === User-Specific Packages ===
-    # Packages installed only for this user (currently none)
-    # Prefer home-manager for user packages
     packages = with pkgs; [
-      # Example:
-      # thunderbird
+      # Packages installed only for this user (currently none)
+      # Prefer home-manager for user packages
     ];
   };
 }

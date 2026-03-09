@@ -1,6 +1,22 @@
 { config, pkgs, ... }:
 
 {
+  # === Bluetooth ===
+  # Enable Bluetooth hardware support for wireless peripherals
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;  # Ensure Bluetooth is powered on at boot
+    settings = {
+      General = {
+        Experimental = true;  # Enables battery reporting for BT devices
+      };
+    };
+  };
+
+  # Blueman - GTK Bluetooth manager
+  # Provides a system tray applet and GUI for pairing/connecting
+  services.blueman.enable = true;
+
   # === Audio Configuration ===
   
   # Disable PulseAudio (replaced by PipeWire)

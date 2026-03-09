@@ -71,34 +71,52 @@
     docker       # Container runtime and CLI
     vscode       # Visual Studio Code editor
     gh           # GitHub command line tool
+    opencode     # AI coding agent for the terminal
     
+    # === Entertainment ===
+    spotify           # Music streaming client
+
     # === Enterprise Communication ===
     # Work collaboration tools
     slack             # Team communication platform
     teams-for-linux   # Microsoft Teams client for Linux
     
-    # === Hyprland Ecosystem ===
+    # === Sway Ecosystem ===
     # Wayland compositor and related tools
-    waybar                  # Status bar for Wayland compositors
-    rofi                    # Application launcher with Wayland support
-    dunst                   # Lightweight notification daemon
     libnotify               # Library for desktop notifications (notify-send)
-    swww                    # Wallpaper daemon for Wayland
     wl-clipboard            # Command-line copy/paste for Wayland
-    
-    # Screenshot utilities
-    grim                    # Screenshot tool for Wayland
-    slurp                   # Select a region in Wayland
-    grimblast               # Convenience wrapper for grim + slurp
+    grim                    # Screenshot tool
+    slurp                   # Region selection tool
+    swaylock-effects        # Screen locker with blur effects
+    swayidle                # Idle management daemon
+    wlsunset                # Day/night gamma adjustments
+    brightnessctl           # Backlight control
+    imagemagick             # Required by Noctalia for template processing
     
     # System tray and control utilities
     networkmanagerapplet    # Network configuration GUI (nm-applet)
     pavucontrol             # PulseAudio volume control
-    brightnessctl           # Control screen brightness
-    
-    # File management
-    xfce.thunar                  # Lightweight file manager
-    xfce.thunar-volman           # Automatic management of removable media
-    xfce.thunar-archive-plugin   # Archive support in Thunar
   ];
+
+  # Chromium (ungoogled variant) + default extension set
+  programs.chromium = {
+    enable = true;
+    package = pkgs.ungoogled-chromium;
+    extensions = [
+      "cjpalhdlnbpafiamejdnhcphjbkeiagm" # uBlock Origin
+    ];
+  };
+
+  # Make Chromium the default browser for links and HTML files
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html" = [ "chromium-browser.desktop" "chromium.desktop" ];
+      "application/xhtml+xml" = [ "chromium-browser.desktop" "chromium.desktop" ];
+      "x-scheme-handler/http" = [ "chromium-browser.desktop" "chromium.desktop" ];
+      "x-scheme-handler/https" = [ "chromium-browser.desktop" "chromium.desktop" ];
+      "x-scheme-handler/about" = [ "chromium-browser.desktop" "chromium.desktop" ];
+      "x-scheme-handler/unknown" = [ "chromium-browser.desktop" "chromium.desktop" ];
+    };
+  };
 }

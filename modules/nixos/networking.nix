@@ -2,8 +2,7 @@
 
 {
   # === Hostname ===
-  # Identifies this machine on the network
-  networking.hostName = "helios";
+  # Hostname is set per host in ./modules/nixos/hosts/*.nix
 
   # === Network Manager ===
   # Provides GUI and CLI tools for network configuration

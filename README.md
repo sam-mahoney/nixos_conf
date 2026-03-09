@@ -1,40 +1,43 @@
 # Helios NixOS Configuration
 
-Modular NixOS configuration for the Helios laptop (Dell Precision 5570).
+Modular NixOS configuration for multiple machines:
+
+- `helios` — Dell Precision 5570 laptop
+- `apollo` — desktop (AMD 9950X + NVIDIA RTX 5080, gaming stack with Steam + Heroic)
+
+**Desktop:** Sway (Aerospace-inspired keybindings) · **Shell:** Noctalia (bar, notifications, OSD, launcher) · **Terminal:** Alacritty + tmux · **Theme:** Geohot-style monochrome (black/grey/white)
 
 ## 📁 Directory Structure
 
 ```
 nixos-conf/
-├── flake.nix                    # Main flake configuration (NEW MODULAR VERSION)
-├── configuration.nix            # Main NixOS config (NEW MODULAR VERSION)
-├── home.nix                     # Home Manager config (NEW MODULAR VERSION)
+├── flake.nix                    # Main flake configuration
+├── configuration.nix            # Main NixOS config
+├── home.nix                     # Home Manager config
 ├── hardware-configuration.nix   # Auto-generated hardware config
+├── KEYBINDS.md                  # Full keybindings cheatsheet
 │
 ├── modules/
 │   ├── nixos/                   # System-level configuration modules
 │   │   ├── boot.nix            # Bootloader and disk encryption
 │   │   ├── networking.nix      # Network settings
 │   │   ├── locale.nix          # Timezone and language
-│   │   ├── desktop.nix         # Desktop environment and display manager
-│   │   ├── hardware.nix        # Audio, printing, input devices
+│   │   ├── desktop.nix         # Sway compositor and display manager
+│   │   ├── hardware.nix        # Audio, Bluetooth, printing, input devices
 │   │   ├── users.nix           # User accounts and groups
 │   │   ├── packages.nix        # System-wide packages and fonts
-│   │   └── services.nix        # System services (SSH, etc.)
+│   │   └── services.nix        # System services (SSH, Docker, TLP, UPower)
 │   │
 │   └── home-manager/           # User-level configuration modules
 │       ├── packages.nix        # User packages and tools
-│       ├── hyprland.nix        # Hyprland window manager
-│       ├── waybar.nix          # Status bar
-│       ├── dunst.nix           # Notification daemon
-│       ├── terminal.nix        # Terminal emulators and shell
+│       ├── sway.nix            # Sway WM (Aerospace-style keybindings)
+│       ├── noctalia.nix        # Noctalia desktop shell (bar, notifications, OSD, launcher)
+│       ├── swaylock.nix        # Screen locker configuration
+│       ├── terminal.nix        # Alacritty terminal + Starship prompt
+│       ├── tmux.nix            # Terminal multiplexer
 │       ├── git.nix             # Git and SSH configuration
-│       └── services.nix        # User services (polkit agent)
-│
-└── [legacy files]              # Old monolithic configs (backup)
-    ├── flake.nix.old
-    ├── configuration.nix.old
-    └── home.nix.old
+│       ├── services.nix        # User services (polkit agent)
+│       └── battery-notifier.nix # Battery level notifications
 ```
 
 ## 🚀 Quick Start
@@ -44,8 +47,11 @@ nixos-conf/
 After editing any configuration files, rebuild the system:
 
 ```bash
-# Rebuild and switch to new configuration
+# Rebuild and switch laptop
 sudo nixos-rebuild switch --flake .#helios
+
+# Rebuild and switch desktop
+sudo nixos-rebuild switch --flake .#apollo
 
 # Test configuration without switching (boot into it once)
 sudo nixos-rebuild test --flake .#helios
@@ -76,23 +82,25 @@ System-level settings are in `modules/nixos/`:
 - **`boot.nix`** - Bootloader configuration and disk encryption
 - **`networking.nix`** - Hostname, NetworkManager, proxy settings
 - **`locale.nix`** - Timezone, language, and regional settings
-- **`desktop.nix`** - Hyprland, GNOME, display manager, keyboard layout
-- **`hardware.nix`** - Audio (PipeWire), printing (CUPS), touchpad
+- **`desktop.nix`** - Sway compositor, display manager (greetd), XDG portals
+- **`hardware.nix`** - Audio (PipeWire), Bluetooth, printing (CUPS), touchpad
 - **`users.nix`** - User accounts, groups, and permissions
 - **`packages.nix`** - System-wide packages, fonts, and aliases
-- **`services.nix`** - System services like SSH, firewall rules
+- **`services.nix`** - System services (SSH, Docker, TLP, UPower)
 
 ### User Configuration (Home Manager)
 
 User-level settings are in `modules/home-manager/`:
 
 - **`packages.nix`** - User packages (development tools, utilities, GUI apps)
-- **`hyprland.nix`** - Hyprland window manager configuration and keybindings
-- **`waybar.nix`** - Status bar appearance and modules
-- **`dunst.nix`** - Notification daemon styling and behavior
-- **`terminal.nix`** - Alacritty, Kitty, and Starship prompt
-- **`git.nix`** - Git configuration with work/personal profiles
+- **`sway.nix`** - Sway window manager with Aerospace-style keybindings
+- **`noctalia.nix`** - Desktop shell (bar, notifications, OSD, launcher)
+- **`swaylock.nix`** - Screen locker with blur effects
+- **`terminal.nix`** - Alacritty terminal (regular shells by default)
+- **`tmux.nix`** - Terminal multiplexer configuration
+- **`git.nix`** - Git and SSH configuration (with key caching)
 - **`services.nix`** - User services (polkit authentication agent)
+- **`battery-notifier.nix`** - Battery level notifications
 
 ## 🔧 Common Tasks
 
@@ -116,27 +124,51 @@ home.packages = with pkgs; [
 ];
 ```
 
-### Modifying Hyprland Keybindings
+### Sway Keybindings (Aerospace-style)
 
-Edit `modules/home-manager/hyprland.nix`:
+Keybindings are in `modules/home-manager/sway.nix`. The modifier is **Alt** (matching Aerospace on macOS):
+
+| Key | Action |
+|-----|--------|
+| `Alt+Return` | Open terminal (Alacritty + tmux) |
+| `Alt+d` | Application launcher (Noctalia) |
+| `Alt+q` | Close window |
+| `Alt+h/j/k/l` | Focus left/down/up/right |
+| `Alt+Shift+h/j/k/l` | Move window left/down/up/right |
+| `Alt+1-9` | Switch to workspace 1-9 |
+| `Alt+Shift+1-9` | Move window to workspace 1-9 |
+| `Alt+/` | Toggle horizontal/vertical tiling |
+| `Alt+,` | Toggle tabbed/stacking (accordion) |
+| `Alt+f` | Fullscreen |
+| `Alt+Shift+f` | Toggle floating |
+| `Alt+Tab` | Workspace back-and-forth |
+| `Alt+-/=` | Resize shrink/grow |
+| `Alt+r` | Enter resize mode (hjkl to resize) |
+| `Alt+Escape` | Lock screen |
+| `Print` | Screenshot (full) |
+| `Shift+Print` | Screenshot (region) |
+
+### tmux Keybindings
+
+Prefix is **Ctrl+a** (more ergonomic than default Ctrl+b):
+
+| Key | Action |
+|-----|--------|
+| `Ctrl+a \|` | Vertical split |
+| `Ctrl+a -` | Horizontal split |
+| `Ctrl+a h/j/k/l` | Navigate panes |
+| `Ctrl+a c` | New window |
+| `Ctrl+a 1-9` | Switch to window |
+| `Ctrl+a d` | Detach session |
+
+### Customising Noctalia Shell
+
+Edit `modules/home-manager/noctalia.nix`:
 
 ```nix
-bind = [
-  # Add new keybinding
-  "$mod, T, exec, kitty"  # Super+T opens Kitty terminal
-];
-```
-
-### Changing Waybar Appearance
-
-Edit `modules/home-manager/waybar.nix`:
-
-```nix
-# Modify settings for module configuration
-settings.mainBar.modules-right = [ ... ];
-
-# Modify style for CSS styling
-style = '' ... '';
+# Configure bar widgets, position, and style
+# Configure notification daemon, OSD, and app launcher
+# See: https://github.com/noctalia-dev/noctalia-shell
 ```
 
 ### Adding a New User
@@ -152,34 +184,54 @@ users.users.newuser = {
 
 ### Configuring SSH Keys
 
-Edit `modules/home-manager/git.nix`:
-
-```nix
-core.sshCommand = "ssh -i ~/.ssh/your_key";
-```
+SSH keys are managed in `modules/home-manager/git.nix` with `programs.ssh`.
+Keys are automatically cached by the SSH agent after first use (`addKeysToAgent = "yes"`).
 
 ## 🎨 Customization
 
-### Hyprland Window Manager
+### Sway Window Manager
 
-Hyprland configuration uses a modular approach:
-- **General settings**: gaps, borders, layouts
-- **Animations**: bezier curves and transition effects
-- **Keybindings**: workspace navigation, window management
-- **Autostart**: programs launched on login
+Sway configuration in `modules/home-manager/sway.nix`:
 
-See `modules/home-manager/hyprland.nix` for detailed comments.
+- **Keybindings**: Aerospace-inspired (Alt modifier, hjkl navigation)
+- **Gaps & Borders**: Minimal gaps with monochrome geohot-style accent colors
+- **Input**: GB keyboard, natural scroll touchpad, follow-mouse focus
+- **Autostart**: noctalia-shell, blueman-applet, mako, nm-applet, swayidle, wlsunset
 
-### Waybar Status Bar
+### Noctalia Desktop Shell
 
-Waybar uses Catppuccin-inspired colors:
-- **Modules**: workspace, window, clock, CPU, memory, battery, network, audio
-- **Styling**: Fully customizable CSS in the `style` section
-- **Icons**: Nerd Font icons and Font Awesome
+Noctalia provides a unified desktop shell with:
 
-See `modules/home-manager/waybar.nix` for all available options.
+- **Bar**: Workspaces, clock, network, Bluetooth, volume, battery, system tray
+- **Notifications**: Built-in notification daemon with control centre (Alt+n / Alt+o)
+- **OSD**: On-screen display for volume and brightness
+- **Launcher**: Application launcher toggled with Alt+d
+
+See `modules/home-manager/noctalia.nix` for configuration.
 
 ## 🔍 Troubleshooting
+
+### Secret Scanning
+
+This repo includes a `gitleaks`-based secret scanner through `flake check`.
+
+```bash
+# Run all flake checks (includes secret scan)
+nix flake check
+
+# Run only the secret scan check
+nix build .#checks.x86_64-linux.secret-scan
+```
+
+To enable local pre-commit scanning for this repo:
+
+```bash
+# Use repository-managed hooks
+git config core.hooksPath .githooks
+
+# Optional: run the hook manually
+.githooks/pre-commit
+```
 
 ### Configuration Errors
 
@@ -220,23 +272,10 @@ home-manager generations
 - [NixOS Manual](https://nixos.org/manual/nixos/stable/)
 - [NixOS Options Search](https://search.nixos.org/options)
 - [Home Manager Manual](https://nix-community.github.io/home-manager/)
-- [Hyprland Documentation](https://wiki.hyprland.org/)
+- [Sway Documentation](https://swaywm.org/)
+- [Noctalia Shell](https://github.com/noctalia-dev/noctalia-shell) (desktop shell)
+- [Aerospace Guide](https://nikitabobko.github.io/AeroSpace/guide) (keybinding inspiration)
 - [Nix Flakes](https://wiki.nixos.org/wiki/Flakes)
-
-## ⚠️ Migration from Old Configuration
-
-The old monolithic configuration files have been split into modules:
-
-1. **Backup old files** (already done with `.bak` extension)
-2. **Review new modular structure** in `modules/` directories
-3. **Test new configuration** with `nixos-rebuild test`
-4. **Switch to new configuration** when satisfied
-
-To revert to old configuration, you can:
-```bash
-# Use git to restore old files
-git checkout HEAD -- flake.nix configuration.nix home.nix
-```
 
 ## 📋 Notes
 

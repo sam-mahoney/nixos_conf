@@ -1,51 +1,67 @@
 { config, pkgs, ... }:
 
 {
-  # === Hyprland Wayland Compositor ===
-  # Modern, dynamic tiling Wayland compositor
-  # https://hyprland.org/
-  programs.hyprland = {
+  # === Sway Wayland Compositor ===
+  # i3-compatible tiling Wayland compositor
+  # https://swaywm.org/
+  programs.sway = {
     enable = true;
-    xwayland.enable = true;  # X11 application compatibility
+    wrapperFeatures.gtk = true;  # Fix GTK apps under Sway
+    extraPackages = with pkgs; [
+      swaylock-effects  # Screen locker with blur/effects
+      swayidle          # Idle management daemon
+      wl-clipboard      # Wayland clipboard utilities
+      wlsunset          # Day/night gamma adjustments
+      grim              # Screenshot tool
+      slurp             # Region selector for screenshots
+    ];
   };
 
-  # === X11 Windowing System ===
-  # Legacy display server (still needed for some applications)
-  services.xserver.enable = true;
+  # === XDG Portal for Sway ===
+  # Enables screen sharing, file picker, etc. for Wayland apps
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  };
 
   # === Display Manager: greetd ===
   # Lightweight, minimal display manager for login
   # Using tuigreet for a text-based interface
   services.greetd = {
     enable = true;
+    # greetd is fixed to VT1 on NixOS 25.11+
+    # Boot log bleed-through is handled by quiet kernel params (boot.nix)
+    # and TTY cleanup (systemd service overrides below)
     settings = {
       default_session = {
         # tuigreet provides a terminal-based login screen
         # --time: Show current time
         # --remember: Remember last logged-in user
         # --remember-session: Remember last selected session
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-session --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions:${config.services.displayManager.sessionData.desktops}/share/xsessions";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-session --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions";
         user = "greeter";  # User account for the greeter process
       };
     };
   };
 
-  # === GNOME Desktop Environment ===
-  # Full-featured desktop environment (available as fallback)
-  services.desktopManager.gnome.enable = true;
-  
+  # Suppress systemd status messages on greetd's VT
+  # This prevents "Starting foo..." lines from appearing behind tuigreet
+  systemd.services.greetd.serviceConfig = {
+    StandardInput = "null";
+    StandardOutput = "null";
+    StandardError = "journal";
+    TTYReset = true;
+    TTYVHangup = true;
+    TTYVTDisallocate = true;
+  };
+
   # === GNOME Keyring ===
   # Secure storage for passwords, keys, and certificates
   # Integrates with PAM for automatic unlocking on login
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.greetd.enableGnomeKeyring = true;
-
-  # === X11 Keyboard Layout ===
-  # British keyboard layout for X11 applications
-  services.xserver.xkb = {
-    layout = "gb";  # UK keyboard layout
-    variant = "";   # Standard variant (no modifications)
-  };
+  security.pam.services.swaylock = {};  # Allow swaylock to authenticate
 
   # === Console Keyboard Layout ===
   # British keyboard layout for TTY/console

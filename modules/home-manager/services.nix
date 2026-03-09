@@ -1,28 +1,21 @@
 { config, pkgs, ... }:
 
 {
-  # === Polkit GNOME Authentication Agent ===
-  # Provides graphical authentication dialogs for privileged operations
-  # Required for GUI applications to request sudo/admin permissions
-  
-  systemd.user.services.polkit-gnome-authentication-agent-1 = {
+  # === Polkit Authentication Agent ===
+  # Required for GUI privilege escalation prompts
+  # Launched as a systemd user service under Sway
+  systemd.user.services.polkit-gnome-agent = {
     Unit = {
-      Description = "polkit-gnome-authentication-agent-1";
-      Wants = [ "graphical-session.target" ];  # Requires graphical session
-      After = [ "graphical-session.target" ];  # Start after graphical session
+      Description = "GNOME Polkit Authentication Agent";
+      After = [ "graphical-session.target" ];
+      PartOf = [ "graphical-session.target" ];
     };
-    
     Service = {
       Type = "simple";
-      # Path to the polkit authentication agent binary
       ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-      Restart = "on-failure";  # Restart if it crashes
-      RestartSec = 1;          # Wait 1 second before restarting
-      TimeoutStopSec = 10;     # Force kill after 10 seconds if not stopped
+      Restart = "on-failure";
     };
-    
     Install = {
-      # Automatically start with graphical session
       WantedBy = [ "graphical-session.target" ];
     };
   };

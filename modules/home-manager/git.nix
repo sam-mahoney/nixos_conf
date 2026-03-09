@@ -42,4 +42,62 @@
   # Manages SSH keys and handles authentication
   # Automatically starts with user session
   services.ssh-agent.enable = true;
+
+  # === SSH Client Configuration ===
+  # Automatically adds keys to the agent on first use
+  # After entering your passphrase once, it's cached for the session
+  programs.ssh = {
+    enable = true;
+
+    # Opt out of legacy default config — we set everything explicitly
+    enableDefaultConfig = false;
+
+    matchBlocks = {
+      # Personal GitHub — plain github.com uses personal key
+      # This matches remote URLs like git@github.com:sam-mahoney/...
+      "github.com" = {
+        hostname = "github.com";
+        user = "git";
+        identityFile = "~/.ssh/helios_personal_ed25519";
+        identitiesOnly = true;
+        addKeysToAgent = "yes";
+      };
+
+      # Work GitHub — use "github.com-work" as the host alias
+      # Work repos use remote URLs like git@github.com-work:cydar/...
+      "github.com-work" = {
+        hostname = "github.com";
+        user = "git";
+        identityFile = "~/.ssh/helios_ed25519";
+        identitiesOnly = true;
+        addKeysToAgent = "yes";
+      };
+
+      # Default catch-all for any other SSH host (e.g. servers)
+      "*" = {
+        addKeysToAgent = "yes";
+      };
+    };
+  };
+
+  # === Pre-load SSH keys at login ===
+  # Adds both keys to the agent on session start so you only enter
+  # passphrases once (at login) rather than on first use of each key.
+  systemd.user.services.ssh-add-keys = {
+    Unit = {
+      Description = "Pre-load SSH keys into agent";
+      After = [ "ssh-agent.service" ];
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = let
+        script = pkgs.writeShellScript "ssh-add-keys" ''
+          ${pkgs.openssh}/bin/ssh-add ~/.ssh/helios_personal_ed25519 2>/dev/null || true
+          ${pkgs.openssh}/bin/ssh-add ~/.ssh/helios_ed25519 2>/dev/null || true
+        '';
+      in "${script}";
+      Environment = "SSH_AUTH_SOCK=%t/ssh-agent";
+    };
+    Install.WantedBy = [ "default.target" ];
+  };
 }
