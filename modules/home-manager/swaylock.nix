@@ -13,19 +13,20 @@
     indicator
     grace=2
     fade-in=0.1
+    color=000000
 
-    # === Colors (minimal black/grey) ===
+    # === Colors (aligned with terminal + Noctalia palette) ===
     inside-color=000000dd
     inside-clear-color=000000dd
     inside-caps-lock-color=000000dd
     inside-ver-color=000000dd
     inside-wrong-color=000000dd
 
-    ring-color=5f5f5f
-    ring-clear-color=8a8a8a
-    ring-caps-lock-color=8a8a8a
-    ring-ver-color=a0a0a0
-    ring-wrong-color=d75f5f
+    ring-color=3a3a3a
+    ring-clear-color=9a9a9a
+    ring-caps-lock-color=9a9a9a
+    ring-ver-color=c0c0c0
+    ring-wrong-color=ff8080
 
     line-color=00000000
     line-clear-color=00000000
@@ -35,14 +36,14 @@
 
     separator-color=00000000
 
-    text-color=e6e6e6
-    text-clear-color=e6e6e6
-    text-caps-lock-color=e6e6e6
-    text-ver-color=e6e6e6
+    text-color=d8d8d8
+    text-clear-color=d8d8d8
+    text-caps-lock-color=d8d8d8
+    text-ver-color=d8d8d8
     text-wrong-color=ff8080
 
-    key-hl-color=a0a0a0
-    bs-hl-color=d75f5f
+    key-hl-color=c0c0c0
+    bs-hl-color=ff8080
 
     font=JetBrainsMono Nerd Font
     font-size=22

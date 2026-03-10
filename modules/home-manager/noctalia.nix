@@ -96,18 +96,18 @@
     # --- Geohot-style monochrome colors ---
     colors = {
       dark = {
-        mPrimary = "#a0a0a0";
+        mPrimary = "#c0c0c0";
         mOnPrimary = "#000000";
-        mSecondary = "#8a8a8a";
+        mSecondary = "#9a9a9a";
         mOnSecondary = "#000000";
-        mTertiary = "#c8c8c8";
+        mTertiary = "#d8d8d8";
         mOnTertiary = "#000000";
         mError = "#ff8080";
         mOnError = "#000000";
         mSurface = "#000000";
-        mOnSurface = "#e6e6e6";
+        mOnSurface = "#d8d8d8";
         mSurfaceVariant = "#111111";
-        mOnSurfaceVariant = "#a0a0a0";
+        mOnSurfaceVariant = "#9a9a9a";
         mOutline = "#3a3a3a";
         mShadow = "#000000";
         mHover = "#9a9a9a";

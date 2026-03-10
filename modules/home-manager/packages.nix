@@ -72,7 +72,7 @@
     vscode       # Visual Studio Code editor
     gh           # GitHub command line tool
     opencode     # AI coding agent for the terminal
-    
+
     # === Entertainment ===
     spotify           # Music streaming client
 
@@ -80,6 +80,9 @@
     # Work collaboration tools
     slack             # Team communication platform
     teams-for-linux   # Microsoft Teams client for Linux
+
+    # === Password Manager ===
+    _1password-gui    # 1Password desktop application
     
     # === Sway Ecosystem ===
     # Wayland compositor and related tools

@@ -34,6 +34,23 @@
     ./modules/home-manager/opencode.nix        # OpenCode AI coding agent
   ];
 
+  # === GTK Theme ===
+  gtk = {
+    enable = true;
+    theme = {
+      package = pkgs.gnome-themes-extra;
+      name = "Adwaita-dark";
+    };
+
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+  };
+
   # === Cursor Theme ===
   home.pointerCursor = {
     gtk.enable = true;

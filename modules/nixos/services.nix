@@ -62,20 +62,27 @@
     
     settings = {
       # CPU Performance
-      CPU_SCALING_GOVERNOR_ON_AC = "performance";     # Max performance when plugged in
+      CPU_SCALING_GOVERNOR_ON_AC = "schedutil";       # Balanced frequency scaling on AC
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";      # Battery saving when on battery
-      
+
       # CPU Energy/Performance Policy (HWP.EPP)
-      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";   # Prefer performance on AC
-      CPU_ENERGY_PERF_POLICY_ON_BAT = "power";        # Prefer power saving on battery
-      
+      CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";  # Reduce high-frequency spikes/noise
+      CPU_ENERGY_PERF_POLICY_ON_BAT = "power";               # Prefer power saving on battery
+
+      # Limit AC max performance slightly to reduce VRM/coil noise
+      CPU_MIN_PERF_ON_AC = 5;
+      CPU_MAX_PERF_ON_AC = 90;
+
       # CPU Boost
-      CPU_BOOST_ON_AC = 1;      # Enable turbo boost when plugged in
+      CPU_BOOST_ON_AC = 1;      # Keep turbo available for burst workloads
       CPU_BOOST_ON_BAT = 0;     # Disable turbo boost on battery (saves power)
-      
+
       # Platform Profile (if supported)
-      PLATFORM_PROFILE_ON_AC = "performance";
+      PLATFORM_PROFILE_ON_AC = "balanced";
       PLATFORM_PROFILE_ON_BAT = "low-power";
+
+      # Disable dynamic HWP boost to reduce rapid frequency swings
+      CPU_HWP_DYN_BOOST_ON_AC = 0;
       
       # Start/Stop charge thresholds (helps preserve battery health)
       # Prevents charging to 100% which degrades battery faster

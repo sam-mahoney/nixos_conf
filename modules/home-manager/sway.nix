@@ -56,35 +56,35 @@
         border = 1;
       };
 
-      # === Colors (minimal black/grey) ===
+      # === Colors (aligned with terminal + Noctalia palette) ===
       colors = {
         focused = {
-          border = "#a0a0a0";
+          border = "#c0c0c0";
           background = "#000000";
-          text = "#ffffff";
-          indicator = "#a0a0a0";
-          childBorder = "#a0a0a0";
+          text = "#d8d8d8";
+          indicator = "#c0c0c0";
+          childBorder = "#c0c0c0";
         };
         focusedInactive = {
-          border = "#5f5f5f";
+          border = "#9a9a9a";
           background = "#000000";
-          text = "#d0d0d0";
-          indicator = "#5f5f5f";
-          childBorder = "#5f5f5f";
+          text = "#c0c0c0";
+          indicator = "#9a9a9a";
+          childBorder = "#9a9a9a";
         };
         unfocused = {
           border = "#3a3a3a";
           background = "#000000";
-          text = "#b0b0b0";
+          text = "#9a9a9a";
           indicator = "#3a3a3a";
           childBorder = "#3a3a3a";
         };
         urgent = {
-          border = "#d75f5f";
+          border = "#ff8080";
           background = "#000000";
-          text = "#ffffff";
-          indicator = "#d75f5f";
-          childBorder = "#d75f5f";
+          text = "#d8d8d8";
+          indicator = "#ff8080";
+          childBorder = "#ff8080";
         };
       };
 
