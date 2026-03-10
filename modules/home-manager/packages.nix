@@ -72,6 +72,18 @@
     vscode       # Visual Studio Code editor
     gh           # GitHub command line tool
     opencode     # AI coding agent for the terminal
+    neovim       # Text editor with LSP + Tree-sitter support
+
+    # === Language Servers (shared by opencode + neovim) ===
+    nodePackages.typescript-language-server # TS/JS language server
+    pyright                                # Python language server (default)
+    basedpyright                            # Alternate Python language server
+    gopls                                   # Go language server
+    clang-tools                             # clangd for C/C++ language support
+    nil                                     # Nix language server
+    tree-sitter                             # Tree-sitter CLI/runtime
+    ast-grep                                # AST-aware code search tool (sg)
+    universal-ctags                         # Symbol indexing and tag generation
 
     # === Entertainment ===
     spotify           # Music streaming client

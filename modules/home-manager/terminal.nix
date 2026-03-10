@@ -105,6 +105,12 @@
       gp = "git push";
       gl = "git log --oneline --graph";
       ta = "tmux attach -t main || tmux new -s main";
+
+      # OpenCode helper aliases
+      astq = "sg scan --json";
+      symidx = "ctags -R --output-format=json";
+      diag = "nix flake check";
+      timp = "git diff --name-only";
     };
 
     # --- History ---

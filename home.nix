@@ -27,6 +27,7 @@
     ./modules/home-manager/noctalia.nix         # Noctalia desktop shell (bar, notifications, OSD)
     ./modules/home-manager/terminal.nix        # Terminal emulators and shell
     ./modules/home-manager/tmux.nix            # Terminal multiplexer
+    ./modules/home-manager/neovim.nix          # Neovim + LSP + Tree-sitter
     ./modules/home-manager/git.nix             # Git and SSH configuration
     ./modules/home-manager/services.nix        # User services (polkit agent)
     ./modules/home-manager/swaylock.nix        # Screen locker configuration

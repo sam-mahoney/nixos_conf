@@ -70,7 +70,23 @@ in
     lsp = {
       typescript = {
         command = [ "typescript-language-server" "--stdio" ];
-        extensions = [ "ts" "tsx" "js" "jsx" ];
+        extensions = [ "ts" "tsx" "js" "jsx" "mjs" "cjs" ];
+      };
+      python = {
+        command = [ "pyright-langserver" "--stdio" ];
+        extensions = [ "py" "pyi" ];
+      };
+      go = {
+        command = [ "gopls" ];
+        extensions = [ "go" ];
+      };
+      c = {
+        command = [ "clangd" "--background-index" ];
+        extensions = [ "c" "h" ];
+      };
+      cpp = {
+        command = [ "clangd" "--background-index" ];
+        extensions = [ "cc" "cpp" "cxx" "hpp" "hh" "hxx" ];
       };
       nix = {
         command = [ "nil" ];
@@ -133,9 +149,4 @@ in
     alias peon="${inputs.peon-ping.packages.${system}.default}/bin/peon"
   '';
 
-  # Ensure LSP servers referenced above are available
-  home.packages = with pkgs; [
-    nodePackages.typescript-language-server
-    nil   # Nix language server
-  ];
 }

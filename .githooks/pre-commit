@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks detect --source . --no-git --redact --exit-code 1
+elif command -v nix >/dev/null 2>&1; then
+  nix build .#checks.x86_64-linux.secret-scan --no-link
+else
+  echo "Error: neither gitleaks nor nix is available in PATH." >&2
+  echo "Install gitleaks or nix to run pre-commit secret scanning." >&2
+  exit 1
+fi

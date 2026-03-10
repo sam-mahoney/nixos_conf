@@ -124,6 +124,23 @@ home.packages = with pkgs; [
 ];
 ```
 
+### Bootstrapping `AGENTS.md`
+
+Use the shared template to create an `AGENTS.md` in any repo root:
+
+```bash
+./scripts/bootstrap-agents-md.sh /path/to/repo
+```
+
+If the target already has `AGENTS.md`, pass `--force` to replace it:
+
+```bash
+./scripts/bootstrap-agents-md.sh /path/to/repo --force
+```
+
+Template source: `AGENTS.template.md`
+Bootstrap script: `scripts/bootstrap-agents-md.sh`
+
 ### Sway Keybindings (Aerospace-style)
 
 Keybindings are in `modules/home-manager/sway.nix`. The modifier is **Alt** (matching Aerospace on macOS):
@@ -276,6 +293,7 @@ home-manager generations
 - [Noctalia Shell](https://github.com/noctalia-dev/noctalia-shell) (desktop shell)
 - [Aerospace Guide](https://nikitabobko.github.io/AeroSpace/guide) (keybinding inspiration)
 - [Nix Flakes](https://wiki.nixos.org/wiki/Flakes)
+- [OpenCode Tooling Plan](./OPENCODE-TOOLING.md) (tool rationale, testing, workflow)
 
 ## 📋 Notes
 
