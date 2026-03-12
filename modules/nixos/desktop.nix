@@ -64,6 +64,6 @@
   security.pam.services.swaylock = {};  # Allow swaylock to authenticate
 
   # === Console Keyboard Layout ===
-  # British keyboard layout for TTY/console
-  console.keyMap = "uk";
+  # US keyboard layout for TTY/console
+  console.keyMap = "us";
 }

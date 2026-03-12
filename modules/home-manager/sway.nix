@@ -110,7 +110,7 @@
       # === Input Configuration ===
       input = {
         "type:keyboard" = {
-          xkb_layout = "gb";
+          xkb_layout = "us";
           repeat_delay = "300";
           repeat_rate = "50";
         };
