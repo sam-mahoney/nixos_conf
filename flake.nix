@@ -29,6 +29,10 @@
     # Hardware-specific configuration repository
     # Provides optimized settings for various laptop models
     nixos-hardware.url = "github:NixOS/nixos-hardware";
+
+    # Secondary nixpkgs channel used only for fast-moving packages
+    # Keep system on stable while allowing targeted package overrides
+    nixpkgs-opencode.url = "github:NixOS/nixpkgs/nixos-unstable";
     
     # Home Manager for user-level configuration
     # Manages dotfiles, user packages, and user services
@@ -60,13 +64,16 @@
 
   # === Outputs ===
   # What this flake produces (system configurations)
-  outputs = { self, nixpkgs, nixos-hardware, home-manager, ...}@inputs:
+  outputs = { self, nixpkgs, nixpkgs-opencode, nixos-hardware, home-manager, ...}@inputs:
     let
       # Target system architecture
       system = "x86_64-linux";
 
       # Import nixpkgs for the specified system
       pkgs = import nixpkgs { inherit system; };
+
+      # Import unstable channel for targeted package overrides
+      pkgsOpencode = import nixpkgs-opencode { inherit system; };
 
       mkHost = { configPath, extraModules ? [ ] }:
         nixpkgs.lib.nixosSystem {
@@ -77,6 +84,13 @@
               configPath
               home-manager.nixosModules.home-manager
               {
+                # Override opencode from nixos-unstable while keeping stable base
+                nixpkgs.overlays = [
+                  (final: prev: {
+                    opencode = pkgsOpencode.opencode;
+                  })
+                ];
+
                 # Use system-level nixpkgs for home-manager
                 # Reduces closures and ensures consistency
                 home-manager.useGlobalPkgs = true;
