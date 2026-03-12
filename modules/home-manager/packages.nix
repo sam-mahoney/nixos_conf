@@ -72,7 +72,7 @@
     vscode       # Visual Studio Code editor
     gh           # GitHub command line tool
     opencode     # AI coding agent for the terminal
-    neovim       # Text editor with LSP + Tree-sitter support
+    # neovim is managed by programs.neovim in modules/home-manager/neovim.nix
 
     # === Language Servers (shared by opencode + neovim) ===
     nodePackages.typescript-language-server # TS/JS language server
