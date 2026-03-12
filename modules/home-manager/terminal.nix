@@ -65,7 +65,7 @@
     enable = true;
     settings = {
       # Minimal prompt that works well with tmux status bar
-      format = "$directory$git_branch$git_status$character";
+      format = "$directory$git_branch$git_status$status$character";
       
       directory = {
         truncation_length = 3;
@@ -78,6 +78,11 @@
       
       git_status = {
         style = "#7a7a7a";
+      };
+
+      status = {
+        disabled = false;
+        format = '' [$status](bold #ff8a8a)'';
       };
       
       character = {
