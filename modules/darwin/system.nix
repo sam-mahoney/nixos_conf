@@ -4,11 +4,9 @@ let
   user = "mahoney";
   nixGuiApps = with pkgs; [
     aerospace
-    firefox
     spotify
     discord
     logseq
-    _1password-gui
     _1password-cli
     transmission_4-qt
   ];
@@ -149,34 +147,11 @@ in
       "the-unarchiver"
       "balenaetcher"
       "cold-turkey-blocker"
+      "1password"
     ];
     taps = [ ];
     masApps = { };
   };
-
-  system.activationScripts.applications.text = let
-    env = pkgs.buildEnv {
-      name = "system-applications";
-      paths = config.environment.systemPackages;
-      pathsToLink = [ "/Applications" ];
-    };
-  in
-    pkgs.lib.mkForce ''
-      set -euo pipefail
-
-      echo "setting up /Applications..." >&2
-      rm -rf /Applications/Nix\ Apps
-      mkdir -p /Applications/Nix\ Apps
-
-      if [ -d "${env}/Applications" ]; then
-        for src in "${env}/Applications"/*.app; do
-          [ -e "$src" ] || continue
-          app_name=$(basename "$src")
-          echo "linking $src" >&2
-          ln -sfn "$src" "/Applications/Nix Apps/$app_name"
-        done
-      fi
-    '';
 
   environment.variables = {
     EDITOR = "nvim";

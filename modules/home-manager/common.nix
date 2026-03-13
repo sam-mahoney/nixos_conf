@@ -8,5 +8,6 @@
     ./neovim.nix
     ./git.nix
     ./opencode.nix
+    ./firefox.nix
   ];
 }

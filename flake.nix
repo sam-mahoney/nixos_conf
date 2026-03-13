@@ -1,7 +1,7 @@
 {
   # === NixOS Flake Configuration ===
   # Declarative system configuration using Nix Flakes
-  # 
+  #
   # This flake defines the Helios and Apollo system configurations with:
   #   - NixOS system configuration
   #   - Home Manager for user-level configuration
@@ -16,16 +16,16 @@
   # For more information:
   #   - Flakes: https://wiki.nixos.org/wiki/Flakes
   #   - NixOS: https://nixos.org/manual/nixos/stable/
-  
+
   description = "Mahoney mixed NixOS and Darwin flake";
-  
+
   # === Inputs ===
   # External dependencies for this flake
   inputs = {
     # NixOS 25.11 stable channel
     # Primary source for system packages and modules
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-    
+
     # Hardware-specific configuration repository
     # Provides optimized settings for various laptop models
     nixos-hardware.url = "github:NixOS/nixos-hardware";
@@ -33,7 +33,7 @@
     # Secondary nixpkgs channel used only for fast-moving packages
     # Keep system on stable while allowing targeted package overrides
     nixpkgs-opencode.url = "github:NixOS/nixpkgs/nixos-unstable";
-    
+
     # Home Manager for user-level configuration
     # Manages dotfiles, user packages, and user services
     home-manager = {
@@ -65,71 +65,93 @@
       url = "github:PeonPing/peon-ping";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # mac-app-util — trampoline .app bundles so Spotlight can index Nix apps
+    mac-app-util.url = "github:hraban/mac-app-util";
   };
 
   # === Outputs ===
   # What this flake produces (system configurations)
-  outputs = { self, nixpkgs, nixpkgs-opencode, nixos-hardware, home-manager, darwin, ...}@inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nixpkgs-opencode,
+      nixos-hardware,
+      home-manager,
+      darwin,
+      mac-app-util,
+      ...
+    }@inputs:
     let
       linuxSystem = "x86_64-linux";
       darwinSystem = "aarch64-darwin";
 
-      mkPkgs = system: import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-      };
+      mkPkgs =
+        system:
+        import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
 
       pkgs = mkPkgs linuxSystem;
 
-      opencodeOverlay = final: prev: let
-        pkgsOpencode = import nixpkgs-opencode {
-          system = final.stdenv.hostPlatform.system;
-          config.allowUnfree = true;
+      opencodeOverlay =
+        final: prev:
+        let
+          pkgsOpencode = import nixpkgs-opencode {
+            system = final.stdenv.hostPlatform.system;
+            config.allowUnfree = true;
+          };
+        in
+        {
+          opencode = pkgsOpencode.opencode;
         };
-      in {
-        opencode = pkgsOpencode.opencode;
-      };
 
-      mkLinuxHost = { configPath, extraModules ? [ ] }:
+      mkLinuxHost =
+        {
+          configPath,
+          extraModules ? [ ],
+        }:
         nixpkgs.lib.nixosSystem {
           system = linuxSystem;
           specialArgs = { inherit inputs; };
-          modules =
-            extraModules
-            ++ [
-              configPath
-              home-manager.nixosModules.home-manager
-              {
-                # Override opencode from nixos-unstable while keeping stable base
-                nixpkgs.overlays = [
-                  opencodeOverlay
-                ];
+          modules = extraModules ++ [
+            configPath
+            home-manager.nixosModules.home-manager
+            {
+              # Override opencode from nixos-unstable while keeping stable base
+              nixpkgs.overlays = [
+                opencodeOverlay
+              ];
 
-                # Use system-level nixpkgs for home-manager
-                # Reduces closures and ensures consistency
-                home-manager.useGlobalPkgs = true;
+              # Use system-level nixpkgs for home-manager
+              # Reduces closures and ensures consistency
+              home-manager.useGlobalPkgs = true;
 
-                # Install packages to /etc/profiles instead of ~/.nix-profile
-                # Allows better integration with NixOS
-                home-manager.useUserPackages = true;
+              # Install packages to /etc/profiles instead of ~/.nix-profile
+              # Allows better integration with NixOS
+              home-manager.useUserPackages = true;
 
-                # User-specific home-manager configuration
-                # Imports all home-manager modules from ./modules/home-manager/
-                home-manager.users.mahoney = import ./home.nix;
+              # User-specific home-manager configuration
+              # Imports all home-manager modules from ./modules/home-manager/
+              home-manager.users.mahoney = import ./home.nix;
 
-                # Pass flake inputs to home-manager modules (needed for noctalia)
-                home-manager.extraSpecialArgs = { inherit inputs; };
-              }
-            ];
+              # Pass flake inputs to home-manager modules (needed for noctalia)
+              home-manager.extraSpecialArgs = { inherit inputs; };
+            }
+          ];
         };
 
-      mkDarwinHost = { hostModule, homeModule }:
+      mkDarwinHost =
+        { hostModule, homeModule }:
         darwin.lib.darwinSystem {
           system = darwinSystem;
           specialArgs = { inherit inputs; };
           modules = [
             hostModule
             home-manager.darwinModules.home-manager
+            mac-app-util.darwinModules.default
             {
               nixpkgs.overlays = [ opencodeOverlay ];
               nixpkgs.config.allowUnfree = true;
@@ -143,23 +165,29 @@
               home-manager.useUserPackages = true;
               home-manager.users.mahoney = import homeModule;
               home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.sharedModules = [
+                mac-app-util.homeManagerModules.default
+              ];
             }
           ];
         };
     in
     {
-      checks.${linuxSystem}.secret-scan = pkgs.runCommand "secret-scan" {
-        nativeBuildInputs = [ pkgs.gitleaks ];
-      } ''
-        export HOME="$TMPDIR"
-        cd ${self}
-        gitleaks detect \
-          --source . \
-          --no-git \
-          --redact \
-          --exit-code 1
-        touch "$out"
-      '';
+      checks.${linuxSystem}.secret-scan =
+        pkgs.runCommand "secret-scan"
+          {
+            nativeBuildInputs = [ pkgs.gitleaks ];
+          }
+          ''
+            export HOME="$TMPDIR"
+            cd ${self}
+            gitleaks detect \
+              --source . \
+              --no-git \
+              --redact \
+              --exit-code 1
+            touch "$out"
+          '';
 
       # === NixOS Configuration: helios ===
       # Main system configuration for the Helios laptop
