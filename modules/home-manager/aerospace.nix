@@ -21,12 +21,12 @@
     preset = 'qwerty'
 
     [gaps]
-    inner.horizontal = 7
-    inner.vertical = 7
-    outer.left = 7
-    outer.bottom = 7
-    outer.top = 7
-    outer.right = 7
+    inner.horizontal = 0
+    inner.vertical = 0
+    outer.left = 0
+    outer.bottom = 0
+    outer.top = 0
+    outer.right = 0
 
     [mode.main.binding]
     alt-shift-enter = 'exec-and-forget open -na alacritty'
