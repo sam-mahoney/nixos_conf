@@ -242,7 +242,7 @@ AeroSpace config lives in `modules/home-manager/aerospace.nix` and keeps the sam
 | `Alt+1-9` | Switch to workspace 1-9 |
 | `Alt+Shift+1-9` | Move window to workspace 1-9 |
 | `Alt+/` | Toggle horizontal/vertical tiling |
-| `Alt+,` | Toggle accordion/tiling layout |
+| `Alt+,` | Toggle horizontal/vertical tiling |
 | `Alt+Tab` | Workspace back-and-forth |
 | `Alt+Shift+;` | Enter service mode |
 

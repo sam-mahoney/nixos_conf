@@ -7,11 +7,11 @@
   # https://alacritty.org/
   programs.alacritty = {
     enable = true;
-    
+
     settings = {
       # Set TERM variable for proper color support
       env.TERM = "xterm-256color";
-      
+
       # Copy to clipboard on selection
       selection.save_to_clipboard = true;
 
@@ -50,8 +50,12 @@
 
       # === Window Settings ===
       window = {
-        padding = { x = 4; y = 4; };
+        padding = {
+          x = 4;
+          y = 4;
+        };
         opacity = 1.0;
+        decorations = "None";
       };
 
       # Use default login shell behavior (no auto-attach to tmux)
@@ -66,25 +70,25 @@
     settings = {
       # Minimal prompt that works well with tmux status bar
       format = "$directory$git_branch$git_status$status$character";
-      
+
       directory = {
         truncation_length = 3;
         style = "bold #c8c8c8";
       };
-      
+
       git_branch = {
         style = "#9c9c9c";
       };
-      
+
       git_status = {
         style = "#7a7a7a";
       };
 
       status = {
         disabled = false;
-        format = '' [$status](bold #ff8a8a)'';
+        format = "[$status](bold #ff8a8a)";
       };
-      
+
       character = {
         success_symbol = "[❯](bold #e6e6e6)";
         error_symbol = "[❯](bold #ff8a8a)";
@@ -122,15 +126,15 @@
     history = {
       size = 50000;
       save = 50000;
-      ignoreDups = true;      # Don't store duplicate commands
-      ignoreAllDups = true;   # Remove older duplicate when new one added
-      ignoreSpace = true;     # Don't store commands starting with space
-      extended = true;         # Save timestamps
-      share = true;            # Share history across sessions
+      ignoreDups = true; # Don't store duplicate commands
+      ignoreAllDups = true; # Remove older duplicate when new one added
+      ignoreSpace = true; # Don't store commands starting with space
+      extended = true; # Save timestamps
+      share = true; # Share history across sessions
     };
 
     # --- Completion System ---
-    enableCompletion = true;   # Enable zsh completion system
+    enableCompletion = true; # Enable zsh completion system
     completionInit = ''
       # Case-insensitive, partial-word, and substring completion
       zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
@@ -155,10 +159,13 @@
 
     # --- Plugins ---
     autosuggestion = {
-      enable = true;           # Fish-like suggestions from history
-      strategy = [ "history" "completion" ];
+      enable = true; # Fish-like suggestions from history
+      strategy = [
+        "history"
+        "completion"
+      ];
     };
-    syntaxHighlighting.enable = true;  # Real-time command highlighting
+    syntaxHighlighting.enable = true; # Real-time command highlighting
 
     # --- Extra Options ---
     initContent = ''
@@ -189,6 +196,10 @@
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
-    defaultOptions = [ "--height=40%" "--layout=reverse" "--border" ];
+    defaultOptions = [
+      "--height=40%"
+      "--layout=reverse"
+      "--border"
+    ];
   };
 }

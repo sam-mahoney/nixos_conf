@@ -44,7 +44,7 @@ All keybindings for the Helios NixOS setup. **Mod = Alt** (Aerospace-style).
 | Key | Action |
 |-----|--------|
 | `Mod+/` | Toggle horizontal / vertical tiling |
-| `Mod+,` | Toggle tabbed / stacking (accordion) |
+| `Mod+,` | Toggle horizontal / vertical tiling |
 | `Mod+f` | Toggle fullscreen |
 | `Mod+Shift+f` | Toggle floating |
 | `Mod+Space` | Toggle focus between tiling/floating |

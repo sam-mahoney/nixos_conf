@@ -35,7 +35,7 @@
 
     alt-q = 'close'
     alt-slash = 'layout tiles horizontal vertical'
-    alt-comma = 'layout accordion horizontal vertical'
+    alt-comma = 'layout tiles horizontal vertical'
     alt-m = 'fullscreen'
     alt-shift-f = ['layout floating tiling', 'mode main']
 
