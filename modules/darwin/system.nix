@@ -162,36 +162,20 @@ in
     };
   in
     pkgs.lib.mkForce ''
+      set -euo pipefail
+
       echo "setting up /Applications..." >&2
       rm -rf /Applications/Nix\ Apps
       mkdir -p /Applications/Nix\ Apps
-      if [ -d "${env}/Applications" ]; then
-        find "${env}/Applications" -maxdepth 1 -type l -exec readlink '{}' + |
-        while read -r src; do
-          app_name=$(basename "$src")
-          echo "aliasing $src" >&2
-          ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
-        done
 
-        find "${env}/Applications" -maxdepth 1 -type d -name '*.app' |
-        while read -r src; do
+      if [ -d "${env}/Applications" ]; then
+        for src in "${env}/Applications"/*.app; do
+          [ -e "$src" ] || continue
           app_name=$(basename "$src")
           echo "linking $src" >&2
           ln -sfn "$src" "/Applications/Nix Apps/$app_name"
         done
       fi
-
-      if [ -d "/Users/${user}/Applications/Home Manager Apps" ]; then
-        find "/Users/${user}/Applications/Home Manager Apps" -maxdepth 1 \( -type l -o -type d \) -name '*.app' |
-        while read -r src; do
-          app_name=$(basename "$src")
-          target="/Applications/Nix Apps/$app_name"
-          if [ ! -e "$target" ]; then
-            echo "surfacing $src" >&2
-            ln -sfn "$src" "$target"
-          fi
-        done
-      done
     '';
 
   environment.variables = {
