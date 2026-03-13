@@ -22,17 +22,12 @@
   # === Module Imports ===
   # User configuration split into logical modules
   imports = [
-    ./modules/home-manager/packages.nix        # User packages and tools
+    ./modules/home-manager/common.nix          # Shared cross-platform HM modules
     ./modules/home-manager/sway.nix            # Sway window manager config
     ./modules/home-manager/noctalia.nix         # Noctalia desktop shell (bar, notifications, OSD)
-    ./modules/home-manager/terminal.nix        # Terminal emulators and shell
-    ./modules/home-manager/tmux.nix            # Terminal multiplexer
-    ./modules/home-manager/neovim.nix          # Neovim + LSP + Tree-sitter
-    ./modules/home-manager/git.nix             # Git and SSH configuration
     ./modules/home-manager/services.nix        # User services (polkit agent)
     ./modules/home-manager/swaylock.nix        # Screen locker configuration
     ./modules/home-manager/battery-notifier.nix # Battery notifications
-    ./modules/home-manager/opencode.nix        # OpenCode AI coding agent
   ];
 
   # === GTK Theme ===

@@ -1,9 +1,10 @@
-# Helios NixOS Configuration
+# Mahoney Nix Configuration
 
-Modular NixOS configuration for multiple machines:
+Mixed NixOS and nix-darwin configuration for multiple machines:
 
 - `helios` — Dell Precision 5570 laptop
 - `apollo` — desktop (AMD 9950X + NVIDIA RTX 5080, gaming stack with Steam + Heroic)
+- `halcyon` — MacBook Pro 16 (nix-darwin + Homebrew + AeroSpace)
 
 **Desktop:** Sway (Aerospace-inspired keybindings) · **Shell:** Noctalia (bar, notifications, OSD, launcher) · **Terminal:** Alacritty + tmux · **Theme:** Geohot-style monochrome (black/grey/white)
 
@@ -12,12 +13,19 @@ Modular NixOS configuration for multiple machines:
 ```
 nixos-conf/
 ├── flake.nix                    # Main flake configuration
-├── configuration.nix            # Main NixOS config
-├── home.nix                     # Home Manager config
+├── configuration.nix            # Main NixOS config (helios)
+├── configuration-apollo.nix     # Main NixOS config (apollo)
+├── home.nix                     # Linux Home Manager entrypoint
+├── home-darwin.nix              # Darwin Home Manager entrypoint
 ├── hardware-configuration.nix   # Auto-generated hardware config
 ├── KEYBINDS.md                  # Full keybindings cheatsheet
 │
 ├── modules/
+│   ├── darwin/                  # macOS system-level configuration modules
+│   │   ├── system.nix          # Shared nix-darwin settings + Homebrew
+│   │   └── hosts/
+│   │       └── halcyon.nix     # macOS host identity
+│   │
 │   ├── nixos/                   # System-level configuration modules
 │   │   ├── boot.nix            # Bootloader and disk encryption
 │   │   ├── networking.nix      # Network settings
@@ -29,7 +37,9 @@ nixos-conf/
 │   │   └── services.nix        # System services (SSH, Docker, TLP, UPower)
 │   │
 │   └── home-manager/           # User-level configuration modules
+│       ├── common.nix          # Shared Home Manager baseline for Linux + Darwin
 │       ├── packages.nix        # User packages and tools
+│       ├── aerospace.nix       # AeroSpace window manager config for macOS
 │       ├── sway.nix            # Sway WM (Aerospace-style keybindings)
 │       ├── noctalia.nix        # Noctalia desktop shell (bar, notifications, OSD, launcher)
 │       ├── swaylock.nix        # Screen locker configuration
@@ -58,6 +68,23 @@ sudo nixos-rebuild test --flake .#helios
 
 # Build configuration but only activate on next boot
 sudo nixos-rebuild boot --flake .#helios
+
+# Rebuild and switch macOS host
+darwin-rebuild switch --flake .#halcyon
+
+# Build macOS config without switching
+nix build .#darwinConfigurations.halcyon.system
+```
+
+### Bootstrap a Fresh macOS Machine
+
+```bash
+# Install Determinate Systems Nix or official Nix first, then:
+git clone <repo-url> ~/nixos-conf
+cd ~/nixos-conf
+
+# Apply nix-darwin system configuration
+darwin-rebuild switch --flake .#halcyon
 ```
 
 ### Updating System
@@ -71,6 +98,9 @@ nix flake lock --update-input nixpkgs
 
 # Apply updates
 sudo nixos-rebuild switch --flake .#helios
+
+# Apply updates on macOS
+darwin-rebuild switch --flake .#halcyon
 ```
 
 ## 📝 Configuration Guide
@@ -90,9 +120,16 @@ System-level settings are in `modules/nixos/`:
 
 ### User Configuration (Home Manager)
 
-User-level settings are in `modules/home-manager/`:
+Shared user-level settings live in `modules/home-manager/common.nix` and `modules/home-manager/`, then each OS adds its own entrypoint:
+
+- `home.nix` - Linux Home Manager entrypoint
+- `home-darwin.nix` - Darwin Home Manager entrypoint
+- `modules/home-manager/common.nix` - Shared shell/editor/git/package/OpenCode baseline
+
+User-level modules are in `modules/home-manager/`:
 
 - **`packages.nix`** - User packages (development tools, utilities, GUI apps)
+- **`aerospace.nix`** - AeroSpace config for macOS
 - **`sway.nix`** - Sway window manager with Aerospace-style keybindings
 - **`noctalia.nix`** - Desktop shell (bar, notifications, OSD, launcher)
 - **`swaylock.nix`** - Screen locker with blur effects
@@ -164,6 +201,24 @@ Keybindings are in `modules/home-manager/sway.nix`. The modifier is **Alt** (mat
 | `Alt+Escape` | Lock screen |
 | `Print` | Screenshot (full) |
 | `Shift+Print` | Screenshot (region) |
+
+### AeroSpace Keybindings (macOS)
+
+AeroSpace config lives in `modules/home-manager/aerospace.nix` and keeps the same Alt-driven muscle memory as Linux:
+
+| Key | Action |
+|-----|--------|
+| `Alt+Shift+Enter` | Open Alacritty |
+| `Alt+Shift+b` | Open Firefox |
+| `Alt+q` | Close window |
+| `Alt+h/j/k/l` | Focus left/down/up/right |
+| `Alt+Shift+h/j/k/l` | Move window left/down/up/right |
+| `Alt+1-9` | Switch to workspace 1-9 |
+| `Alt+Shift+1-9` | Move window to workspace 1-9 |
+| `Alt+/` | Toggle horizontal/vertical tiling |
+| `Alt+,` | Toggle accordion/tiling layout |
+| `Alt+Tab` | Workspace back-and-forth |
+| `Alt+Shift+;` | Enter service mode |
 
 ### tmux Keybindings
 
@@ -256,6 +311,9 @@ If rebuild fails, check syntax:
 ```bash
 # Validate flake
 nix flake check
+
+# Verify the Darwin host evaluates
+nix eval .#darwinConfigurations.halcyon.system --raw --impure
 
 # Show detailed error output
 sudo nixos-rebuild switch --flake .#helios --show-trace

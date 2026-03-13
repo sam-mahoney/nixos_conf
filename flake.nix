@@ -17,7 +17,7 @@
   #   - Flakes: https://wiki.nixos.org/wiki/Flakes
   #   - NixOS: https://nixos.org/manual/nixos/stable/
   
-  description = "Helios NixOS Flake";
+  description = "Mahoney mixed NixOS and Darwin flake";
   
   # === Inputs ===
   # External dependencies for this flake
@@ -43,6 +43,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    darwin = {
+      url = "github:LnL7/nix-darwin/nix-darwin-25.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Noctalia — minimal desktop shell for Wayland (replaces waybar)
     # Requires its own Quickshell fork (noctalia-qs)
     noctalia = {
@@ -64,20 +69,30 @@
 
   # === Outputs ===
   # What this flake produces (system configurations)
-  outputs = { self, nixpkgs, nixpkgs-opencode, nixos-hardware, home-manager, ...}@inputs:
+  outputs = { self, nixpkgs, nixpkgs-opencode, nixos-hardware, home-manager, darwin, ...}@inputs:
     let
-      # Target system architecture
-      system = "x86_64-linux";
+      linuxSystem = "x86_64-linux";
+      darwinSystem = "aarch64-darwin";
 
-      # Import nixpkgs for the specified system
-      pkgs = import nixpkgs { inherit system; };
+      mkPkgs = system: import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
 
-      # Import unstable channel for targeted package overrides
-      pkgsOpencode = import nixpkgs-opencode { inherit system; };
+      pkgs = mkPkgs linuxSystem;
+      pkgsOpencode = import nixpkgs-opencode {
+        system = linuxSystem;
+        config.allowUnfree = true;
+      };
 
-      mkHost = { configPath, extraModules ? [ ] }:
+      opencodeOverlay = final: prev: {
+        opencode = pkgsOpencode.opencode;
+      };
+
+      mkLinuxHost = { configPath, extraModules ? [ ] }:
         nixpkgs.lib.nixosSystem {
-          inherit system;
+          system = linuxSystem;
+          specialArgs = { inherit inputs; };
           modules =
             extraModules
             ++ [
@@ -86,9 +101,7 @@
               {
                 # Override opencode from nixos-unstable while keeping stable base
                 nixpkgs.overlays = [
-                  (final: prev: {
-                    opencode = pkgsOpencode.opencode;
-                  })
+                  opencodeOverlay
                 ];
 
                 # Use system-level nixpkgs for home-manager
@@ -108,9 +121,33 @@
               }
             ];
         };
+
+      mkDarwinHost = { hostModule, homeModule }:
+        darwin.lib.darwinSystem {
+          system = darwinSystem;
+          specialArgs = { inherit inputs; };
+          modules = [
+            hostModule
+            home-manager.darwinModules.home-manager
+            {
+              nixpkgs.overlays = [ opencodeOverlay ];
+              nixpkgs.config.allowUnfree = true;
+
+              users.users.mahoney = {
+                name = "mahoney";
+                home = "/Users/mahoney";
+              };
+
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.mahoney = import homeModule;
+              home-manager.extraSpecialArgs = { inherit inputs; };
+            }
+          ];
+        };
     in
     {
-      checks.${system}.secret-scan = pkgs.runCommand "secret-scan" {
+      checks.${linuxSystem}.secret-scan = pkgs.runCommand "secret-scan" {
         nativeBuildInputs = [ pkgs.gitleaks ];
       } ''
         export HOME="$TMPDIR"
@@ -125,7 +162,7 @@
 
       # === NixOS Configuration: helios ===
       # Main system configuration for the Helios laptop
-      nixosConfigurations.helios = mkHost {
+      nixosConfigurations.helios = mkLinuxHost {
         configPath = ./configuration.nix;
         extraModules = [
           # Hardware-specific optimizations for Dell Precision 5570
@@ -135,8 +172,13 @@
 
       # === NixOS Configuration: apollo ===
       # Main system configuration for the Apollo desktop
-      nixosConfigurations.apollo = mkHost {
+      nixosConfigurations.apollo = mkLinuxHost {
         configPath = ./configuration-apollo.nix;
+      };
+
+      darwinConfigurations.halcyon = mkDarwinHost {
+        hostModule = /home/mahoney/nixos-conf/modules/darwin/hosts/halcyon.nix;
+        homeModule = /home/mahoney/nixos-conf/home-darwin.nix;
       };
     };
 }
