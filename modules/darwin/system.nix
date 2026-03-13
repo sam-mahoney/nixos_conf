@@ -4,6 +4,7 @@ let
   user = "mahoney";
   nixGuiApps = with pkgs; [
     aerospace
+    hidden-bar
     spotify
     discord
     logseq
@@ -148,10 +149,19 @@ in
       "balenaetcher"
       "cold-turkey-blocker"
       "1password"
+      "little-snitch"
     ];
     taps = [ ];
     masApps = { };
   };
+
+  # === Cleanup unwanted login items ===
+  # Some apps self-register as login items; remove them on every rebuild
+  system.activationScripts.postActivation.text = ''
+    echo "removing unwanted login items..." >&2
+    osascript -e 'tell application "System Events" to delete login item "Notion"' 2>/dev/null || true
+    rm -f "$HOME/Library/LaunchAgents/com.valvesoftware.steamclean.plist" 2>/dev/null || true
+  '';
 
   environment.variables = {
     EDITOR = "nvim";

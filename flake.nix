@@ -163,6 +163,7 @@
 
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "hm-backup";
               home-manager.users.mahoney = import homeModule;
               home-manager.extraSpecialArgs = { inherit inputs; };
               home-manager.sharedModules = [
