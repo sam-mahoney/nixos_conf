@@ -87,6 +87,32 @@ cd ~/nixos-conf
 darwin-rebuild switch --flake .#halcyon
 ```
 
+### First Migration From the Old Darwin Config
+
+If `halcyon` is still on the older Darwin setup, do the first migration in two steps instead of switching blindly:
+
+```bash
+# 1) Confirm the Darwin target resolves
+nix eval .#darwinConfigurations.halcyon.system --raw
+
+# 2) Build without activating
+darwin-rebuild build --flake .#halcyon
+
+# 3) Inspect the built system and app outputs
+ls -la ./result
+ls -la ./result/sw/Applications
+
+# 4) Only then activate
+darwin-rebuild switch --flake .#halcyon
+
+# 5) Verify Nix-managed apps showed up where expected
+ls -la "/Applications/Nix Apps"
+ls -la "$HOME/Applications/Home Manager Apps"
+brew list --cask
+```
+
+For the first migration, Homebrew cleanup is intentionally set to `none` in `modules/darwin/system.nix` so old brew-managed apps are not aggressively removed during the initial cutover. Once the machine is stable, this can be tightened again.
+
 ### Updating System
 
 ```bash

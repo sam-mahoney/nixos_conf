@@ -133,7 +133,7 @@ in
   homebrew = {
     enable = true;
     onActivation = {
-      cleanup = "zap";
+      cleanup = "none";
       autoUpdate = true;
       upgrade = true;
     };
