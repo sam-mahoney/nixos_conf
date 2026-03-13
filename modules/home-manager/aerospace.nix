@@ -21,12 +21,13 @@
     preset = 'qwerty'
 
     [gaps]
+    # AeroSpace treats omitted values as defaults, so keep the full zeroed set.
     inner.horizontal = 0
     inner.vertical = 0
     outer.left = 0
-    outer.bottom = 0
-    outer.top = 0
     outer.right = 0
+    outer.top = 0
+    outer.bottom = 0
 
     [mode.main.binding]
     alt-shift-enter = 'exec-and-forget open -na alacritty'
