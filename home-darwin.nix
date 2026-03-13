@@ -16,6 +16,8 @@
   programs.home-manager.enable = true;
   systemd.user.startServices = "sd-switch";
 
+  targets.darwin.copyApps.enable = false;
+
   fonts.fontconfig.enable = true;
 
   home.stateVersion = "25.11";
