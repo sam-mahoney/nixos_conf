@@ -113,6 +113,12 @@
   # Required by Noctalia shell for battery widget
   services.upower.enable = true;
 
+  services.logind.settings.Login = {
+    HandleLidSwitch = "ignore";
+    HandleLidSwitchExternalPower = "ignore";
+    HandleLidSwitchDocked = "ignore";
+  };
+
   # === Firewall Configuration ===
   # Uncomment to open specific ports:
   # networking.firewall.allowedTCPPorts = [ 80 443 ];

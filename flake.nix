@@ -80,12 +80,13 @@
       };
 
       pkgs = mkPkgs linuxSystem;
-      pkgsOpencode = import nixpkgs-opencode {
-        system = linuxSystem;
-        config.allowUnfree = true;
-      };
 
-      opencodeOverlay = final: prev: {
+      opencodeOverlay = final: prev: let
+        pkgsOpencode = import nixpkgs-opencode {
+          system = final.stdenv.hostPlatform.system;
+          config.allowUnfree = true;
+        };
+      in {
         opencode = pkgsOpencode.opencode;
       };
 

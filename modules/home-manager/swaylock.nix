@@ -14,6 +14,9 @@
     grace=2
     fade-in=0.1
     color=000000
+    screenshots
+    effect-blur=8x4
+    effect-vignette=0.2:0.2
 
     # === Colors (aligned with terminal + Noctalia palette) ===
     inside-color=000000dd
