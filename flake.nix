@@ -66,6 +66,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    firefox-addons = {
+      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # mac-app-util — trampoline .app bundles so Spotlight can index Nix apps
     mac-app-util.url = "github:hraban/mac-app-util";
   };
@@ -155,6 +160,11 @@
             {
               nixpkgs.overlays = [ opencodeOverlay ];
               nixpkgs.config.allowUnfree = true;
+              nixpkgs.config.allowUnfreePredicate =
+                pkg:
+                builtins.elem (nixpkgs.lib.getName pkg) [
+                  "onepassword-password-manager"
+                ];
 
               users.users.mahoney = {
                 name = "mahoney";

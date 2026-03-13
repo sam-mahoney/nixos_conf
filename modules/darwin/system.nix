@@ -143,6 +143,7 @@ in
     ];
     casks = [
       "hammerspoon"
+      "maccy"
       "anytype"
       "mullvad-vpn"
       "notion"
