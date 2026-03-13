@@ -13,10 +13,6 @@
     "/opt/homebrew/bin"
   ];
 
-  targets.darwin.linkApps.enable = true;
-  targets.darwin.linkApps.directory = "Applications/Home Manager Apps";
-  targets.darwin.copyApps.enable = false;
-
   programs.home-manager.enable = true;
   systemd.user.startServices = "sd-switch";
 
