@@ -177,8 +177,8 @@
       };
 
       darwinConfigurations.halcyon = mkDarwinHost {
-        hostModule = /home/mahoney/nixos-conf/modules/darwin/hosts/halcyon.nix;
-        homeModule = /home/mahoney/nixos-conf/home-darwin.nix;
+        hostModule = ./modules/darwin/hosts/halcyon.nix;
+        homeModule = ./home-darwin.nix;
       };
     };
 }
