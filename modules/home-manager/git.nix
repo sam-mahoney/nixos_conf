@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   # Git version control configuration
@@ -43,10 +43,7 @@
   # Automatically starts with user session
   services.ssh-agent.enable = true;
 
-  # === SSH Client Configuration ===
-  # Automatically adds keys to the agent on first use
-  # After entering your passphrase once, it's cached for the session
-  programs.ssh = {
+  programs.ssh = lib.mkIf pkgs.stdenv.isLinux {
     enable = true;
 
     # Opt out of legacy default config — we set everything explicitly
@@ -83,7 +80,7 @@
   # === Pre-load SSH keys at login ===
   # Adds both keys to the agent on session start so you only enter
   # passphrases once (at login) rather than on first use of each key.
-  systemd.user.services.ssh-add-keys = {
+  systemd.user.services.ssh-add-keys = lib.mkIf pkgs.stdenv.isLinux {
     Unit = {
       Description = "Pre-load SSH keys into agent";
       After = [ "ssh-agent.service" ];
