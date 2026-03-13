@@ -14,14 +14,14 @@
         name = "Sam Mahoney";
         email = "mahoney@cmui.co.uk";  # Personal email by default
       };
-      
-      # Use personal SSH key by default
-      core.sshCommand = "ssh -i ~/.ssh/helios_personal_ed25519";
+
+      # Use personal SSH key by default on Linux.
+      core.sshCommand = lib.mkIf pkgs.stdenv.isLinux "ssh -i ~/.ssh/helios_personal_ed25519";
     };
-  
+
     # === Conditional Includes ===
     # Override settings based on repository location
-    includes = [
+    includes = lib.optionals pkgs.stdenv.isLinux [
       {
         # === Work Configuration ===
         # Use work identity and SSH key for Cydar repositories
