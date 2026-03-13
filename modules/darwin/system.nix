@@ -2,6 +2,16 @@
 
 let
   user = "mahoney";
+  nixGuiApps = with pkgs; [
+    aerospace
+    firefox
+    spotify
+    discord
+    logseq
+    _1password-gui
+    _1password-cli
+    transmission_4-qt
+  ];
 in
 {
   nixpkgs.config.allowUnfree = true;
@@ -118,6 +128,8 @@ in
     nerd-fonts.meslo-lg
   ];
 
+  environment.systemPackages = nixGuiApps;
+
   homebrew = {
     enable = true;
     onActivation = {
@@ -130,24 +142,15 @@ in
       "wimlib"
     ];
     casks = [
-      "1password"
       "hammerspoon"
-      "logseq"
       "anytype"
+      "mullvad-vpn"
       "notion"
-      "firefox"
-      "spotify"
       "the-unarchiver"
-      "nikitabobko/tap/aerospace"
       "balenaetcher"
       "cold-turkey-blocker"
-      "discord"
-      "transmission"
-      "mullvad-vpn"
     ];
-    taps = [
-      "nikitabobko/tap"
-    ];
+    taps = [ ];
     masApps = { };
   };
 
@@ -162,11 +165,32 @@ in
       echo "setting up /Applications..." >&2
       rm -rf /Applications/Nix\ Apps
       mkdir -p /Applications/Nix\ Apps
-      find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
-      while read -r src; do
-        app_name=$(basename "$src")
-        echo "copying $src" >&2
-        ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
+      if [ -d "${env}/Applications" ]; then
+        find "${env}/Applications" -maxdepth 1 -type l -exec readlink '{}' + |
+        while read -r src; do
+          app_name=$(basename "$src")
+          echo "aliasing $src" >&2
+          ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
+        done
+
+        find "${env}/Applications" -maxdepth 1 -type d -name '*.app' |
+        while read -r src; do
+          app_name=$(basename "$src")
+          echo "linking $src" >&2
+          ln -sfn "$src" "/Applications/Nix Apps/$app_name"
+        done
+      fi
+
+      if [ -d "/Users/${user}/Applications/Home Manager Apps" ]; then
+        find "/Users/${user}/Applications/Home Manager Apps" -maxdepth 1 \( -type l -o -type d \) -name '*.app' |
+        while read -r src; do
+          app_name=$(basename "$src")
+          target="/Applications/Nix Apps/$app_name"
+          if [ ! -e "$target" ]; then
+            echo "surfacing $src" >&2
+            ln -sfn "$src" "$target"
+          fi
+        done
       done
     '';
 
