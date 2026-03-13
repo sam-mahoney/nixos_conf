@@ -130,6 +130,7 @@
         { command = "noctalia-shell"; }  # Desktop shell (bar, notifications, OSD, notifications)
         { command = "nm-applet --indicator"; }
         { command = "blueman-applet"; }  # Bluetooth tray applet
+        { command = "sh -lc 'while sleep 5; do if [ -e /proc/acpi/button/lid/LID0/state ] && grep -q closed /proc/acpi/button/lid/LID0/state && swaymsg -t get_outputs | grep -q \"\\\"active\\\": true\" && swaymsg -t get_outputs | grep -q \"DP-\|HDMI-\|USB-C-\"; then swaymsg output eDP-1 disable; else swaymsg output eDP-1 enable; fi; done'"; }
         { command = "swayidle -w timeout 120 'brightnessctl set 10%' resume 'brightnessctl set 50%' timeout 300 'swaylock -f' timeout 360 'swaymsg \"output * power off\"' resume 'swaymsg \"output * power on\"' timeout 600 'systemctl suspend' before-sleep 'swaylock -f'"; }
         # Keep startup lean: no gamma daemon by default
       ];
