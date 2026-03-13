@@ -24,6 +24,7 @@ in
   nix.optimise.automatic = true;
 
   security.pam.services.sudo_local.touchIdAuth = true;
+  security.pam.services.sudo_local.reattach = true;
 
   system.primaryUser = user;
   system.startup.chime = false;
