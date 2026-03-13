@@ -155,6 +155,7 @@ Shared user-level settings live in `modules/home-manager/common.nix` and `module
 User-level modules are in `modules/home-manager/`:
 
 - **`packages.nix`** - User packages (development tools, utilities, GUI apps)
+- **`neovim.nix`** - Neovim with native LSP, completion, Telescope, formatting, and writing support
 - **`aerospace.nix`** - AeroSpace config for macOS
 - **`sway.nix`** - Sway window manager with Aerospace-style keybindings
 - **`noctalia.nix`** - Desktop shell (bar, notifications, OSD, launcher)
@@ -183,9 +184,15 @@ environment.systemPackages = with pkgs; [
 # Edit modules/home-manager/packages.nix
 home.packages = with pkgs; [
   # Add your package here
-  neovim
+  jq
 ];
 ```
+
+### Neovim Setup
+
+Neovim is configured in `modules/home-manager/neovim.nix` and supported by editor tooling in `modules/home-manager/packages.nix`.
+
+See `NEOVIM.md` for the full setup guide, including plugins, language servers, formatting, writing support, keymaps, activation, and verification steps.
 
 ### Bootstrapping `AGENTS.md`
 

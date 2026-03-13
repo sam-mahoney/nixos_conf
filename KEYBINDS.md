@@ -191,6 +191,18 @@ Noctalia keybinds are triggered via IPC calls from Sway.
 
 ---
 
+## ✍️ Neovim — Editor
+
+Neovim keymaps and editor tooling are documented in `NEOVIM.md`.
+
+- Leader is `Space`
+- Telescope: `<leader>ff`, `<leader>fg`, `<leader>fb`, `<leader>fh`
+- LSP: `gd`, `gD`, `gr`, `gi`, `K`, `<leader>rn`, `<leader>ca`
+- Diagnostics: `[d`, `]d`, `<leader>fd`
+- Formatting: `<leader>fm`
+
+---
+
 ## 💡 Tips
 
 - **Mod = Alt key** — inspired by Aerospace on macOS
