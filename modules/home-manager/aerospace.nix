@@ -31,7 +31,7 @@
 
     [mode.main.binding]
     alt-shift-enter = 'exec-and-forget open -na alacritty'
-    alt-shift-b = 'exec-and-forget open -a firefox'
+    alt-shift-b = 'exec-and-forget open -a Firefox'
 
     alt-q = 'close'
     alt-slash = 'layout tiles horizontal vertical'
