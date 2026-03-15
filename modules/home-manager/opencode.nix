@@ -1,7 +1,13 @@
-{ config, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
+  superpowersSrc = inputs.superpowers;
 
   ogPacksVersion = "1.4.0";
   ogPacksSrc = pkgs.fetchzip {
@@ -56,7 +62,7 @@ in
     # --- Keybinds ---
     # Override the default leader key (ctrl+x) to avoid conflicts with tmux
     keybinds = {
-      leader = "ctrl+o";  # ctrl+x clashes with tmux; ctrl+o is free in sway
+      leader = "ctrl+o"; # ctrl+x clashes with tmux; ctrl+o is free in sway
     };
 
     # --- Autoupdate ---
@@ -69,24 +75,56 @@ in
     # Add more as needed (rust-analyzer, pyright, etc.)
     lsp = {
       typescript = {
-        command = [ "typescript-language-server" "--stdio" ];
-        extensions = [ "ts" "tsx" "js" "jsx" "mjs" "cjs" ];
+        command = [
+          "typescript-language-server"
+          "--stdio"
+        ];
+        extensions = [
+          "ts"
+          "tsx"
+          "js"
+          "jsx"
+          "mjs"
+          "cjs"
+        ];
       };
       python = {
-        command = [ "pyright-langserver" "--stdio" ];
-        extensions = [ "py" "pyi" ];
+        command = [
+          "pyright-langserver"
+          "--stdio"
+        ];
+        extensions = [
+          "py"
+          "pyi"
+        ];
       };
       go = {
         command = [ "gopls" ];
         extensions = [ "go" ];
       };
       c = {
-        command = [ "clangd" "--background-index" ];
-        extensions = [ "c" "h" ];
+        command = [
+          "clangd"
+          "--background-index"
+        ];
+        extensions = [
+          "c"
+          "h"
+        ];
       };
       cpp = {
-        command = [ "clangd" "--background-index" ];
-        extensions = [ "cc" "cpp" "cxx" "hpp" "hh" "hxx" ];
+        command = [
+          "clangd"
+          "--background-index"
+        ];
+        extensions = [
+          "cc"
+          "cpp"
+          "cxx"
+          "hpp"
+          "hh"
+          "hxx"
+        ];
       };
       nix = {
         command = [ "nil" ];
@@ -124,8 +162,22 @@ in
   };
 
   # OpenCode plugin and adapter config
-  xdg.configFile."opencode/plugins/peon-ping.ts".source =
-    "${inputs.peon-ping.packages.${system}.default}/share/peon-ping/adapters/opencode/peon-ping.ts";
+  xdg.configFile."opencode/plugins/peon-ping.ts".source = "${
+    inputs.peon-ping.packages.${system}.default
+  }/share/peon-ping/adapters/opencode/peon-ping.ts";
+
+  xdg.configFile."opencode/plugins/superpowers.js".source =
+    "${superpowersSrc}/.opencode/plugins/superpowers.js";
+
+  xdg.configFile."opencode/skills/superpowers" = {
+    source = "${superpowersSrc}/skills";
+    recursive = true;
+  };
+
+  xdg.configFile."opencode/superpowers" = {
+    source = superpowersSrc;
+    recursive = true;
+  };
 
   xdg.configFile."opencode/peon-ping/config.json".text = builtins.toJSON {
     active_pack = "jarvis-mk2";
@@ -145,7 +197,9 @@ in
   };
 
   programs.zsh.initContent = ''
-    source ${inputs.peon-ping.packages.${system}.default}/share/zsh/site-functions/_peon 2>/dev/null || true
+    source ${
+      inputs.peon-ping.packages.${system}.default
+    }/share/zsh/site-functions/_peon 2>/dev/null || true
     alias peon="${inputs.peon-ping.packages.${system}.default}/bin/peon"
   '';
 

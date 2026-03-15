@@ -122,12 +122,44 @@ nix flake update
 # Update specific input only
 nix flake lock --update-input nixpkgs
 
+# Update only OpenCode Superpowers
+nix flake lock --update-input superpowers
+
+# Review exactly what changed before rebuilding
+git diff flake.lock
+
 # Apply updates
 sudo nixos-rebuild switch --flake .#helios
 
 # Apply updates on macOS
 darwin-rebuild switch --flake .#halcyon
 ```
+
+### OpenCode Superpowers
+
+Superpowers is managed declaratively through the flake input `superpowers` and installed into the OpenCode config by Home Manager. Rebuilds stay pinned to the version recorded in `flake.lock`.
+
+```bash
+# Update just Superpowers to the latest upstream revision
+nix flake lock --update-input superpowers
+
+# Inspect the locked revision change before applying it
+git diff flake.lock
+
+# Apply the updated version on macOS
+darwin-rebuild switch --flake .#halcyon
+
+# Or rebuild only Home Manager
+home-manager switch --flake .#mahoney
+```
+
+If you only want to check whether an update is available without changing `flake.lock`, compare the pinned revision in `flake.lock` with the current upstream HEAD:
+
+```bash
+git ls-remote https://github.com/obra/superpowers.git HEAD
+```
+
+After applying an update, restart OpenCode so it reloads the plugin and skills.
 
 ## 📝 Configuration Guide
 
