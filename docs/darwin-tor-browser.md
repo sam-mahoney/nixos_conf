@@ -22,6 +22,12 @@ It will:
 - print short OPSEC reminders
 - launch `/Applications/Tor Browser.app`
 
+If Tor Browser opens and then immediately exits, run `/Applications/Tor Browser.app` directly once. That helps surface first-run dialogs or app-level startup errors that the launcher cannot fix for you.
+
+This repo also keeps Tor Browser out of the normal AeroSpace tiling path by treating it as a floating app. That reduces the chance that window-management hooks interfere with startup.
+
+If Tor Browser still opens and then disappears, check whether `Cold Turkey Blocker` is running and whether it has a rule that matches Tor Browser. On this machine, that blocker can terminate the app after launch even when the launcher itself succeeds.
+
 ## MacBook OPSEC
 
 - Keep Mullvad connected before opening Tor Browser.

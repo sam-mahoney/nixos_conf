@@ -150,7 +150,6 @@ in
       "notion"
       "the-unarchiver"
       "balenaetcher"
-      "cold-turkey-blocker"
       "1password"
       "little-snitch"
     ];

@@ -3,7 +3,10 @@
 let
   safeTorBrowser = pkgs.writeShellApplication {
     name = "safe-tor-browser";
-    runtimeInputs = [ pkgs.coreutils ];
+    runtimeInputs = [
+      pkgs.coreutils
+      pkgs.python3
+    ];
     text = ''
             set -eu
 
@@ -32,14 +35,46 @@ let
               python3 <<'PY'
       import subprocess
 
-      browsers = ["Safari", "Firefox", "Google Chrome", "Arc", "Brave Browser"]
-      running = []
-      for app in browsers:
-          result = subprocess.run(["pgrep", "-x", app], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-          if result.returncode == 0:
-              running.append(app)
-      print(", ".join(running))
+      script = 'tell application "System Events"\n' \
+               '  set browserNames to {"Safari", "Firefox", "Google Chrome", "Arc", "Brave Browser"}\n' \
+               '  set runningBrowsers to {}\n' \
+               '  repeat with browserName in browserNames\n' \
+               '    if exists process (contents of browserName) then\n' \
+               '      copy (contents of browserName) to end of runningBrowsers\n' \
+               '    end if\n' \
+               '  end repeat\n' \
+               '  return runningBrowsers as string\n' \
+               'end tell'
+
+      result = subprocess.run(["osascript", "-e", script], capture_output=True, text=True)
+      if result.returncode == 0:
+          raw = result.stdout.strip()
+          if raw:
+              names = [name.strip() for name in raw.replace(",", "\n").splitlines() if name.strip()]
+          else:
+              names = []
+          print(", ".join(names))
+      else:
+          print("")
       PY
+            }
+
+            blocker_running() {
+              if [ "''${SAFE_TOR_BROWSER_TEST_MODE:-0}" = "1" ]; then
+                [ "''${SAFE_TOR_BROWSER_COLD_TURKEY_RUNNING:-0}" = "1" ]
+                return $?
+              fi
+
+              pgrep -f "Cold Turkey Blocker" >/dev/null 2>&1
+            }
+
+            tor_running() {
+              if [ "''${SAFE_TOR_BROWSER_TEST_MODE:-0}" = "1" ]; then
+                [ "''${SAFE_TOR_BROWSER_TOR_RUNNING:-0}" = "1" ]
+                return $?
+              fi
+
+              pgrep -f "Tor Browser" >/dev/null 2>&1
             }
 
             tor_installed() {
@@ -65,6 +100,10 @@ let
               printf '%s\n' "Warning: close other browsers first when possible: $browsers" >&2
             fi
 
+            if blocker_running; then
+              printf '%s\n' "Warning: Cold Turkey Blocker is running and may terminate Tor Browser immediately if it has a matching block rule." >&2
+            fi
+
             if ! tor_installed; then
               printf '%s\n' "Tor Browser is not installed at $tor_browser_app. Rebuild nix-darwin to install the Homebrew cask." >&2
               exit 1
@@ -79,7 +118,13 @@ let
               exit 0
             fi
 
-            open -a "$tor_browser_app"
+            open "$tor_browser_app"
+
+            sleep 2
+            if ! tor_running; then
+              printf '%s\n' "Tor Browser launched and then exited during startup. Try opening it once directly from /Applications/Tor Browser.app to surface any macOS or Tor Browser first-run dialogs." >&2
+              exit 1
+            fi
     '';
   };
 in
