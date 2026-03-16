@@ -163,6 +163,14 @@ After applying an update, restart OpenCode so it reloads the plugin and skills.
 
 ## 📝 Configuration Guide
 
+### macOS Tor Browser Workflow
+
+For `halcyon`, the Tor workflow is now the native macOS path documented in `docs/darwin-tor-browser.md`.
+
+- Install Tor Browser through the nix-darwin Homebrew cask during `darwin-rebuild switch --flake .#halcyon`
+- Launch with `safe-tor-browser` so Mullvad, browser warnings, and brief OPSEC reminders are checked every time
+- Keep this path simple and native; this repo no longer treats the VM-based browser route as the main macOS solution
+
 ### System Configuration (NixOS)
 
 System-level settings are in `modules/nixos/`:

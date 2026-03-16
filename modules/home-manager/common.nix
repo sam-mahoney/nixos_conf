@@ -10,5 +10,6 @@
     ./git.nix
     ./opencode.nix
     ./firefox.nix
+    ./tor-browser.nix
   ];
 }

@@ -146,6 +146,7 @@ in
       "maccy"
       "anytype"
       "mullvad-vpn"
+      "tor-browser"
       "notion"
       "the-unarchiver"
       "balenaetcher"
