@@ -364,7 +364,7 @@
             criteria = "DP-2";
             status = "enable";
             mode = "3840x2160@59.997Hz";
-            transform = "270";
+            transform = "90";
             position = "0,0";
           }
           {
@@ -388,7 +388,7 @@
             criteria = "DP-2";
             status = "enable";
             mode = "3840x2160@59.997Hz";
-            transform = "270";
+            transform = "90";
             position = "0,0";
           }
           {
