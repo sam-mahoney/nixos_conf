@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   # === Sway Wayland Compositor Configuration ===
@@ -11,10 +16,10 @@
   #   - Alt+number for workspace switching
   #   - Binding modes for resize and service operations
   #   - Clean gaps and minimal chrome
-  
+
   wayland.windowManager.sway = {
     enable = true;
-    wrapperFeatures.gtk = true;  # Fix GTK apps
+    wrapperFeatures.gtk = true; # Fix GTK apps
 
     config = rec {
       # === Modifier Key ===
@@ -93,18 +98,6 @@
         "*" = {
           bg = "#000000 solid_color";
         };
-        # LG ULTRAFINE — portrait (rotated 90°), left of the Dell
-        "DP-2" = {
-          transform = "270";
-          position = "0 0";
-          resolution = "3840x2160";
-        };
-        # Dell U2723QE — landscape, to the right of the LG
-        # x-offset = LG height after rotation (2160)
-        "DP-3" = {
-          position = "2160 0";
-          resolution = "3840x2160";
-        };
       };
 
       # === Input Configuration ===
@@ -117,7 +110,7 @@
         "type:touchpad" = {
           tap = "enabled";
           natural_scroll = "enabled";
-          dwt = "enabled";  # Disable while typing
+          dwt = "enabled"; # Disable while typing
           middle_emulation = "enabled";
         };
         "type:pointer" = {
@@ -127,30 +120,65 @@
 
       # === Startup Applications ===
       startup = [
-        { command = "noctalia-shell"; }  # Desktop shell (bar, notifications, OSD, notifications)
+        { command = "noctalia-shell"; } # Desktop shell (bar, notifications, OSD, notifications)
         { command = "nm-applet --indicator"; }
-        { command = "blueman-applet"; }  # Bluetooth tray applet
-        { command = "sh -lc 'while sleep 5; do if [ -e /proc/acpi/button/lid/LID0/state ] && grep -q closed /proc/acpi/button/lid/LID0/state && swaymsg -t get_outputs -r | jq -e \"map(select(.active and .name != \\\"eDP-1\\\")) | length > 0\" >/dev/null; then swaymsg output eDP-1 disable; else swaymsg output eDP-1 enable; fi; done'"; }
-        { command = "swayidle -w timeout 120 'brightnessctl set 10%' resume 'brightnessctl set 50%' timeout 300 'swaylock -f' timeout 360 'swaymsg \"output * power off\"' resume 'swaymsg \"output * power on\"' timeout 600 'systemctl suspend' before-sleep 'swaylock -f'"; }
+        { command = "blueman-applet"; } # Bluetooth tray applet
+        {
+          command = "systemctl --user restart kanshi.service";
+          always = true;
+        }
+        {
+          command = "swayidle -w timeout 120 'brightnessctl set 10%' resume 'brightnessctl set 50%' timeout 300 'swaylock -f' timeout 360 'swaymsg \"output * power off\"' resume 'swaymsg \"output * power on\"' timeout 600 'systemctl suspend' before-sleep 'swaylock -f'";
+        }
         # Keep startup lean: no gamma daemon by default
       ];
 
       # === Window Rules ===
       window.commands = [
-        { criteria = { app_id = "pavucontrol"; }; command = "floating enable"; }
-        { criteria = { app_id = "nm-connection-editor"; }; command = "floating enable"; }
-        { criteria = { app_id = "blueman-manager"; }; command = "floating enable"; }
-        { criteria = { window_role = "pop-up"; }; command = "floating enable"; }
-        { criteria = { window_role = "dialog"; }; command = "floating enable"; }
-        { criteria = { window_type = "dialog"; }; command = "floating enable"; }
+        {
+          criteria = {
+            app_id = "pavucontrol";
+          };
+          command = "floating enable";
+        }
+        {
+          criteria = {
+            app_id = "nm-connection-editor";
+          };
+          command = "floating enable";
+        }
+        {
+          criteria = {
+            app_id = "blueman-manager";
+          };
+          command = "floating enable";
+        }
+        {
+          criteria = {
+            window_role = "pop-up";
+          };
+          command = "floating enable";
+        }
+        {
+          criteria = {
+            window_role = "dialog";
+          };
+          command = "floating enable";
+        }
+        {
+          criteria = {
+            window_type = "dialog";
+          };
+          command = "floating enable";
+        }
       ];
 
       # === Workspace Assignments ===
       # Automatically move apps to specific workspaces when they open
       assigns = {
         "9" = [
-          { class = "Slack"; }      # XWayland
-          { app_id = "Slack"; }     # Wayland-native
+          { class = "Slack"; } # XWayland
+          { app_id = "Slack"; } # Wayland-native
         ];
       };
 
@@ -161,116 +189,118 @@
       };
 
       # === Bar (disabled — using Noctalia shell) ===
-      bars = [];
+      bars = [ ];
 
       # === Keybindings ===
       # Aerospace-style: Alt as modifier, hjkl for directions
-      keybindings = let
-        mod = modifier;
-      in {
-        # --- Application Launchers ---
-        "${mod}+Return" = "exec ${terminal}";
-        "${mod}+d" = "exec noctalia-shell ipc call launcher toggle";  # Noctalia launcher
+      keybindings =
+        let
+          mod = modifier;
+        in
+        {
+          # --- Application Launchers ---
+          "${mod}+Return" = "exec ${terminal}";
+          "${mod}+d" = "exec noctalia-shell ipc call launcher toggle"; # Noctalia launcher
 
-        # --- Window Management ---
-        "${mod}+q" = "kill";
-        "${mod}+Shift+e" = "exec swaynag -t warning -m 'Exit Sway?' -B 'Yes' 'swaymsg exit'";
-        "${mod}+Shift+c" = "reload";
+          # --- Window Management ---
+          "${mod}+q" = "kill";
+          "${mod}+Shift+e" = "exec swaynag -t warning -m 'Exit Sway?' -B 'Yes' 'swaymsg exit'";
+          "${mod}+Shift+c" = "reload";
 
-        # --- Focus Movement (Aerospace-style: Alt+hjkl) ---
-        "${mod}+h" = "focus left";
-        "${mod}+j" = "focus down";
-        "${mod}+k" = "focus up";
-        "${mod}+l" = "focus right";
+          # --- Focus Movement (Aerospace-style: Alt+hjkl) ---
+          "${mod}+h" = "focus left";
+          "${mod}+j" = "focus down";
+          "${mod}+k" = "focus up";
+          "${mod}+l" = "focus right";
 
-        # --- Move Windows (Aerospace-style: Alt+Shift+hjkl) ---
-        "${mod}+Shift+h" = "move left";
-        "${mod}+Shift+j" = "move down";
-        "${mod}+Shift+k" = "move up";
-        "${mod}+Shift+l" = "move right";
+          # --- Move Windows (Aerospace-style: Alt+Shift+hjkl) ---
+          "${mod}+Shift+h" = "move left";
+          "${mod}+Shift+j" = "move down";
+          "${mod}+Shift+k" = "move up";
+          "${mod}+Shift+l" = "move right";
 
-        # --- Layout Switching (Aerospace-style) ---
-        # Alt+/ toggles between horizontal and vertical tiling (like Aerospace alt-slash)
-        "${mod}+slash" = "layout toggle splitv splith";
-        # Alt+, toggles tabbed/stacking (like Aerospace accordion)
-        "${mod}+comma" = "layout toggle tabbed stacking";
-        # Alt+f for fullscreen
-        "${mod}+f" = "fullscreen toggle";
-        # Alt+Shift+f for floating toggle (like Aerospace service mode 'f')
-        "${mod}+Shift+f" = "floating toggle";
-        # Alt+space to toggle focus between tiling/floating
-        "${mod}+space" = "focus mode_toggle";
+          # --- Layout Switching (Aerospace-style) ---
+          # Alt+/ toggles between horizontal and vertical tiling (like Aerospace alt-slash)
+          "${mod}+slash" = "layout toggle splitv splith";
+          # Alt+, toggles tabbed/stacking (like Aerospace accordion)
+          "${mod}+comma" = "layout toggle tabbed stacking";
+          # Alt+f for fullscreen
+          "${mod}+f" = "fullscreen toggle";
+          # Alt+Shift+f for floating toggle (like Aerospace service mode 'f')
+          "${mod}+Shift+f" = "floating toggle";
+          # Alt+space to toggle focus between tiling/floating
+          "${mod}+space" = "focus mode_toggle";
 
-        # --- Split Direction ---
-        "${mod}+b" = "splith";  # Horizontal split
-        "${mod}+v" = "splitv";  # Vertical split
+          # --- Split Direction ---
+          "${mod}+b" = "splith"; # Horizontal split
+          "${mod}+v" = "splitv"; # Vertical split
 
-        # --- Resize (Aerospace-style: Alt+minus/equal) ---
-        "${mod}+minus" = "resize shrink width 50 px";
-        "${mod}+equal" = "resize grow width 50 px";
-        "${mod}+Shift+minus" = "resize shrink height 50 px";
-        "${mod}+Shift+equal" = "resize grow height 50 px";
+          # --- Resize (Aerospace-style: Alt+minus/equal) ---
+          "${mod}+minus" = "resize shrink width 50 px";
+          "${mod}+equal" = "resize grow width 50 px";
+          "${mod}+Shift+minus" = "resize shrink height 50 px";
+          "${mod}+Shift+equal" = "resize grow height 50 px";
 
-        # --- Workspaces (Aerospace-style: Alt+number) ---
-        "${mod}+1" = "workspace number 1";
-        "${mod}+2" = "workspace number 2";
-        "${mod}+3" = "workspace number 3";
-        "${mod}+4" = "workspace number 4";
-        "${mod}+5" = "workspace number 5";
-        "${mod}+6" = "workspace number 6";
-        "${mod}+7" = "workspace number 7";
-        "${mod}+8" = "workspace number 8";
-        "${mod}+9" = "workspace number 9";
+          # --- Workspaces (Aerospace-style: Alt+number) ---
+          "${mod}+1" = "workspace number 1";
+          "${mod}+2" = "workspace number 2";
+          "${mod}+3" = "workspace number 3";
+          "${mod}+4" = "workspace number 4";
+          "${mod}+5" = "workspace number 5";
+          "${mod}+6" = "workspace number 6";
+          "${mod}+7" = "workspace number 7";
+          "${mod}+8" = "workspace number 8";
+          "${mod}+9" = "workspace number 9";
 
-        # --- Move Window to Workspace (Aerospace-style: Alt+Shift+number) ---
-        "${mod}+Shift+1" = "move container to workspace number 1; workspace number 1";
-        "${mod}+Shift+2" = "move container to workspace number 2; workspace number 2";
-        "${mod}+Shift+3" = "move container to workspace number 3; workspace number 3";
-        "${mod}+Shift+4" = "move container to workspace number 4; workspace number 4";
-        "${mod}+Shift+5" = "move container to workspace number 5; workspace number 5";
-        "${mod}+Shift+6" = "move container to workspace number 6; workspace number 6";
-        "${mod}+Shift+7" = "move container to workspace number 7; workspace number 7";
-        "${mod}+Shift+8" = "move container to workspace number 8; workspace number 8";
-        "${mod}+Shift+9" = "move container to workspace number 9; workspace number 9";
+          # --- Move Window to Workspace (Aerospace-style: Alt+Shift+number) ---
+          "${mod}+Shift+1" = "move container to workspace number 1; workspace number 1";
+          "${mod}+Shift+2" = "move container to workspace number 2; workspace number 2";
+          "${mod}+Shift+3" = "move container to workspace number 3; workspace number 3";
+          "${mod}+Shift+4" = "move container to workspace number 4; workspace number 4";
+          "${mod}+Shift+5" = "move container to workspace number 5; workspace number 5";
+          "${mod}+Shift+6" = "move container to workspace number 6; workspace number 6";
+          "${mod}+Shift+7" = "move container to workspace number 7; workspace number 7";
+          "${mod}+Shift+8" = "move container to workspace number 8; workspace number 8";
+          "${mod}+Shift+9" = "move container to workspace number 9; workspace number 9";
 
-        # --- Workspace Back-and-Forth (Aerospace-style: Alt+Tab) ---
-        "${mod}+Tab" = "workspace back_and_forth";
-        "${mod}+Shift+Tab" = "move container to workspace back_and_forth; workspace back_and_forth";
+          # --- Workspace Back-and-Forth (Aerospace-style: Alt+Tab) ---
+          "${mod}+Tab" = "workspace back_and_forth";
+          "${mod}+Shift+Tab" = "move container to workspace back_and_forth; workspace back_and_forth";
 
-        # --- Multi-Monitor (Aerospace-style) ---
-        "${mod}+period" = "focus output right";
-        "${mod}+Shift+period" = "move workspace to output right";
+          # --- Multi-Monitor (Aerospace-style) ---
+          "${mod}+period" = "focus output right";
+          "${mod}+Shift+period" = "move workspace to output right";
 
-        # --- Scratchpad (similar to Aerospace special workspace) ---
-        "${mod}+s" = "scratchpad show";
-        "${mod}+Shift+s" = "move scratchpad";
+          # --- Scratchpad (similar to Aerospace special workspace) ---
+          "${mod}+s" = "scratchpad show";
+          "${mod}+Shift+s" = "move scratchpad";
 
-        # --- Screenshots ---
-        "Print" = "exec grim - | wl-copy";                                    # Full screenshot
-        "Shift+Print" = "exec grim -g \"$(slurp)\" - | wl-copy";               # Region screenshot
-        "${mod}+Print" = "exec grim ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png";  # Save to file
+          # --- Screenshots ---
+          "Print" = "exec grim - | wl-copy"; # Full screenshot
+          "Shift+Print" = "exec grim -g \"$(slurp)\" - | wl-copy"; # Region screenshot
+          "${mod}+Print" = "exec grim ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png"; # Save to file
 
-        # --- Screen Lock ---
-        "${mod}+Escape" = "exec swaylock -f";
+          # --- Screen Lock ---
+          "${mod}+Escape" = "exec swaylock -f";
 
-        # --- Volume & Brightness ---
-        "XF86AudioRaiseVolume" = "exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
-        "XF86AudioLowerVolume" = "exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
-        "XF86AudioMute" = "exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
-        "XF86AudioMicMute" = "exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
-        "XF86MonBrightnessUp" = "exec brightnessctl set 5%+";
-        "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
+          # --- Volume & Brightness ---
+          "XF86AudioRaiseVolume" = "exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
+          "XF86AudioLowerVolume" = "exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
+          "XF86AudioMute" = "exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+          "XF86AudioMicMute" = "exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
+          "XF86MonBrightnessUp" = "exec brightnessctl set 5%+";
+          "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
 
-        # --- Enter Resize Mode (Aerospace-style: Alt+Shift+semicolon for service mode) ---
-        "${mod}+r" = "mode resize";
+          # --- Enter Resize Mode (Aerospace-style: Alt+Shift+semicolon for service mode) ---
+          "${mod}+r" = "mode resize";
 
-        # --- Noctalia Shell IPC ---
-        # These trigger noctalia-shell panels via IPC
-        # See: https://docs.noctalia.dev/getting-started/keybinds/
-        "${mod}+n" = "exec noctalia-shell ipc call notifications toggleHistory";
-        "${mod}+o" = "exec noctalia-shell ipc call controlCenter toggle";
-        "${mod}+p" = "exec noctalia-shell ipc call sessionMenu toggle";
-      };
+          # --- Noctalia Shell IPC ---
+          # These trigger noctalia-shell panels via IPC
+          # See: https://docs.noctalia.dev/getting-started/keybinds/
+          "${mod}+n" = "exec noctalia-shell ipc call notifications toggleHistory";
+          "${mod}+o" = "exec noctalia-shell ipc call controlCenter toggle";
+          "${mod}+p" = "exec noctalia-shell ipc call sessionMenu toggle";
+        };
 
       # === Binding Modes ===
       modes = {
@@ -303,9 +333,79 @@
 
   # === Environment Variables for Wayland ===
   home.sessionVariables = {
-    NIXOS_OZONE_WL = "1";  # Electron/Chromium Wayland support
+    NIXOS_OZONE_WL = "1"; # Electron/Chromium Wayland support
     XDG_CURRENT_DESKTOP = "sway";
     XDG_SESSION_DESKTOP = "sway";
     MOZ_ENABLE_WAYLAND = "1";
+  };
+
+  services.kanshi = {
+    enable = true;
+    systemdTarget = "sway-session.target";
+    settings = [
+      {
+        profile.name = "laptop";
+        profile.outputs = [
+          {
+            criteria = "eDP-1";
+            status = "enable";
+            mode = "1920x1200@59.950Hz";
+            position = "0,0";
+          }
+        ];
+      }
+      {
+        profile.name = "docked-open";
+        profile.exec = [
+          "sh -lc 'if [ -e /proc/acpi/button/lid/LID0/state ] && grep -q closed /proc/acpi/button/lid/LID0/state; then exit 1; fi'"
+        ];
+        profile.outputs = [
+          {
+            criteria = "DP-2";
+            status = "enable";
+            mode = "3840x2160@59.997Hz";
+            transform = "270";
+            position = "0,0";
+          }
+          {
+            criteria = "DP-3";
+            status = "enable";
+            mode = "3840x2160@59.997Hz";
+            position = "2160,0";
+          }
+          {
+            criteria = "eDP-1";
+            status = "enable";
+            mode = "1920x1200@59.950Hz";
+            position = "3120,2160";
+          }
+        ];
+      }
+      {
+        profile.name = "docked-closed";
+        profile.outputs = [
+          {
+            criteria = "DP-2";
+            status = "enable";
+            mode = "3840x2160@59.997Hz";
+            transform = "270";
+            position = "0,0";
+          }
+          {
+            criteria = "DP-3";
+            status = "enable";
+            mode = "3840x2160@59.997Hz";
+            position = "2160,0";
+          }
+          {
+            criteria = "eDP-1";
+            status = "disable";
+          }
+        ];
+        profile.exec = [
+          "sh -lc 'if [ -e /proc/acpi/button/lid/LID0/state ] && grep -q open /proc/acpi/button/lid/LID0/state; then exit 1; fi'"
+        ];
+      }
+    ];
   };
 }
