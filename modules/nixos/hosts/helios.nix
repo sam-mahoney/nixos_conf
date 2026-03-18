@@ -20,6 +20,9 @@
         boot.kernelParams = [
           "i915.force_probe=46a6"
           "xe.force_probe=!46a6"
+          # Keep the internal Intel Bluetooth controller stable during firmware
+          # handoff; without this the 8087:0033 device crashes at boot.
+          "btusb.reset=0"
         ];
       }
     )
