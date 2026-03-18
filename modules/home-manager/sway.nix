@@ -356,22 +356,22 @@
       }
       {
         profile.name = "docked-open";
-        profile.exec = [
-          "sh -lc 'if [ -e /proc/acpi/button/lid/LID0/state ] && grep -q closed /proc/acpi/button/lid/LID0/state; then exit 1; fi'"
-        ];
+        # Kanshi exec hooks are shell-split in a way that made the lid guard
+        # unstable across restarts, so keep this profile match purely output-based.
+        profile.exec = [ ];
         profile.outputs = [
           {
-            criteria = "DP-2";
-            status = "enable";
-            mode = "3840x2160@59.997Hz";
-            position = "2160,0";
-          }
-          {
-            criteria = "DP-3";
+            criteria = "LG Electronics LG ULTRAFINE 412NTKF3S797";
             status = "enable";
             mode = "3840x2160@59.997Hz";
             transform = "90";
             position = "0,0";
+          }
+          {
+            criteria = "Dell Inc. DELL U2723QE 9P79FH3";
+            status = "enable";
+            mode = "3840x2160@59.997Hz";
+            position = "2160,0";
           }
           {
             criteria = "eDP-1";
@@ -385,26 +385,26 @@
         profile.name = "docked-closed";
         profile.outputs = [
           {
-            criteria = "DP-2";
-            status = "enable";
-            mode = "3840x2160@59.997Hz";
-            position = "2160,0";
-          }
-          {
-            criteria = "DP-3";
+            criteria = "LG Electronics LG ULTRAFINE 412NTKF3S797";
             status = "enable";
             mode = "3840x2160@59.997Hz";
             transform = "90";
             position = "0,0";
           }
           {
+            criteria = "Dell Inc. DELL U2723QE 9P79FH3";
+            status = "enable";
+            mode = "3840x2160@59.997Hz";
+            position = "2160,0";
+          }
+          {
             criteria = "eDP-1";
             status = "disable";
           }
         ];
-        profile.exec = [
-          "sh -lc 'if [ -e /proc/acpi/button/lid/LID0/state ] && grep -q open /proc/acpi/button/lid/LID0/state; then exit 1; fi'"
-        ];
+        # Keep this profile output-driven as well; the previous shell guard broke
+        # profile reloads and left the layout in a bad state.
+        profile.exec = [ ];
       }
     ];
   };
