@@ -364,14 +364,14 @@
             criteria = "DP-2";
             status = "enable";
             mode = "3840x2160@59.997Hz";
-            transform = "90";
-            position = "0,0";
+            position = "2160,0";
           }
           {
             criteria = "DP-3";
             status = "enable";
             mode = "3840x2160@59.997Hz";
-            position = "2160,0";
+            transform = "90";
+            position = "0,0";
           }
           {
             criteria = "eDP-1";
@@ -388,14 +388,14 @@
             criteria = "DP-2";
             status = "enable";
             mode = "3840x2160@59.997Hz";
-            transform = "90";
-            position = "0,0";
+            position = "2160,0";
           }
           {
             criteria = "DP-3";
             status = "enable";
             mode = "3840x2160@59.997Hz";
-            position = "2160,0";
+            transform = "90";
+            position = "0,0";
           }
           {
             criteria = "eDP-1";
