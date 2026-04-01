@@ -96,6 +96,11 @@
     };
   };
 
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
   # === Zsh Configuration ===
   # Feature-rich shell with smart autocompletion, syntax highlighting,
   # history-based suggestions, and fuzzy search
