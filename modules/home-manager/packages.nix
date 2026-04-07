@@ -67,6 +67,7 @@ let
     # === General Development ===
     awscli2 # AWS command line interface v2
     aws-vault # Secure credential storage for AWS
+    steampipe # SQL interface for cloud APIs and services
     osv-scanner # Vulnerability scanner for dependencies
     docker # Container runtime and CLI
     ollama # Local LLM runtime and model runner
