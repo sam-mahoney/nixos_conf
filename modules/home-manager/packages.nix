@@ -122,6 +122,7 @@ let
     imagemagick # Required by Noctalia for template processing
     networkmanagerapplet # Network configuration GUI (nm-applet)
     pavucontrol # PulseAudio volume control
+    tigervnc # VNC client tools
   ];
 in
 
