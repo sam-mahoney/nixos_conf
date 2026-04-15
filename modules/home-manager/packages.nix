@@ -123,6 +123,7 @@ let
     networkmanagerapplet # Network configuration GUI (nm-applet)
     pavucontrol # PulseAudio volume control
     tigervnc # VNC client tools
+    wineWowPackages.stable # Standard Wine package for Windows apps
   ];
 in
 
