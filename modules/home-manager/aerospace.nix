@@ -99,6 +99,10 @@
     run = 'move-node-to-workspace 4'
 
     [[on-window-detected]]
+    if.app-id = 'org.torproject.torbrowser'
+    run = ['layout floating', 'move-node-to-workspace 4']
+
+    [[on-window-detected]]
     if.app-id = 'com.tinyspeck.slackmacgap'
     run = 'move-node-to-workspace 9'
   '';
