@@ -8,7 +8,7 @@ NixOS and nix-darwin flake managing three machines:
 | `apollo` | AMD 9950X + RTX 5080 | NixOS (x86_64) | Desktop, gaming stack |
 | `halcyon` | MacBook Pro 16 | nix-darwin (aarch64) | Homebrew integration |
 
-Desktop: Sway (Linux) / AeroSpace (macOS). Terminal: Alacritty + tmux. Editor: Neovim. Theme: monochrome black/grey/white.
+Desktop: Sway (Linux) / AeroSpace (macOS). Terminal: Alacritty + tmux. Editor: Neovim. Theme: monochrome black/grey/white (defined once in `modules/theme.nix`).
 
 ## Rebuild
 
@@ -40,14 +40,19 @@ git diff flake.lock                       # review before rebuilding
 `flake.nix` defines `mkLinuxHost` and `mkDarwinHost` helper functions that compose each machine's config.
 
 **System configs** (what gets built):
-- `configuration.nix` → helios, `configuration-apollo.nix` → apollo — both import `configuration-common.nix` for shared NixOS settings
+- `configuration.nix` -> helios, `configuration-apollo.nix` -> apollo — both import `configuration-common.nix` for shared NixOS settings
 - Home Manager: `home.nix` (Linux) and `home-darwin.nix` (macOS) — both import `modules/home-manager/common.nix`
 
 **Modules** (the building blocks):
+- `modules/theme.nix` — shared monochrome palette imported by all UI modules
 - `modules/nixos/` — system-level: boot, networking, desktop (Sway + greetd), hardware (PipeWire, Bluetooth), services (Docker, SSH, TLP)
-- `modules/nixos/hosts/` — per-machine hardware quirks (GPU drivers, kernel flags)
+- `modules/nixos/hosts/` — per-machine hardware quirks (GPU drivers, kernel flags, LUKS)
 - `modules/darwin/` — macOS system defaults, Homebrew, keyboard remapping
-- `modules/home-manager/` — user-level: editor, terminal, git, window manager, packages. Shared baseline in `common.nix`; Linux adds sway/noctalia/swaylock, macOS adds aerospace
+- `modules/home-manager/` — user-level config, shared baseline in `common.nix`:
+  - Terminal: `alacritty.nix`, `zsh.nix` (shell + prompt + direnv), `tmux.nix`
+  - Editor: `neovim.nix`
+  - Desktop: `sway.nix`, `kanshi.nix` (monitors), `noctalia.nix`, `swaylock.nix`, `aerospace.nix`
+  - Tools: `git.nix`, `opencode.nix`, `peon-ping.nix`, `packages.nix`
 
 **Overlays:**
 - `opencodeOverlay` — pins opencode from nixos-unstable
@@ -55,11 +60,11 @@ git diff flake.lock                       # review before rebuilding
 
 ## Adding packages
 
-System-wide (all users): edit `modules/nixos/packages.nix` → `environment.systemPackages`
+System-wide (all users): edit `modules/nixos/packages.nix` -> `environment.systemPackages`
 
-User-level: edit `modules/home-manager/packages.nix` → `home.packages`
+User-level: edit `modules/home-manager/packages.nix` -> `home.packages`
 
-macOS Homebrew casks: edit `modules/darwin/system.nix` → `homebrew.casks`
+macOS Homebrew casks: edit `modules/darwin/system.nix` -> `homebrew.casks`
 
 ## Tests
 
@@ -85,7 +90,7 @@ sudo nixos-rebuild switch --rollback
 
 All in `docs/`:
 
-- [where-to-edit.md](docs/where-to-edit.md) — "I want to change X" → edit this file
+- [where-to-edit.md](docs/where-to-edit.md) — "I want to change X" -> edit this file
 - [machines.md](docs/machines.md) — host-specific hardware details and quirks
 - [keybinds.md](docs/keybinds.md) — all keybindings for Sway, AeroSpace, tmux, Neovim
 - [neovim.md](docs/neovim.md) — editor setup and keymaps

@@ -1,8 +1,9 @@
 { pkgs, ... }:
 
+let
+  p = (import ../theme.nix).palette;
+in
 {
-  # === Neovim ===
-  # Editor setup with modern LSP, completion, fuzzy finding, and writing support.
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -27,25 +28,8 @@
       cmp_luasnip
       (nvim-treesitter.withPlugins (
         plugins: with plugins; [
-          bash
-          c
-          cpp
-          go
-          javascript
-          json
-          lua
-          markdown
-          markdown_inline
-          nix
-          python
-          query
-          regex
-          toml
-          tsx
-          typescript
-          vim
-          vimdoc
-          yaml
+          bash c cpp go javascript json lua markdown markdown_inline
+          nix python query regex toml tsx typescript vim vimdoc yaml
         ]
       ))
     ];
@@ -54,18 +38,19 @@
       vim.g.mapleader = " "
       vim.g.maplocalleader = ","
 
+      -- Palette sourced from modules/theme.nix
       local palette = {
-        bg = "#000000",
-        bg_alt = "#111111",
-        fg = "#d8d8d8",
-        fg_bright = "#e6e6e6",
-        white = "#ffffff",
-        gray_1 = "#c0c0c0",
-        gray_2 = "#a0a0a0",
-        gray_3 = "#9a9a9a",
-        gray_4 = "#6f6f6f",
-        gray_5 = "#3a3a3a",
-        red = "#ff8080",
+        bg = "${p.bg}",
+        bg_alt = "${p.bg_alt}",
+        fg = "${p.fg}",
+        fg_bright = "${p.fg_bright}",
+        white = "${p.white}",
+        gray_1 = "${p.gray1}",
+        gray_2 = "${p.gray2}",
+        gray_3 = "${p.gray3}",
+        gray_4 = "${p.gray4}",
+        gray_5 = "${p.gray5}",
+        red = "${p.red}",
       }
 
       local set_hl = vim.api.nvim_set_hl
@@ -74,6 +59,7 @@
       vim.o.background = "dark"
       vim.g.colors_name = "terminal_mono"
 
+      -- UI chrome
       set_hl(0, "Normal", { fg = palette.fg, bg = palette.bg })
       set_hl(0, "NormalNC", { fg = palette.fg, bg = palette.bg })
       set_hl(0, "NormalFloat", { fg = palette.fg, bg = palette.bg_alt })
@@ -108,6 +94,7 @@
       set_hl(0, "Whitespace", { fg = palette.gray_5 })
       set_hl(0, "EndOfBuffer", { fg = palette.bg })
 
+      -- Syntax
       set_hl(0, "Comment", { fg = palette.gray_4, italic = true })
       set_hl(0, "Constant", { fg = palette.gray_1 })
       set_hl(0, "String", { fg = palette.fg_bright })
@@ -141,6 +128,7 @@
       set_hl(0, "ErrorMsg", { fg = palette.red, bold = true })
       set_hl(0, "WarningMsg", { fg = palette.gray_1, bold = true })
 
+      -- Diagnostics
       set_hl(0, "DiagnosticError", { fg = palette.red })
       set_hl(0, "DiagnosticWarn", { fg = palette.gray_1 })
       set_hl(0, "DiagnosticInfo", { fg = palette.gray_2 })
@@ -163,6 +151,7 @@
       set_hl(0, "DiagnosticSignInfo", { fg = palette.gray_2, bg = palette.bg })
       set_hl(0, "DiagnosticSignHint", { fg = palette.gray_3, bg = palette.bg })
 
+      -- Plugin highlights
       set_hl(0, "GitSignsAdd", { fg = palette.fg_bright, bg = palette.bg })
       set_hl(0, "GitSignsChange", { fg = palette.gray_1, bg = palette.bg })
       set_hl(0, "GitSignsDelete", { fg = palette.red, bg = palette.bg })
@@ -183,6 +172,7 @@
       set_hl(0, "CmpItemMenu", { fg = palette.gray_4 })
       set_hl(0, "CmpItemKind", { fg = palette.gray_2 })
 
+      -- Editor options
       local opt = vim.opt
       opt.number = true
       opt.relativenumber = true
@@ -210,12 +200,14 @@
 
       vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
+      -- Telescope
       local telescope = require("telescope.builtin")
       vim.keymap.set("n", "<leader>ff", telescope.find_files, { desc = "Find files" })
       vim.keymap.set("n", "<leader>fg", telescope.live_grep, { desc = "Live grep" })
       vim.keymap.set("n", "<leader>fb", telescope.buffers, { desc = "Buffers" })
       vim.keymap.set("n", "<leader>fh", telescope.help_tags, { desc = "Help tags" })
 
+      -- Plugin setup
       require("gitsigns").setup()
       require("Comment").setup()
       require("nvim-surround").setup()
@@ -226,6 +218,7 @@
         indent = { enable = true },
       })
 
+      -- Completion
       local cmp = require("cmp")
       local luasnip = require("luasnip")
 
@@ -268,20 +261,18 @@
 
       cmp.setup.cmdline({ "/", "?" }, {
         mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-          { name = "buffer" },
-        },
+        sources = { { name = "buffer" } },
       })
 
       cmp.setup.cmdline(":", {
         mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources({
-          { name = "path" },
-        }, {
-          { name = "cmdline" },
-        }),
+        sources = cmp.config.sources(
+          { { name = "path" } },
+          { { name = "cmdline" } }
+        ),
       })
 
+      -- LSP
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
       local servers = {
         clangd = {},
@@ -321,6 +312,7 @@
         end,
       })
 
+      -- Formatting
       require("conform").setup({
         notify_on_error = true,
         format_on_save = false,
@@ -342,6 +334,7 @@
         require("conform").format({ async = true, lsp_fallback = true })
       end, { desc = "Format buffer" })
 
+      -- Writing mode for prose
       vim.api.nvim_create_autocmd("FileType", {
         pattern = { "gitcommit", "markdown", "text" },
         callback = function(event)
@@ -358,10 +351,7 @@
         float = { border = "rounded", source = "if_many" },
         underline = true,
         signs = true,
-        virtual_text = {
-          spacing = 2,
-          source = "if_many",
-        },
+        virtual_text = { spacing = 2, source = "if_many" },
       })
     '';
   };

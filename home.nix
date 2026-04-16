@@ -1,66 +1,35 @@
 { config, pkgs, inputs, ... }:
 
-# === Home Manager Configuration ===
-# User-level configuration for the mahoney user
-# Manages dotfiles, user packages, and user services
-#
-# This file imports modular configuration from ./modules/home-manager/
-#
-# After editing, rebuild with:
-#   sudo nixos-rebuild switch --flake .#helios
-# (home-manager is automatically deployed via flake.nix)
-#
-# For more information:
-#   - Home Manager Manual: https://nix-community.github.io/home-manager/
-#   - Home Manager Options: https://nix-community.github.io/home-manager/options.html
-
 {
-  # === User Identity ===
   home.username = "mahoney";
   home.homeDirectory = "/home/mahoney";
 
-  # === Module Imports ===
-  # User configuration split into logical modules
   imports = [
-    ./modules/home-manager/common.nix          # Shared cross-platform HM modules
-    ./modules/home-manager/sway.nix            # Sway window manager config
-    ./modules/home-manager/noctalia.nix         # Noctalia desktop shell (bar, notifications, OSD)
-    ./modules/home-manager/services.nix        # User services (polkit agent)
-    ./modules/home-manager/swaylock.nix        # Screen locker configuration
-    ./modules/home-manager/battery-notifier.nix # Battery notifications
+    ./modules/home-manager/common.nix
+    ./modules/home-manager/sway.nix
+    ./modules/home-manager/kanshi.nix
+    ./modules/home-manager/noctalia.nix
+    ./modules/home-manager/services.nix
+    ./modules/home-manager/swaylock.nix
+    ./modules/home-manager/battery-notifier.nix
   ];
 
-  # === GTK Theme ===
   gtk = {
     enable = true;
     theme = {
       package = pkgs.gnome-themes-extra;
       name = "Adwaita-dark";
     };
-
-    gtk3.extraConfig = {
-      gtk-application-prefer-dark-theme = 1;
-    };
-
-    gtk4.extraConfig = {
-      gtk-application-prefer-dark-theme = 1;
-    };
+    gtk3.extraConfig.gtk-application-prefer-dark-theme = 1;
+    gtk4.extraConfig.gtk-application-prefer-dark-theme = 1;
   };
 
-  # === Cursor Theme ===
   home.pointerCursor = {
     gtk.enable = true;
-    # x11.enable = true;
     package = pkgs.bibata-cursors;
     name = "Bibata-Modern-Ice";
     size = 24;
   };
 
-  # === Home Manager Version ===
-  # This value determines the Home Manager release corresponding to your
-  # NixOS release. It ensures compatibility between home-manager and NixOS.
-  #
-  # DO NOT CHANGE this value without also updating system.stateVersion
-  # in configuration.nix to maintain consistency.
   home.stateVersion = "25.11";
 }

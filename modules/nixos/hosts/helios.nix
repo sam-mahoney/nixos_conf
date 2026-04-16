@@ -9,8 +9,7 @@
   networking.hostName = "helios";
 
   # The nixos-hardware Precision 5570 module prefers xe for device 46a6.
-  # Override the host's final kernel params so helios keeps the shared boot flags
-  # while forcing the stable i915 path for external displays.
+  # Override so helios keeps the stable i915 path for external displays.
   disabledModules = [ "${inputs.nixos-hardware}/dell/precision/5570" ];
 
   imports = [
@@ -20,13 +19,19 @@
         boot.kernelParams = [
           "i915.force_probe=46a6"
           "xe.force_probe=!46a6"
-          # Keep the internal Intel Bluetooth controller stable during firmware
-          # handoff; without this the 8087:0033 device crashes at boot.
+          # Stabilise Intel Bluetooth controller (8087:0033) during firmware handoff
           "btusb.reset=0"
         ];
       }
     )
   ];
+
+  # spd5118 causes wake-up instability on this platform
+  boot.blacklistedKernelModules = [ "spd5118" ];
+
+  # LUKS encrypted swap (helios-specific)
+  boot.initrd.luks.devices."luks-ffeb8c8b-0b47-4b51-9d3a-d21ca17e832a".device =
+    "/dev/disk/by-uuid/ffeb8c8b-0b47-4b51-9d3a-d21ca17e832a";
 
   services.xserver.videoDrivers = [
     "modesetting"

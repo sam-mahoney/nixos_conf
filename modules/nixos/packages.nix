@@ -20,7 +20,6 @@
 
     # === Sway Utilities ===
     brightnessctl # Backlight control (for laptop keys)
-    wl-clipboard # Wayland clipboard
   ];
 
   # === Shell Aliases ===
