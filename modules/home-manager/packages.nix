@@ -72,6 +72,7 @@ let
     docker # Container runtime and CLI
     ollama # Local LLM runtime and model runner
     gh # GitHub command line tool
+    claude-code # Anthropic Claude Code terminal agent
     opencode # AI coding agent for the terminal
 
     # === Language Servers (shared by opencode + neovim) ===
@@ -81,7 +82,6 @@ let
     gopls # Go language server
     clang-tools # clangd for C/C++ language support
     nil # Nix language server
-    marksman # Markdown language server
     tree-sitter # Tree-sitter CLI/runtime
     ast-grep # AST-aware code search tool (sg)
     universal-ctags # Symbol indexing and tag generation

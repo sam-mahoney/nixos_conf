@@ -66,11 +66,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    superpowers = {
-      url = "github:obra/superpowers";
-      flake = false;
-    };
-
     caveman = {
       url = "github:JuliusBrussee/caveman";
       flake = false;
@@ -123,6 +118,12 @@
           opencode = pkgsOpencode.opencode;
         };
 
+      darwinBuildFixesOverlay = final: prev: {
+        direnv = prev.direnv.overrideAttrs (_: {
+          doCheck = false;
+        });
+      };
+
       mkLinuxHost =
         {
           configPath,
@@ -138,6 +139,7 @@
               # Override opencode from nixos-unstable while keeping stable base
               nixpkgs.overlays = [
                 opencodeOverlay
+                darwinBuildFixesOverlay
               ];
 
               # Use system-level nixpkgs for home-manager
@@ -168,7 +170,10 @@
             home-manager.darwinModules.home-manager
             mac-app-util.darwinModules.default
             {
-              nixpkgs.overlays = [ opencodeOverlay ];
+              nixpkgs.overlays = [
+                opencodeOverlay
+                darwinBuildFixesOverlay
+              ];
               nixpkgs.config.allowUnfree = true;
               nixpkgs.config.allowUnfreePredicate =
                 pkg:

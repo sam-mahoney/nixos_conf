@@ -9,7 +9,6 @@ let
     discord
     logseq
     _1password-cli
-    transmission_4-qt
   ];
 in
 {

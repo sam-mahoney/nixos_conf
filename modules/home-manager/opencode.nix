@@ -7,7 +7,6 @@
 
 let
   system = pkgs.stdenv.hostPlatform.system;
-  superpowersSrc = inputs.superpowers;
   cavemanSrc = inputs.caveman;
   opencodePackage = pkgs.opencode;
   defaultOpencodeConfig = builtins.toJSON {
@@ -84,24 +83,6 @@ let
     };
   };
 
-  superpowersOpencode = pkgs.writeShellScriptBin "opencode-superpowers" ''
-    set -euo pipefail
-
-    xdg_root="$HOME/.config/opencode-superpowers"
-    superpowers_dir="$xdg_root/opencode"
-    mkdir -p "$superpowers_dir/plugins" "$superpowers_dir/skills"
-
-    ln -sfn "$HOME/.config/opencode/config.json" "$superpowers_dir/config.json"
-    ln -sfn "$HOME/.config/opencode/plugins/peon-ping.ts" "$superpowers_dir/plugins/peon-ping.ts"
-    ln -sfn "$HOME/.config/opencode/plugins/superpowers.js" "$superpowers_dir/plugins/superpowers.js"
-    ln -sfn "$HOME/.config/opencode/skills/superpowers" "$superpowers_dir/skills/superpowers"
-    ln -sfn "$HOME/.config/opencode/superpowers" "$superpowers_dir/superpowers"
-    ln -sfn "$HOME/.config/opencode/peon-ping" "$superpowers_dir/peon-ping"
-
-    exec env XDG_CONFIG_HOME="$xdg_root" \
-      ${opencodePackage}/bin/opencode "$@"
-  '';
-
   ogPacksVersion = "1.4.0";
   ogPacksSrc = pkgs.fetchzip {
     url = "https://github.com/PeonPing/og-packs/archive/refs/tags/v${ogPacksVersion}.tar.gz";
@@ -141,7 +122,14 @@ in
     Code/commits/PRs: normal. Off: "stop caveman" / "normal mode".
   '';
 
-  home.packages = [ superpowersOpencode ];
+  xdg.configFile."claude/CLAUDE.md".text = ''
+    Terse like caveman. Technical substance exact. Only fluff die.
+    Drop: articles, filler (just/really/basically), pleasantries, hedging.
+    Fragments OK. Short synonyms. Code unchanged.
+    Pattern: [thing] [action] [reason]. [next step].
+    ACTIVE EVERY RESPONSE. No revert after many turns. No filler drift.
+    Code/commits/PRs: normal. Off: "stop caveman" / "normal mode".
+  '';
 
   # === Peon Ping ===
   # Agent voice/notification integration + OpenCode plugin adapter
@@ -176,9 +164,6 @@ in
     inputs.peon-ping.packages.${system}.default
   }/share/peon-ping/adapters/opencode/peon-ping.ts";
 
-  xdg.configFile."opencode/plugins/superpowers.js".source =
-    "${superpowersSrc}/.opencode/plugins/superpowers.js";
-
   xdg.configFile."opencode/plugins/caveman" = {
     source = "${cavemanSrc}/plugins/caveman";
     recursive = true;
@@ -201,16 +186,6 @@ in
 
   xdg.configFile."opencode/skills/caveman-compress" = {
     source = "${cavemanSrc}/caveman-compress";
-    recursive = true;
-  };
-
-  xdg.configFile."opencode/skills/superpowers" = {
-    source = "${superpowersSrc}/skills";
-    recursive = true;
-  };
-
-  xdg.configFile."opencode/superpowers" = {
-    source = superpowersSrc;
     recursive = true;
   };
 
