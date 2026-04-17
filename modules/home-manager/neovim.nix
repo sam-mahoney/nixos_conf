@@ -277,7 +277,6 @@ in
       local servers = {
         clangd = {},
         gopls = {},
-        marksman = {},
         nil_ls = {},
         pyright = {},
         ts_ls = {},

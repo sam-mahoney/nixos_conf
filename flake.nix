@@ -139,7 +139,6 @@
               # Override opencode from nixos-unstable while keeping stable base
               nixpkgs.overlays = [
                 opencodeOverlay
-                darwinBuildFixesOverlay
               ];
 
               # Use system-level nixpkgs for home-manager
