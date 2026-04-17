@@ -1,120 +1,123 @@
-{ config, pkgs, ... }:
-
 {
-  # User-level packages installed via home-manager
-  # These are installed per-user and don't require system-level permissions
-  home.packages = with pkgs; [
-    # === Utilities ===
-    # Modern replacements for common Unix tools
-    ripgrep      # Faster grep alternative (rg)
-    jq           # JSON processor and query tool
-    fzf          # Fuzzy finder for command line
-    
-    # Compression and archiving tools
-    zip          # Create .zip archives
-    xz           # High-compression .xz format
-    unzip        # Extract .zip archives
-    zstd         # Fast compression algorithm
-    gnutar       # GNU tar for .tar archives
-    
-    # === Network Tools ===
-    # Diagnostic and testing utilities
-    mtr          # Network diagnostic tool (traceroute + ping)
-    iperf3       # Network bandwidth testing
-    dnsutils     # DNS utilities (dig, nslookup)
-    ldns         # Provides 'drill' command (dig replacement)
-    nmap         # Network scanning and security auditing
-    ipcalc       # IP address calculator
-    
-    # === System Utilities ===
-    # File and system information tools
-    file         # Determine file type
-    which        # Locate commands in PATH
-    gnused       # GNU stream editor
-    gawk         # GNU awk for text processing
-    gnupg        # GPG encryption and signing
-    
-    # === Terminal Tools ===
-    # Enhanced terminal experience
-    glow         # Render markdown beautifully in the terminal
-    btop         # Modern resource monitor (top replacement)
-    iotop        # Monitor I/O usage by process
-    iftop        # Monitor network bandwidth by connection
-    nvtopPackages.nvidia  # GPU monitoring for NVIDIA cards
-    
-    # === System Call Monitoring ===
-    # Debugging and system analysis
-    strace       # Trace system calls and signals
-    ltrace       # Trace library calls
-    lsof         # List open files and network connections
-    
-    # === System Information ===
-    # Hardware and system monitoring
-    fastfetch    # System information display (neofetch alternative)
-    sysstat      # Collection of performance monitoring tools
-    lm_sensors   # Hardware monitoring (temperature, voltage)
-    ethtool      # Network interface configuration
-    pciutils     # PCI device utilities (lspci)
-    usbutils     # USB device utilities (lsusb)
-    
-    # === Python Development ===
-    # Python interpreter and package management
-    python313              # Python 3.13 interpreter
-    python313Packages.pip  # Python package installer
-    poetry                 # Python dependency management and packaging
-    
-    # === General Development ===
-    # Cloud and DevOps tools
-    awscli2      # AWS command line interface v2
-    aws-vault    # Secure credential storage for AWS
-    osv-scanner  # Vulnerability scanner for dependencies
-    docker       # Container runtime and CLI
-    vscode       # Visual Studio Code editor
-    gh           # GitHub command line tool
-    opencode     # AI coding agent for the terminal
-    # neovim is managed by programs.neovim in modules/home-manager/neovim.nix
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-    # === Language Servers (shared by opencode + neovim) ===
-    nodePackages.typescript-language-server # TS/JS language server
-    pyright                                # Python language server (default)
-    basedpyright                            # Alternate Python language server
-    gopls                                   # Go language server
-    clang-tools                             # clangd for C/C++ language support
-    nil                                     # Nix language server
-    tree-sitter                             # Tree-sitter CLI/runtime
-    ast-grep                                # AST-aware code search tool (sg)
-    universal-ctags                         # Symbol indexing and tag generation
+let
+  sharedPackages = with pkgs; [
+    # Utilities
+    fd
+    ripgrep
+    jq
+    fzf
+    eza
+    dust
+    zip
+    xz
+    unzip
+    zstd
+    gnutar
 
-    # === Entertainment ===
-    spotify           # Music streaming client
+    # Network
+    wget
+    mtr
+    iperf3
+    dnsutils
+    ldns
+    nmap
+    ipcalc
+    termshark
+    tor
 
-    # === Enterprise Communication ===
-    # Work collaboration tools
-    slack             # Team communication platform
-    teams-for-linux   # Microsoft Teams client for Linux
+    # System
+    file
+    which
+    gnused
+    gawk
+    gnupg
+    nh
+    nixfmt-rfc-style
+    stylua
+    shfmt
+    shellcheck
+    typos
 
-    # === Password Manager ===
-    _1password-gui    # 1Password desktop application
-    
-    # === Sway Ecosystem ===
-    # Wayland compositor and related tools
-    libnotify               # Library for desktop notifications (notify-send)
-    wl-clipboard            # Command-line copy/paste for Wayland
-    grim                    # Screenshot tool
-    slurp                   # Region selection tool
-    swaylock-effects        # Screen locker with blur effects
-    swayidle                # Idle management daemon
-    wlsunset                # Day/night gamma adjustments
-    brightnessctl           # Backlight control
-    imagemagick             # Required by Noctalia for template processing
-    
-    # System tray and control utilities
-    networkmanagerapplet    # Network configuration GUI (nm-applet)
-    pavucontrol             # PulseAudio volume control
+    # Terminal
+    glow
+    btop
+    lsof
+    fastfetch
+
+    # Python
+    python313
+    python313Packages.pip
+    poetry
+
+    # Development
+    awscli2
+    aws-vault
+    steampipe
+    osv-scanner
+    docker
+    ollama
+    gh
+    claude-code
+    opencode
+
+    # Language servers (shared by opencode + neovim)
+    nodePackages.typescript-language-server
+    pyright
+    basedpyright
+    gopls
+    clang-tools
+    nil
+    tree-sitter
+    ast-grep
+    universal-ctags
+    vale
+    nodePackages.prettier
+
+    # Apps
+    anki-bin
+    slack
   ];
 
-  # Chromium (ungoogled variant) + default extension set
-  programs.chromium = {
+  # Packages only needed on Linux.
+  # Wayland desktop tools (wl-clipboard, grim, slurp, swaylock-effects,
+  # swayidle, brightnessctl) are installed system-level in desktop.nix
+  # and nixos/packages.nix — not duplicated here.
+  linuxOnlyPackages = with pkgs; [
+    vscode
+    spotify
+    iotop
+    iftop
+    nvtopPackages.nvidia
+    strace
+    ltrace
+    sysstat
+    lm_sensors
+    ethtool
+    pciutils
+    usbutils
+    teams-for-linux
+    _1password-gui
+    _1password-cli
+    libnotify
+    wlsunset
+    imagemagick
+    networkmanagerapplet
+    pavucontrol
+    tigervnc
+    wineWowPackages.stable
+  ];
+in
+
+{
+  home.packages = sharedPackages ++ lib.optionals pkgs.stdenv.isLinux linuxOnlyPackages;
+
+  programs.chromium = lib.mkIf pkgs.stdenv.isLinux {
     enable = true;
     package = pkgs.ungoogled-chromium;
     extensions = [
@@ -122,8 +125,7 @@
     ];
   };
 
-  # Make Chromium the default browser for links and HTML files
-  xdg.mimeApps = {
+  xdg.mimeApps = lib.mkIf pkgs.stdenv.isLinux {
     enable = true;
     defaultApplications = {
       "text/html" = [ "chromium-browser.desktop" "chromium.desktop" ];

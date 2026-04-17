@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   # Git version control configuration
@@ -14,14 +14,14 @@
         name = "Sam Mahoney";
         email = "mahoney@cmui.co.uk";  # Personal email by default
       };
-      
-      # Use personal SSH key by default
-      core.sshCommand = "ssh -i ~/.ssh/helios_personal_ed25519";
+
+      # Use personal SSH key by default on Linux.
+      core.sshCommand = lib.mkIf pkgs.stdenv.isLinux "ssh -i ~/.ssh/helios_personal_ed25519";
     };
-  
+
     # === Conditional Includes ===
     # Override settings based on repository location
-    includes = [
+    includes = lib.optionals pkgs.stdenv.isLinux [
       {
         # === Work Configuration ===
         # Use work identity and SSH key for Cydar repositories
@@ -43,10 +43,7 @@
   # Automatically starts with user session
   services.ssh-agent.enable = true;
 
-  # === SSH Client Configuration ===
-  # Automatically adds keys to the agent on first use
-  # After entering your passphrase once, it's cached for the session
-  programs.ssh = {
+  programs.ssh = lib.mkIf pkgs.stdenv.isLinux {
     enable = true;
 
     # Opt out of legacy default config — we set everything explicitly
@@ -83,7 +80,7 @@
   # === Pre-load SSH keys at login ===
   # Adds both keys to the agent on session start so you only enter
   # passphrases once (at login) rather than on first use of each key.
-  systemd.user.services.ssh-add-keys = {
+  systemd.user.services.ssh-add-keys = lib.mkIf pkgs.stdenv.isLinux {
     Unit = {
       Description = "Pre-load SSH keys into agent";
       After = [ "ssh-agent.service" ];
