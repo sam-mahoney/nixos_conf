@@ -150,7 +150,7 @@ in
       "the-unarchiver"
       "balenaetcher"
       "1password"
-      "little-snitch"
+      "claude"
     ];
     taps = [ ];
     masApps = { };

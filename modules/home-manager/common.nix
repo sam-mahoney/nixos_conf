@@ -10,6 +10,7 @@
     ./git.nix
     ./opencode.nix
     ./peon-ping.nix
+    ./zed.nix
     ./tor-browser.nix
   ];
 

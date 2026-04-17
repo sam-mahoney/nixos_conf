@@ -73,6 +73,7 @@ let
     gopls
     clang-tools
     nil
+    nixd
     tree-sitter
     ast-grep
     universal-ctags
