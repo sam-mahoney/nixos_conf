@@ -16,7 +16,7 @@
   programs.home-manager.enable = true;
   systemd.user.startServices = "sd-switch";
 
-  targets.darwin.copyApps.enable = false;
+  targets.darwin.copyApps.enable = true;
 
   fonts.fontconfig.enable = true;
 
