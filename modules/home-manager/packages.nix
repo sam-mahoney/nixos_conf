@@ -46,6 +46,7 @@ let
 
     # Terminal
     glow
+    mdcat
     btop
     lsof
     fastfetch
