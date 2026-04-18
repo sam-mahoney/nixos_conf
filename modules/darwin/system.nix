@@ -120,6 +120,10 @@ in
     screensaver.askForPassword = true;
   };
 
+  power.sleep.display = 10;
+  power.sleep.computer = 15;
+  power.sleep.harddisk = 10;
+
   fonts.packages = with pkgs; [
     nerd-fonts.blex-mono
     nerd-fonts.departure-mono
