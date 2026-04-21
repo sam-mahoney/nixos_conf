@@ -58,6 +58,7 @@ let
     # Development
     awscli2
     aws-vault
+    ansible
     steampipe
     osv-scanner
     docker
@@ -73,6 +74,7 @@ let
     gopls
     clang-tools
     nil
+    marksman
     tree-sitter
     ast-grep
     universal-ctags
@@ -128,12 +130,30 @@ in
   xdg.mimeApps = lib.mkIf pkgs.stdenv.isLinux {
     enable = true;
     defaultApplications = {
-      "text/html" = [ "chromium-browser.desktop" "chromium.desktop" ];
-      "application/xhtml+xml" = [ "chromium-browser.desktop" "chromium.desktop" ];
-      "x-scheme-handler/http" = [ "chromium-browser.desktop" "chromium.desktop" ];
-      "x-scheme-handler/https" = [ "chromium-browser.desktop" "chromium.desktop" ];
-      "x-scheme-handler/about" = [ "chromium-browser.desktop" "chromium.desktop" ];
-      "x-scheme-handler/unknown" = [ "chromium-browser.desktop" "chromium.desktop" ];
+      "text/html" = [
+        "chromium-browser.desktop"
+        "chromium.desktop"
+      ];
+      "application/xhtml+xml" = [
+        "chromium-browser.desktop"
+        "chromium.desktop"
+      ];
+      "x-scheme-handler/http" = [
+        "chromium-browser.desktop"
+        "chromium.desktop"
+      ];
+      "x-scheme-handler/https" = [
+        "chromium-browser.desktop"
+        "chromium.desktop"
+      ];
+      "x-scheme-handler/about" = [
+        "chromium-browser.desktop"
+        "chromium.desktop"
+      ];
+      "x-scheme-handler/unknown" = [
+        "chromium-browser.desktop"
+        "chromium.desktop"
+      ];
     };
   };
 }
