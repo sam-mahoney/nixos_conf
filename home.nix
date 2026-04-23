@@ -7,6 +7,7 @@
   imports = [
     ./modules/home-manager/common.nix
     ./modules/home-manager/sway.nix
+    ./modules/home-manager/swayidle.nix
     ./modules/home-manager/kanshi.nix
     ./modules/home-manager/noctalia.nix
     ./modules/home-manager/services.nix

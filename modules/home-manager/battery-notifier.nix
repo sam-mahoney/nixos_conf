@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  # Battery notification service using dunst
+  # Battery notification service
   # Sends notifications at critical battery levels
   
   systemd.user.services.battery-notifier = {
