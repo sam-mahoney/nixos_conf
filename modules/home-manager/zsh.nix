@@ -44,6 +44,16 @@ in
       gp = "git push";
       gl = "git log --oneline --graph";
       ta = "tmux attach -t main || tmux new -s main";
+      nix-clean = ''
+        echo "Cleaning Nix store (keeping last 3 generations)..." && \
+        if [ "$(uname)" = "Darwin" ]; then \
+          sudo nix-env --delete-generations +3 --profile /nix/var/nix/profiles/system-profiles/default; \
+        else \
+          sudo nix-env --delete-generations +3 --profile /nix/var/nix/profiles/system; \
+        fi && \
+        nix-env --delete-generations +3 && \
+        sudo nix-collect-garbage && \
+        echo "Done."'';
     };
 
     history = {
