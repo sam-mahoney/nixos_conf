@@ -15,7 +15,7 @@
     fade-in=0.25
     color=020406
     screenshots
-    effect-blur=12x6
+    effect-blur=30x10
     effect-vignette=0.35:0.35
     effect-greyscale
 
