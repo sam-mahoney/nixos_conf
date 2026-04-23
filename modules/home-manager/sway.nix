@@ -207,6 +207,7 @@ in
     extraConfig = ''
       seat seat0 xcursor_theme Bibata-Modern-Ice 24
       default_border pixel 2
+      gaps top 4
     '';
   };
 

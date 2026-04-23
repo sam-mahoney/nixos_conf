@@ -39,7 +39,7 @@
           "${pkgs.tuigreet}/bin/tuigreet"
           "--time --time-format '%Y-%m-%d %H:%M'"
           "--remember --remember-session"
-          "--greeting '${config.networking.hostName}'"
+          "--greeting 'AUTHORIZED ACCESS ONLY'"
           "--asterisks --asterisks-char '*'"
           "--window-padding 2 --container-padding 2"
           "--theme 'container=black;border=darkgray;title=gray;text=gray;prompt=white;input=white;greet=darkgray;time=darkgray;action=darkgray;button=gray'"
