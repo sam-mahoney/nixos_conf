@@ -13,10 +13,8 @@ in
       bar = {
         position = "top";
         density = "compact";
-        barType = "floating";
-        marginVertical = 6;
-        marginHorizontal = 10;
-        backgroundOpacity = 0.85;
+        barType = "simple";
+        backgroundOpacity = 1.0;
         showCapsule = true;
         capsuleOpacity = 0.4;
         capsuleColorKey = "mSurfaceVariant";
@@ -74,18 +72,18 @@ in
     };
 
     colors = {
-      mPrimary = p.fg_bright;
+      mPrimary = p.gray1;
       mOnPrimary = p.bg;
-      mSecondary = p.gray2;
+      mSecondary = p.gray3;
       mOnSecondary = p.bg;
-      mTertiary = p.gray1;
+      mTertiary = p.gray2;
       mOnTertiary = p.bg;
       mError = p.red;
       mOnError = p.bg;
       mSurface = p.bg;
       mOnSurface = p.fg;
       mSurfaceVariant = p.gray5;
-      mOnSurfaceVariant = p.gray2;
+      mOnSurfaceVariant = p.gray3;
       mOutline = p.gray4;
       mShadow = p.bg;
       mHover = p.gray5;

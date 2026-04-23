@@ -35,12 +35,17 @@
     # and TTY cleanup (systemd service overrides below)
     settings = {
       default_session = {
-        # tuigreet provides a terminal-based login screen
-        # --time: Show current time
-        # --remember: Remember last logged-in user
-        # --remember-session: Remember last selected session
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-session --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions";
-        user = "greeter";  # User account for the greeter process
+        command = builtins.concatStringsSep " " [
+          "${pkgs.tuigreet}/bin/tuigreet"
+          "--time --time-format '%Y-%m-%d %H:%M'"
+          "--remember --remember-session"
+          "--greeting '$(hostname)'"
+          "--asterisks --asterisks-char '·'"
+          "--window-padding 2 --container-padding 2"
+          "--theme 'container=black;border=darkgray;title=gray;text=gray;prompt=white;input=white;greet=darkgray;time=darkgray;action=darkgray;button=gray'"
+          "--sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions"
+        ];
+        user = "greeter";
       };
     };
   };

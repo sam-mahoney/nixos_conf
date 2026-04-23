@@ -53,6 +53,6 @@
     font-size=24
 
     timestr=%H:%M
-    datestr=%a %d %b %Y
+    datestr=%Y-%m-%d
   '';
 }
