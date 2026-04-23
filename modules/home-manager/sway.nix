@@ -207,7 +207,7 @@ in
     extraConfig = ''
       seat seat0 xcursor_theme Vanilla-DMZ 24
       default_border pixel 2
-      gaps top 4
+      hide_edge_borders --i3 smart
     '';
   };
 
