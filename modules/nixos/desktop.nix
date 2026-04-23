@@ -40,7 +40,7 @@
           "--time --time-format '%Y-%m-%d %H:%M'"
           "--remember --remember-session"
           "--greeting '$(hostname)'"
-          "--asterisks --asterisks-char '·'"
+          "--asterisks --asterisks-char '*'"
           "--window-padding 2 --container-padding 2"
           "--theme 'container=black;border=darkgray;title=gray;text=gray;prompt=white;input=white;greet=darkgray;time=darkgray;action=darkgray;button=gray'"
           "--sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions"
