@@ -65,6 +65,14 @@ in
         position = "bottom";
       };
 
+      location = {
+        name = "London";
+        autoLocate = false;
+        weatherEnabled = true;
+        useFahrenheit = false;
+        showCalendarWeather = true;
+      };
+
       launcher = {
         showRecentApps = true;
         maxRecentApps = 5;
@@ -72,22 +80,22 @@ in
     };
 
     colors = {
-      mPrimary = p.gray1;
+      mPrimary = p.gray3;
       mOnPrimary = p.bg;
-      mSecondary = p.gray3;
+      mSecondary = p.gray4;
       mOnSecondary = p.bg;
-      mTertiary = p.gray2;
+      mTertiary = p.gray4;
       mOnTertiary = p.bg;
       mError = p.red;
       mOnError = p.bg;
       mSurface = p.bg;
-      mOnSurface = p.fg;
-      mSurfaceVariant = p.gray5;
-      mOnSurfaceVariant = p.gray3;
-      mOutline = p.gray4;
+      mOnSurface = p.gray2;
+      mSurfaceVariant = p.bg_alt;
+      mOnSurfaceVariant = p.gray4;
+      mOutline = p.gray5;
       mShadow = p.bg;
-      mHover = p.gray5;
-      mOnHover = p.fg;
+      mHover = p.bg_alt;
+      mOnHover = p.gray2;
     };
   };
 }

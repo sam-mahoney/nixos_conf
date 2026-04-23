@@ -21,10 +21,10 @@ in
         size = 11.0;
       };
 
-      gaps = { inner = 2; outer = 0; };
+      gaps = { inner = 0; outer = 0; };
 
-      window = { titlebar = false; border = 1; };
-      floating = { titlebar = false; border = 1; };
+      window = { titlebar = false; border = 2; };
+      floating = { titlebar = false; border = 2; };
 
       colors = {
         focused = {
@@ -206,6 +206,8 @@ in
 
     extraConfig = ''
       seat seat0 xcursor_theme Bibata-Modern-Ice 24
+      default_border pixel 2
+      gaps top 2
     '';
   };
 
