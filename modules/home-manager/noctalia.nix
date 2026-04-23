@@ -14,6 +14,7 @@ in
         position = "top";
         density = "compact";
         barType = "simple";
+        displayMode = "always_visible";
         backgroundOpacity = 1.0;
         showCapsule = true;
         capsuleOpacity = 0.4;
