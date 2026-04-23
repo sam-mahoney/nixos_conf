@@ -13,12 +13,30 @@ in
       bar = {
         position = "top";
         density = "compact";
-        showCapsule = false;
-        backgroundOpacity = 1.0;
-        floating = false;
+        barType = "floating";
+        marginVertical = 6;
+        marginHorizontal = 10;
+        backgroundOpacity = 0.85;
+        showCapsule = true;
+        capsuleOpacity = 0.4;
+        capsuleColorKey = "mSurfaceVariant";
+        showOutline = false;
+        widgetSpacing = 4;
+        contentPadding = 6;
+        fontScale = 0.95;
         widgets = {
           left = [
-            { id = "Workspace"; hideUnoccupied = true; labelMode = "number"; }
+            {
+              id = "Workspace";
+              hideUnoccupied = true;
+              labelMode = "number";
+              pillSize = 0.7;
+              fontWeight = "medium";
+              focusedColor = "mPrimary";
+              occupiedColor = "mOnSurfaceVariant";
+              emptyColor = "mOutline";
+              enableScrollWheel = false;
+            }
           ];
           center = [
             { id = "Clock"; formatHorizontal = "ddd HH:mm"; usePrimaryColor = false; useMonospacedFont = true; }
@@ -56,22 +74,22 @@ in
     };
 
     colors = {
-      mPrimary = p.gray1;
+      mPrimary = p.fg_bright;
       mOnPrimary = p.bg;
-      mSecondary = p.gray3;
+      mSecondary = p.gray2;
       mOnSecondary = p.bg;
-      mTertiary = p.fg;
+      mTertiary = p.gray1;
       mOnTertiary = p.bg;
       mError = p.red;
       mOnError = p.bg;
       mSurface = p.bg;
       mOnSurface = p.fg;
-      mSurfaceVariant = p.bg_alt;
-      mOnSurfaceVariant = p.gray3;
-      mOutline = p.gray5;
+      mSurfaceVariant = p.gray5;
+      mOnSurfaceVariant = p.gray2;
+      mOutline = p.gray4;
       mShadow = p.bg;
-      mHover = p.gray3;
-      mOnHover = p.bg;
+      mHover = p.gray5;
+      mOnHover = p.fg;
     };
   };
 }
