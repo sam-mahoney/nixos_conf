@@ -60,12 +60,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Peon Ping — AI agent sound/notification hooks
-    peon-ping = {
-      url = "github:PeonPing/peon-ping";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     caveman = {
       url = "github:JuliusBrussee/caveman";
       flake = false;

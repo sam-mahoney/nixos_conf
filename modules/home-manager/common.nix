@@ -9,7 +9,6 @@
     ./neovim.nix
     ./git.nix
     ./opencode.nix
-    ./peon-ping.nix
     ./tor-browser.nix
   ];
 
