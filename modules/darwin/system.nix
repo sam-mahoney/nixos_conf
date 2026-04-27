@@ -141,6 +141,7 @@ in
       "wimlib"
     ];
     casks = [
+      "claude"
       "hammerspoon"
       "maccy"
       "anytype"
