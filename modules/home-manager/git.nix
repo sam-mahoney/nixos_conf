@@ -16,7 +16,7 @@
       };
 
       # Use personal SSH key by default on Linux.
-      core.sshCommand = lib.mkIf pkgs.stdenv.isLinux "ssh -i ~/.ssh/helios_personal_ed25519";
+      core.sshCommand = lib.mkIf pkgs.stdenv.isLinux "ssh -i ~/.ssh/helios_personal_ed25519 -o IdentitiesOnly=yes";
     };
 
     # === Conditional Includes ===
@@ -32,7 +32,7 @@
             email = "sam.mahoney@cydar.co.uk";  # Work email
           };
           # Use work SSH key
-          core.sshCommand = "ssh -i ~/.ssh/helios_ed25519";
+          core.sshCommand = "ssh -i ~/.ssh/helios_ed25519 -o IdentitiesOnly=yes";
         };
       }
     ];
@@ -50,27 +50,8 @@
     enableDefaultConfig = false;
 
     matchBlocks = {
-      # Personal GitHub — plain github.com uses personal key
-      # This matches remote URLs like git@github.com:sam-mahoney/...
-      "github.com" = {
-        hostname = "github.com";
-        user = "git";
-        identityFile = "~/.ssh/helios_personal_ed25519";
-        identitiesOnly = true;
-        addKeysToAgent = "yes";
-      };
-
-      # Work GitHub — use "github.com-work" as the host alias
-      # Work repos use remote URLs like git@github.com-work:cydar/...
-      "github.com-work" = {
-        hostname = "github.com";
-        user = "git";
-        identityFile = "~/.ssh/helios_ed25519";
-        identitiesOnly = true;
-        addKeysToAgent = "yes";
-      };
-
       # Default catch-all for any other SSH host (e.g. servers)
+      # Git key selection is handled by core.sshCommand per-repo
       "*" = {
         addKeysToAgent = "yes";
       };
