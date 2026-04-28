@@ -19,10 +19,13 @@
 
   # === Nix Configuration ===
   # Enable experimental features for flakes and new CLI
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  nix.settings = {
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    download-buffer-size = 256 * 1024 * 1024; # 256 MiB
+  };
 
   # === Foreign Binary Compatibility ===
   # Allow selected upstream Linux binaries to run on NixOS.
