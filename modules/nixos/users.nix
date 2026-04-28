@@ -14,10 +14,11 @@
     
     # === Group Membership ===
     # Groups grant permissions and capabilities
-    extraGroups = [ 
+    extraGroups = [
       "networkmanager"  # Manage network connections without sudo
       "wheel"           # Can use sudo for administrative tasks
       "docker"          # Run Docker commands without sudo
+      "video"           # Backlight control via brightnessctl
     ];
     
     # === User-Specific Packages ===
