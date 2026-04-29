@@ -50,6 +50,7 @@ in
       input = {
         "type:keyboard" = {
           xkb_layout = "us";
+          xkb_options = "caps:escape";
           repeat_delay = "300";
           repeat_rate = "50";
         };
