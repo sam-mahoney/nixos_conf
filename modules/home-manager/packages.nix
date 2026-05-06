@@ -46,6 +46,7 @@ let
 
     # Terminal
     glow
+    python313Packages.grip
     btop
     lsof
     fastfetch

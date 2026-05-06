@@ -19,6 +19,7 @@ darwin-rebuild build --flake .#halcyon
 # Update flake inputs
 nix flake update
 nix flake lock --update-input nixpkgs
+git diff flake.lock   # review changes before rebuilding
 
 # Validate configuration
 nix flake check
@@ -26,7 +27,10 @@ nix flake check
 # Secret scan check
 nix build .#checks.x86_64-linux.secret-scan
 
-# Enable pre-commit hooks
+# Rollback
+sudo nixos-rebuild switch --rollback
+
+# Enable pre-commit hooks (gitleaks secret scanning)
 git config core.hooksPath .githooks
 ```
 
@@ -58,6 +62,13 @@ This is a **Nix flakes** repository managing three machines with a shared module
   - Desktop: `sway.nix`, `kanshi.nix` (monitor profiles), `noctalia.nix`, `swaylock.nix`, `aerospace.nix`
   - Tools: `git.nix`, `opencode.nix`, `peon-ping.nix`, `packages.nix`
 
+### Where to Add Packages
+
+- **User-level (cross-platform):** `modules/home-manager/packages.nix` -> `sharedPackages` or `linuxOnlyPackages`
+- **System-wide (Linux):** `modules/nixos/packages.nix` -> `environment.systemPackages`
+- **macOS Homebrew casks:** `modules/darwin/system.nix` -> `homebrew.casks`
+- **Neovim plugins:** `modules/home-manager/neovim.nix` -> `plugins`
+
 ### Overlays
 
 - `opencodeOverlay` — pins opencode from nixos-unstable while rest uses stable
@@ -71,6 +82,10 @@ nixpkgs (nixos-25.11), home-manager (release-25.11), nix-darwin (25.11), nixos-h
 
 Tests live in `tests/` as Nix derivations that assert configuration properties. They are evaluated as part of `nix flake check`. Currently: kernel param validation for helios GPU and Bluetooth stability.
 
+## CI
+
+GitHub Actions (`.github/workflows/secret-scan.yml`) runs gitleaks on PRs and pushes to master.
+
 ## Conventions
 
 - **Theme**: All UI colors come from `modules/theme.nix`. Only swaylock uses its own palette (intentional noir accent).
@@ -79,3 +94,13 @@ Tests live in `tests/` as Nix derivations that assert configuration properties. 
 - Wayland desktop packages (wl-clipboard, grim, slurp, swaylock, swayidle) are installed system-level in `modules/nixos/desktop.nix`, not in home-manager
 - Alt-based keybindings are consistent between Sway (Linux) and AeroSpace (macOS)
 - SSH keys are split work/personal with conditional git includes (see `modules/home-manager/git.nix`)
+
+## Additional Docs
+
+Detailed documentation lives in `docs/`:
+- `where-to-edit.md` — "I want to change X" -> edit this file (comprehensive lookup table)
+- `machines.md` — host-specific hardware details and quirks
+- `keybinds.md` — all keybindings for Sway, AeroSpace, tmux, Neovim
+- `neovim.md` — editor setup and keymaps
+- `new-machine.md` — bootstrapping a fresh machine
+- `tor-browser.md` — Tor Browser workflow on macOS
