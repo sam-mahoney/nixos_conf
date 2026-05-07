@@ -132,30 +132,12 @@ in
   xdg.mimeApps = lib.mkIf pkgs.stdenv.isLinux {
     enable = true;
     defaultApplications = {
-      "text/html" = [
-        "chromium-browser.desktop"
-        "chromium.desktop"
-      ];
-      "application/xhtml+xml" = [
-        "chromium-browser.desktop"
-        "chromium.desktop"
-      ];
-      "x-scheme-handler/http" = [
-        "chromium-browser.desktop"
-        "chromium.desktop"
-      ];
-      "x-scheme-handler/https" = [
-        "chromium-browser.desktop"
-        "chromium.desktop"
-      ];
-      "x-scheme-handler/about" = [
-        "chromium-browser.desktop"
-        "chromium.desktop"
-      ];
-      "x-scheme-handler/unknown" = [
-        "chromium-browser.desktop"
-        "chromium.desktop"
-      ];
+      "text/html" = [ "firefox.desktop" ];
+      "application/xhtml+xml" = [ "firefox.desktop" ];
+      "x-scheme-handler/http" = [ "firefox.desktop" ];
+      "x-scheme-handler/https" = [ "firefox.desktop" ];
+      "x-scheme-handler/about" = [ "firefox.desktop" ];
+      "x-scheme-handler/unknown" = [ "firefox.desktop" ];
     };
   };
 }
