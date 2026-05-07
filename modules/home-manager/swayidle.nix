@@ -1,5 +1,11 @@
-{ ... }:
+{ pkgs, ... }:
 
+let
+  brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
+  swaylock = "${pkgs.swaylock-effects}/bin/swaylock";
+  swaymsg = "${pkgs.sway}/bin/swaymsg";
+  systemctl = "${pkgs.systemd}/bin/systemctl";
+in
 {
   services.swayidle = {
     enable = true;
@@ -8,28 +14,28 @@
     timeouts = [
       {
         timeout = 120;
-        command = "brightnessctl set 10%";
-        resumeCommand = "brightnessctl set 50%";
+        command = "${brightnessctl} set 10%";
+        resumeCommand = "${brightnessctl} set 50%";
       }
       {
         timeout = 300;
-        command = "swaylock -f";
+        command = "${swaylock} -f";
       }
       {
         timeout = 360;
-        command = "swaymsg 'output * power off'";
-        resumeCommand = "swaymsg 'output * power on'";
+        command = "${swaymsg} 'output * power off'";
+        resumeCommand = "${swaymsg} 'output * power on'";
       }
       {
         timeout = 600;
-        command = "systemctl suspend";
+        command = "${systemctl} suspend";
       }
     ];
 
     events = [
       {
         event = "before-sleep";
-        command = "swaylock -f";
+        command = "${swaylock} -f";
       }
     ];
   };
