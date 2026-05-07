@@ -8,6 +8,7 @@
 let
   sharedPackages = with pkgs; [
     # Utilities
+    bat
     fd
     ripgrep
     jq
