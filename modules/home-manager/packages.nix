@@ -92,10 +92,8 @@ let
     slack
   ];
 
-  # Packages only needed on Linux.
   # Wayland desktop tools (wl-clipboard, grim, slurp, swaylock-effects,
-  # swayidle, brightnessctl) are installed system-level in desktop.nix
-  # and nixos/packages.nix — not duplicated here.
+  # swayidle, brightnessctl) live in nixos/desktop.nix at the system level.
   linuxOnlyPackages = with pkgs; [
     vscode
     spotify

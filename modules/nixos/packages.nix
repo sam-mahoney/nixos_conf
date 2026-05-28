@@ -1,43 +1,26 @@
 { config, pkgs, ... }:
 
 {
-  # === System-Wide Packages ===
-  # Installed for all users, available system-wide
-  # For user-specific packages, use home-manager instead
-
   environment.systemPackages = with pkgs; [
-    # === Essential Tools ===
-    vim # Text editor (essential for emergency recovery)
-    wget # Download files from the web
-    git # Version control system
+    vim # Available before home-manager activates; useful for emergency recovery
+    wget
+    git
     inotify-tools
-
-    # === Networking ===
-    wireguard-tools # VPN utilities (wg, wg-quick)
-
-    # === Authentication ===
-    polkit_gnome # Graphical authentication agent for privileged operations
-
-    # === Sway Utilities ===
-    brightnessctl # Backlight control (for laptop keys)
+    wireguard-tools
+    polkit_gnome
+    brightnessctl
   ];
 
-  # === Shell Aliases ===
-  # System-wide command shortcuts
   environment.shellAliases = {
-    vpn-up = "wg-quick up wg0"; # Start WireGuard VPN
-    vpn-down = "wg-quick down wg0"; # Stop WireGuard VPN
+    vpn-up = "wg-quick up wg0";
+    vpn-down = "wg-quick down wg0";
   };
 
-  # === Package Configuration ===
-  # Allow proprietary software (required for many drivers and apps)
   nixpkgs.config.allowUnfree = true;
 
-  # === Font Configuration ===
-  # System-wide fonts for all applications
   fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono # JetBrains Mono with Nerd Font icons
-    nerd-fonts.fira-code # Fira Code with Nerd Font icons
-    font-awesome # Font Awesome icon font
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.fira-code
+    font-awesome
   ];
 }

@@ -5,7 +5,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.timeout = 0;
 
-  # Suppress verbose boot messages for a clean greeter
+  # Suppress verbose boot messages for a clean greeter.
   boot.kernelParams = [
     "quiet"
     "loglevel=3"
