@@ -9,7 +9,6 @@
     ./neovim.nix
     ./git.nix
     ./opencode.nix
-    ./tor-browser.nix
   ];
 
   programs.firefox.enable = true;
