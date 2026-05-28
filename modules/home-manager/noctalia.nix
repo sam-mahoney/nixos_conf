@@ -1,7 +1,7 @@
-{ inputs, ... }:
+{ inputs, theme, ... }:
 
 let
-  p = (import ../theme.nix).palette;
+  p = theme.palette;
 in
 {
   imports = [ inputs.noctalia.homeModules.default ];

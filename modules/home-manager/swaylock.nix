@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, theme, ... }:
 
 {
   # === Swaylock Configuration ===
@@ -49,7 +49,7 @@
     key-hl-color=6ee7ff
     bs-hl-color=ff6b6b
 
-    font=JetBrainsMono Nerd Font
+    font=${theme.fonts.mono}
     font-size=24
 
     timestr=%H:%M

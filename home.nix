@@ -1,9 +1,6 @@
-{ config, pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 {
-  home.username = "mahoney";
-  home.homeDirectory = "/home/mahoney";
-
   imports = [
     ./modules/home-manager/common.nix
     ./modules/home-manager/sway.nix
@@ -31,6 +28,4 @@
     name = "Vanilla-DMZ";
     size = 24;
   };
-
-  home.stateVersion = "25.11";
 }

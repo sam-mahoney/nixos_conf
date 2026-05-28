@@ -1,7 +1,6 @@
-{ config, pkgs, ... }:
+{ config, pkgs, user, ... }:
 
 let
-  user = "mahoney";
   nixGuiApps = with pkgs; [
     aerospace
     hidden-bar

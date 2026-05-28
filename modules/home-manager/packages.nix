@@ -2,10 +2,14 @@
   config,
   pkgs,
   lib,
+  osConfig ? null,
   ...
 }:
 
 let
+  hostName = osConfig.networking.hostName or "";
+  isApollo = hostName == "apollo";
+
   sharedPackages = with pkgs; [
     # Utilities
     bat
@@ -114,12 +118,19 @@ let
     networkmanagerapplet
     pavucontrol
     tigervnc
+  ];
+
+  # Multi-GB closure; only needed on apollo's gaming stack.
+  apolloOnlyPackages = with pkgs; [
     wineWowPackages.stable
   ];
 in
 
 {
-  home.packages = sharedPackages ++ lib.optionals pkgs.stdenv.isLinux linuxOnlyPackages;
+  home.packages =
+    sharedPackages
+    ++ lib.optionals pkgs.stdenv.isLinux linuxOnlyPackages
+    ++ lib.optionals isApollo apolloOnlyPackages;
 
   programs.chromium = lib.mkIf pkgs.stdenv.isLinux {
     enable = true;

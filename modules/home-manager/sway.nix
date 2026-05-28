@@ -2,11 +2,12 @@
   config,
   pkgs,
   lib,
+  theme,
   ...
 }:
 
 let
-  p = (import ../theme.nix).palette;
+  p = theme.palette;
 in
 {
   wayland.windowManager.sway = {
@@ -17,7 +18,7 @@ in
       defaultWorkspace = "workspace number 1";
 
       fonts = {
-        names = [ "JetBrainsMono Nerd Font" ];
+        names = [ theme.fonts.mono ];
         size = 11.0;
       };
 

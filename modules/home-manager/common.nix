@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, user, ... }:
 
 {
   imports = [
@@ -10,6 +10,11 @@
     ./git.nix
     ./opencode.nix
   ];
+
+  home.username = user;
+  home.homeDirectory =
+    if pkgs.stdenv.isDarwin then "/Users/${user}" else "/home/${user}";
+  home.stateVersion = "25.11";
 
   programs.firefox.enable = true;
 

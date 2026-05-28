@@ -1,7 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, theme, ... }:
 
 let
-  p = (import ../theme.nix).palette;
+  p = theme.palette;
 in
 {
   programs.neovim = {

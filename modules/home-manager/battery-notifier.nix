@@ -1,9 +1,12 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, osConfig ? null, ... }:
 
-{
+let
+  isHelios = (osConfig.networking.hostName or "") == "helios";
+in
+lib.mkIf isHelios {
   # Battery notification service
   # Sends notifications at critical battery levels
-  
+
   systemd.user.services.battery-notifier = {
     Unit = {
       Description = "Battery level notification service";

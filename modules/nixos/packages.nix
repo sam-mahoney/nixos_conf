@@ -40,9 +40,4 @@
     nerd-fonts.fira-code # Fira Code with Nerd Font icons
     font-awesome # Font Awesome icon font
   ];
-
-  # === Home Manager ===
-  # Backup file extension for home-manager conflicts
-  # When home-manager would overwrite a file, it creates a backup with this extension
-  home-manager.backupFileExtension = "hm-backup";
 }

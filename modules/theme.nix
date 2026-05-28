@@ -1,4 +1,4 @@
-# Shared monochrome palette.
+# Shared monochrome palette and fonts.
 # Change a value here and it updates everywhere: terminal, editor, compositor, status bar.
 {
   palette = {
@@ -13,5 +13,9 @@
     gray4     = "#6f6f6f";
     gray5     = "#3a3a3a";
     red       = "#ff8080";
+  };
+
+  fonts = {
+    mono = "JetBrainsMono Nerd Font";
   };
 }

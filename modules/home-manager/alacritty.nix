@@ -1,7 +1,8 @@
-{ ... }:
+{ theme, ... }:
 
 let
-  p = (import ../theme.nix).palette;
+  p = theme.palette;
+  monoFont = theme.fonts.mono;
 in
 {
   programs.alacritty = {
@@ -12,9 +13,9 @@ in
       selection.save_to_clipboard = true;
 
       font = {
-        normal = { family = "JetBrainsMono Nerd Font"; style = "Regular"; };
-        bold = { family = "JetBrainsMono Nerd Font"; style = "Bold"; };
-        italic = { family = "JetBrainsMono Nerd Font"; style = "Italic"; };
+        normal = { family = monoFont; style = "Regular"; };
+        bold = { family = monoFont; style = "Bold"; };
+        italic = { family = monoFont; style = "Italic"; };
         size = 12.0;
       };
 

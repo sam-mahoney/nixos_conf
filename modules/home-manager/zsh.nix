@@ -1,7 +1,7 @@
-{ ... }:
+{ theme, ... }:
 
 let
-  p = (import ../theme.nix).palette;
+  p = theme.palette;
 in
 {
   programs.starship = {
@@ -92,10 +92,6 @@ in
 
       bindkey '^[[A' history-search-backward
       bindkey '^[[B' history-search-forward
-
-      if command -v fzf &> /dev/null; then
-        source <(fzf --zsh 2>/dev/null || true)
-      fi
     '';
   };
 

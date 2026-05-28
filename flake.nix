@@ -1,45 +1,15 @@
 {
-  # === NixOS Flake Configuration ===
-  # Declarative system configuration using Nix Flakes
-  #
-  # This flake defines the Helios and Apollo system configurations with:
-  #   - NixOS system configuration
-  #   - Home Manager for user-level configuration
-  #   - Hardware-specific optimizations for Dell Precision 5570
-  #
-  # Build and activate with:
-  #   sudo nixos-rebuild switch --flake .#helios
-  #
-  # Update all inputs:
-  #   nix flake update
-  #
-  # For more information:
-  #   - Flakes: https://wiki.nixos.org/wiki/Flakes
-  #   - NixOS: https://nixos.org/manual/nixos/stable/
-
   description = "Mahoney mixed NixOS and Darwin flake";
 
-  # === Inputs ===
-  # External dependencies for this flake
   inputs = {
-    # NixOS 25.11 stable channel
-    # Primary source for system packages and modules
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-
-    # Hardware-specific configuration repository
-    # Provides optimized settings for various laptop models
     nixos-hardware.url = "github:NixOS/nixos-hardware";
 
-    # Secondary nixpkgs channel used only for fast-moving packages
-    # Keep system on stable while allowing targeted package overrides
+    # Secondary nixpkgs channel for fast-moving packages (opencode).
     nixpkgs-opencode.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    # Home Manager for user-level configuration
-    # Manages dotfiles, user packages, and user services
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
-      # Ensure home-manager uses the same nixpkgs as the system
-      # This prevents version mismatches and reduces disk usage
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -48,8 +18,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Noctalia — minimal desktop shell for Wayland (replaces waybar)
-    # Requires its own Quickshell fork (noctalia-qs)
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -65,17 +33,9 @@
       flake = false;
     };
 
-    firefox-addons = {
-      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # mac-app-util — trampoline .app bundles so Spotlight can index Nix apps
     mac-app-util.url = "github:hraban/mac-app-util";
   };
 
-  # === Outputs ===
-  # What this flake produces (system configurations)
   outputs =
     {
       self,
@@ -90,6 +50,9 @@
     let
       linuxSystem = "x86_64-linux";
       darwinSystem = "aarch64-darwin";
+
+      user = "mahoney";
+      theme = import ./modules/theme.nix;
 
       mkPkgs =
         system:
@@ -118,37 +81,31 @@
         });
       };
 
+      hmSpecialArgs = { inherit inputs user theme; };
+
+      hmCommon = {
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.backupFileExtension = "hm-backup";
+        home-manager.extraSpecialArgs = hmSpecialArgs;
+      };
+
       mkLinuxHost =
         {
-          configPath,
+          hostModule,
+          homeModule ? ./home.nix,
           extraModules ? [ ],
         }:
         nixpkgs.lib.nixosSystem {
           system = linuxSystem;
-          specialArgs = { inherit inputs; };
+          specialArgs = { inherit inputs user theme; };
           modules = extraModules ++ [
-            configPath
+            hostModule
             home-manager.nixosModules.home-manager
+            hmCommon
             {
-              # Override opencode from nixos-unstable while keeping stable base
-              nixpkgs.overlays = [
-                opencodeOverlay
-              ];
-
-              # Use system-level nixpkgs for home-manager
-              # Reduces closures and ensures consistency
-              home-manager.useGlobalPkgs = true;
-
-              # Install packages to /etc/profiles instead of ~/.nix-profile
-              # Allows better integration with NixOS
-              home-manager.useUserPackages = true;
-
-              # User-specific home-manager configuration
-              # Imports all home-manager modules from ./modules/home-manager/
-              home-manager.users.mahoney = import ./home.nix;
-
-              # Pass flake inputs to home-manager modules (needed for noctalia)
-              home-manager.extraSpecialArgs = { inherit inputs; };
+              nixpkgs.overlays = [ opencodeOverlay ];
+              home-manager.users.${user} = import homeModule;
             }
           ];
         };
@@ -157,33 +114,29 @@
         { hostModule, homeModule }:
         darwin.lib.darwinSystem {
           system = darwinSystem;
-          specialArgs = { inherit inputs; };
+          specialArgs = { inherit inputs user theme; };
           modules = [
             hostModule
             home-manager.darwinModules.home-manager
             mac-app-util.darwinModules.default
+            hmCommon
             {
               nixpkgs.overlays = [
                 opencodeOverlay
                 darwinBuildFixesOverlay
               ];
-              nixpkgs.config.allowUnfree = true;
               nixpkgs.config.allowUnfreePredicate =
                 pkg:
                 builtins.elem (nixpkgs.lib.getName pkg) [
                   "onepassword-password-manager"
                 ];
 
-              users.users.mahoney = {
-                name = "mahoney";
-                home = "/Users/mahoney";
+              users.users.${user} = {
+                name = user;
+                home = "/Users/${user}";
               };
 
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "hm-backup";
-              home-manager.users.mahoney = import homeModule;
-              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.users.${user} = import homeModule;
               home-manager.sharedModules = [
                 mac-app-util.homeManagerModules.default
               ];
@@ -208,20 +161,15 @@
             touch "$out"
           '';
 
-      # === NixOS Configuration: helios ===
-      # Main system configuration for the Helios laptop
       nixosConfigurations.helios = mkLinuxHost {
-        configPath = ./configuration.nix;
+        hostModule = ./configuration.nix;
         extraModules = [
-          # Hardware-specific optimizations for Dell Precision 5570
           nixos-hardware.nixosModules.dell-precision-5570
         ];
       };
 
-      # === NixOS Configuration: apollo ===
-      # Main system configuration for the Apollo desktop
       nixosConfigurations.apollo = mkLinuxHost {
-        configPath = ./configuration-apollo.nix;
+        hostModule = ./configuration-apollo.nix;
       };
 
       darwinConfigurations.halcyon = mkDarwinHost {
