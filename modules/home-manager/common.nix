@@ -16,7 +16,7 @@
     if pkgs.stdenv.isDarwin then "/Users/${user}" else "/home/${user}";
   home.stateVersion = "25.11";
 
-  programs.firefox.enable = true;
+  programs.firefox.enable = pkgs.stdenv.isLinux;
 
   home.file.".steampipe/config/aws.spc".text = ''
     connection "default" {

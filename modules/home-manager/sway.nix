@@ -24,7 +24,18 @@ in
 
       gaps = { inner = 0; outer = 0; };
 
-      window = { titlebar = false; border = 2; };
+      window = {
+        titlebar = false;
+        border = 2;
+        commands = [
+          { criteria = { app_id = "pavucontrol"; }; command = "floating enable"; }
+          { criteria = { app_id = "nm-connection-editor"; }; command = "floating enable"; }
+          { criteria = { app_id = "blueman-manager"; }; command = "floating enable"; }
+          { criteria = { window_role = "pop-up"; }; command = "floating enable"; }
+          { criteria = { window_role = "dialog"; }; command = "floating enable"; }
+          { criteria = { window_type = "dialog"; }; command = "floating enable"; }
+        ];
+      };
       floating = { titlebar = false; border = 2; };
 
       colors = {
@@ -70,15 +81,6 @@ in
         { command = "noctalia-shell"; }
         { command = "nm-applet --indicator"; }
         { command = "blueman-applet"; }
-      ];
-
-      window.commands = [
-        { criteria = { app_id = "pavucontrol"; }; command = "floating enable"; }
-        { criteria = { app_id = "nm-connection-editor"; }; command = "floating enable"; }
-        { criteria = { app_id = "blueman-manager"; }; command = "floating enable"; }
-        { criteria = { window_role = "pop-up"; }; command = "floating enable"; }
-        { criteria = { window_role = "dialog"; }; command = "floating enable"; }
-        { criteria = { window_type = "dialog"; }; command = "floating enable"; }
       ];
 
       assigns = {

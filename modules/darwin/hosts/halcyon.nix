@@ -1,13 +1,16 @@
 { ... }:
 
+let
+  host = "halcyon";
+in
 {
   imports = [
     ../system.nix
   ];
 
   networking = {
-    computerName = "halcyon";
-    hostName = "halcyon";
-    localHostName = "halcyon";
+    computerName = host;
+    hostName = host;
+    localHostName = host;
   };
 }
