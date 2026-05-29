@@ -5,8 +5,8 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
 
-    # Secondary nixpkgs channel for fast-moving packages (opencode).
-    nixpkgs-opencode.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # Secondary nixpkgs channel for fast-moving or broken-in-stable packages.
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
@@ -40,7 +40,7 @@
     {
       self,
       nixpkgs,
-      nixpkgs-opencode,
+      nixpkgs-unstable,
       nixos-hardware,
       home-manager,
       darwin,
@@ -63,16 +63,17 @@
 
       pkgs = mkPkgs linuxSystem;
 
-      opencodeOverlay =
+      unstableOverlay =
         final: prev:
         let
-          pkgsOpencode = import nixpkgs-opencode {
+          pkgsUnstable = import nixpkgs-unstable {
             system = final.stdenv.hostPlatform.system;
             config.allowUnfree = true;
           };
         in
         {
-          opencode = pkgsOpencode.opencode;
+          opencode = pkgsUnstable.opencode;
+          ollama = pkgsUnstable.ollama;
         };
 
       darwinBuildFixesOverlay = final: prev: {
@@ -104,7 +105,7 @@
             home-manager.nixosModules.home-manager
             hmCommon
             {
-              nixpkgs.overlays = [ opencodeOverlay ];
+              nixpkgs.overlays = [ unstableOverlay ];
               home-manager.users.${user} = import homeModule;
             }
           ];
@@ -122,7 +123,7 @@
             hmCommon
             {
               nixpkgs.overlays = [
-                opencodeOverlay
+                unstableOverlay
                 darwinBuildFixesOverlay
               ];
               nixpkgs.config.allowUnfreePredicate =
