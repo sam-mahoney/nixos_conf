@@ -7,6 +7,7 @@
     ./zsh.nix
     ./tmux.nix
     ./neovim.nix
+    ./vscode.nix
     ./git.nix
     ./opencode.nix
   ];

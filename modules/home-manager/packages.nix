@@ -95,7 +95,6 @@ let
   # Wayland desktop tools (wl-clipboard, grim, slurp, swaylock-effects,
   # swayidle, brightnessctl) live in nixos/desktop.nix at the system level.
   linuxOnlyPackages = with pkgs; [
-    vscode
     spotify
     iotop
     iftop
