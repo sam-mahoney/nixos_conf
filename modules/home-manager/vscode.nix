@@ -30,10 +30,7 @@ in
         "editor.stickyScroll.enabled" = true;
         "editor.stickyScroll.maxLineCount" = 8;
 
-        "editor.minimap.enabled" = true;
-        "editor.minimap.renderCharacters" = false;
-        "editor.minimap.maxColumn" = 100;
-        "editor.minimap.showSlider" = "always";
+        "editor.minimap.enabled" = false;
 
         "editor.bracketPairColorization.enabled" = true;
         "editor.guides.bracketPairs" = "active";
