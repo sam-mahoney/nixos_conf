@@ -74,6 +74,7 @@
         {
           opencode = pkgsUnstable.opencode;
           ollama = pkgsUnstable.ollama;
+          aerospace = pkgsUnstable.aerospace;
         };
 
       darwinBuildFixesOverlay = final: prev: {
