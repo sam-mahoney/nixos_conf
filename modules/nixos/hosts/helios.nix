@@ -21,9 +21,6 @@
           "xe.force_probe=!46a6"
           # Stabilise Intel Bluetooth controller (8087:0033) during firmware handoff
           "btusb.reset=0"
-          # Prevent NVIDIA GPU power state changes during Thunderbolt hotplug
-          # (fixes hard freeze on USB-C dock disconnect)
-          "nvidia.NVreg_DynamicPowerManagement=0x00"
         ];
       }
     )
@@ -45,7 +42,7 @@
   services.tlp = {
     enable = true;
     settings = {
-      CPU_SCALING_GOVERNOR_ON_AC = "schedutil";
+      CPU_SCALING_GOVERNOR_ON_AC = "performance";
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
       CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
       CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
@@ -56,12 +53,11 @@
       PLATFORM_PROFILE_ON_AC = "balanced";
       PLATFORM_PROFILE_ON_BAT = "low-power";
       CPU_HWP_DYN_BOOST_ON_AC = 0;
-      START_CHARGE_THRESH_BAT0 = 40;
+      START_CHARGE_THRESH_BAT0 = 50;
       STOP_CHARGE_THRESH_BAT0 = 80;
       USB_AUTOSUSPEND = 1;
       RUNTIME_PM_ON_AC = "on";
       RUNTIME_PM_ON_BAT = "auto";
-      RUNTIME_PM_DRIVER_DENYLIST = "nvidia";
       NATACPI_ENABLE = 1;
       TPACPI_ENABLE = 1;
       TPSMAPI_ENABLE = 1;
@@ -80,6 +76,7 @@
     open = true;
     package = config.boot.kernelPackages.nvidiaPackages.production;
     powerManagement.enable = true;
+    powerManagement.finegrained = true;
     nvidiaPersistenced = true;
 
     prime = {
