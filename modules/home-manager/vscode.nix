@@ -23,6 +23,8 @@ in
         pkief.material-icon-theme
         jnoortheen.nix-ide
         vscodevim.vim
+        ms-python.python
+        ms-pyright.pyright
       ];
 
       userSettings = {
