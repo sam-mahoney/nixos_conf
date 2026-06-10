@@ -212,6 +212,9 @@ in
       seat seat0 xcursor_theme Vanilla-DMZ 24
       default_border pixel 2
       hide_edge_borders --i3 smart
+
+      bindswitch --reload --locked lid:on output eDP-1 disable
+      bindswitch --reload --locked lid:off output eDP-1 enable
     '';
   };
 
