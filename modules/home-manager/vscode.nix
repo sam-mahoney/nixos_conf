@@ -22,6 +22,7 @@ in
         aaron-bond.better-comments
         pkief.material-icon-theme
         jnoortheen.nix-ide
+        vscodevim.vim
       ];
 
       userSettings = {
@@ -148,6 +149,40 @@ in
         "files.trimTrailingWhitespace" = false;
         "files.insertFinalNewline" = false;
         "explorer.compactFolders" = false;
+
+        # Vim mode — mirrors neovim.nix preferences (space leader, relative
+        # numbers, system clipboard). Ctrl-c/v/f/a are left to VSCode so the
+        # editor still feels native outside of motion-heavy work.
+        "editor.lineNumbers" = "relative";
+        "vim.leader" = "<space>";
+        "vim.useSystemClipboard" = true;
+        "vim.useCtrlKeys" = true;
+        "vim.hlsearch" = true;
+        "vim.incsearch" = true;
+        "vim.smartRelativeLine" = true;
+        "vim.handleKeys" = {
+          "<C-c>" = false;
+          "<C-v>" = false;
+          "<C-f>" = false;
+          "<C-a>" = false;
+          "<C-z>" = false;
+          "<C-y>" = false;
+        };
+        "vim.normalModeKeyBindingsNonRecursive" = [
+          { before = [ "<Esc>" ]; commands = [ ":nohl" ]; }
+          { before = [ "<leader>" "f" "f" ]; commands = [ "workbench.action.quickOpen" ]; }
+          { before = [ "<leader>" "f" "g" ]; commands = [ "workbench.action.findInFiles" ]; }
+          { before = [ "<leader>" "f" "b" ]; commands = [ "workbench.action.showAllEditors" ]; }
+          { before = [ "<leader>" "c" "a" ]; commands = [ "editor.action.quickFix" ]; }
+          { before = [ "<leader>" "r" "n" ]; commands = [ "editor.action.rename" ]; }
+          { before = [ "g" "d" ]; commands = [ "editor.action.revealDefinition" ]; }
+          { before = [ "g" "D" ]; commands = [ "editor.action.revealDeclaration" ]; }
+          { before = [ "g" "r" ]; commands = [ "editor.action.goToReferences" ]; }
+          { before = [ "g" "i" ]; commands = [ "editor.action.goToImplementation" ]; }
+          { before = [ "K" ]; commands = [ "editor.action.showHover" ]; }
+          { before = [ "[" "d" ]; commands = [ "editor.action.marker.prev" ]; }
+          { before = [ "]" "d" ]; commands = [ "editor.action.marker.next" ]; }
+        ];
       };
     };
   };
