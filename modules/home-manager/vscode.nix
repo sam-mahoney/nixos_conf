@@ -165,16 +165,22 @@ in
         "vim.handleKeys" = {
           "<C-c>" = false;
           "<C-v>" = false;
+          "<C-x>" = false;
           "<C-f>" = false;
           "<C-a>" = false;
           "<C-z>" = false;
           "<C-y>" = false;
         };
+        "vim.insertModeKeyBindings" = [
+          { before = [ "j" "k" ]; after = [ "<Esc>" ]; }
+        ];
         "vim.normalModeKeyBindingsNonRecursive" = [
           { before = [ "<Esc>" ]; commands = [ ":nohl" ]; }
           { before = [ "<leader>" "f" "f" ]; commands = [ "workbench.action.quickOpen" ]; }
           { before = [ "<leader>" "f" "g" ]; commands = [ "workbench.action.findInFiles" ]; }
           { before = [ "<leader>" "f" "b" ]; commands = [ "workbench.action.showAllEditors" ]; }
+          { before = [ "<leader>" "d" "s" ]; commands = [ "workbench.action.gotoSymbol" ]; }
+          { before = [ "<leader>" "w" "s" ]; commands = [ "workbench.action.showAllSymbols" ]; }
           { before = [ "<leader>" "c" "a" ]; commands = [ "editor.action.quickFix" ]; }
           { before = [ "<leader>" "r" "n" ]; commands = [ "editor.action.rename" ]; }
           { before = [ "g" "d" ]; commands = [ "editor.action.revealDefinition" ]; }
