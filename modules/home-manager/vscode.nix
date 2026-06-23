@@ -1,9 +1,9 @@
 { pkgs, theme, ... }:
 
-# Reading-focused VSCode setup.
-# Write-oriented noise (autosave, format-on-save, aggressive suggestions) is
-# turned off so the editor behaves like a code browser. Add language servers
-# per-project via direnv rather than enabling them globally here.
+# VSCode setup tuned for reading first, light editing second. Autosave is on
+# but format-on-save and aggressive suggestions stay off so the editor still
+# behaves like a code browser. Add language servers per-project via direnv
+# rather than enabling them globally here.
 let
   p = theme.palette;
   monoFont = theme.fonts.mono;
@@ -61,8 +61,10 @@ in
         "workbench.tree.indent" = 16;
         "workbench.tree.renderIndentGuides" = "always";
 
-        # Disable write-oriented features that get in the way when reading.
-        "files.autoSave" = "off";
+        # Autosave on a short delay — never lose work, but keep the rest of
+        # the write-oriented noise off so the editor still feels calm.
+        "files.autoSave" = "afterDelay";
+        "files.autoSaveDelay" = 1000;
         "editor.formatOnSave" = false;
         "editor.formatOnPaste" = false;
         "editor.formatOnType" = false;
