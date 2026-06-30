@@ -103,4 +103,3 @@ Detailed documentation lives in `docs/`:
 - `keybinds.md` — all keybindings for Sway, AeroSpace, tmux, Neovim
 - `neovim.md` — editor setup and keymaps
 - `new-machine.md` — bootstrapping a fresh machine
-- `tor-browser.md` — Tor Browser workflow on macOS

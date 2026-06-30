@@ -148,10 +148,10 @@ in
       "maccy"
       "anytype"
       "mullvad-vpn"
-      "tor-browser"
       "notion"
       "the-unarchiver"
       "balenaetcher"
+      "cold-turkey-blocker"
       "1password"
     ];
     taps = [ ];

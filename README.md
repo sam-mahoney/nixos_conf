@@ -95,4 +95,3 @@ All in `docs/`:
 - [keybinds.md](docs/keybinds.md) — all keybindings for Sway, AeroSpace, tmux, Neovim
 - [neovim.md](docs/neovim.md) — editor setup and keymaps
 - [new-machine.md](docs/new-machine.md) — bootstrapping a fresh machine
-- [tor-browser.md](docs/tor-browser.md) — Tor Browser workflow on macOS
