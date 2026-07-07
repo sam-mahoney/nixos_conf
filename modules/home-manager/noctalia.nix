@@ -6,97 +6,86 @@ in
 {
   imports = [ inputs.noctalia.homeModules.default ];
 
-  programs.noctalia-shell = {
+  programs.noctalia = {
     enable = true;
 
     settings = {
-      bar = {
+      shell = {
+        time_format = "{:%H:%M}";
+        date_format = "%A, %x";
+      };
+
+      theme = {
+        mode = "dark";
+        source = "custom";
+        custom_palette = "mono";
+      };
+
+      bar.main = {
         position = "top";
-        density = "compact";
-        barType = "simple";
-        displayMode = "always_visible";
-        backgroundOpacity = 1.0;
-        showCapsule = true;
-        capsuleOpacity = 0.4;
-        capsuleColorKey = "mSurfaceVariant";
-        showOutline = false;
-        widgetSpacing = 4;
-        contentPadding = 6;
-        fontScale = 0.95;
-        widgets = {
-          left = [
-            {
-              id = "Workspace";
-              hideUnoccupied = true;
-              labelMode = "number";
-              pillSize = 0.7;
-              fontWeight = "medium";
-              focusedColor = "mPrimary";
-              occupiedColor = "mOnSurfaceVariant";
-              emptyColor = "mOutline";
-              enableScrollWheel = false;
-            }
-          ];
-          center = [
-            { id = "Clock"; formatHorizontal = "ddd HH:mm"; usePrimaryColor = false; useMonospacedFont = true; }
-          ];
-          right = [
-            { id = "Network"; }
-            { id = "Volume"; }
-            { id = "Battery"; alwaysShowPercentage = true; warningThreshold = 20; }
-            { id = "Tray"; }
-          ];
-        };
+        background_opacity = 1.0;
+        scale = 0.95;
+        widget_spacing = 4;
+        padding = 6;
+        capsule = true;
+        capsule_fill = "surface_variant";
+        capsule_opacity = 0.4;
+        start = [ "workspaces" ];
+        center = [ "clock" ];
+        end = [
+          "network"
+          "volume"
+          "battery"
+          "tray"
+        ];
       };
 
-      colorSchemes = {
-        darkMode = true;
-        useWallpaperColors = false;
-        predefinedScheme = "";
+      widget.clock = {
+        format = "{:%a %H:%M}";
       };
 
-      notifications = {
-        position = "top-right";
-        width = 400;
-        timeout = 5000;
+      notification = {
+        enable_daemon = true;
       };
 
       osd = {
+        position = "bottom_center";
+      };
+
+      weather = {
         enabled = true;
-        position = "bottom";
+        unit = "celsius";
       };
 
       location = {
-        name = "London";
-        autoLocate = false;
-        weatherEnabled = true;
-        useFahrenheit = false;
-        showCalendarWeather = true;
+        auto_locate = false;
+        address = "London";
       };
 
-      launcher = {
-        showRecentApps = true;
-        maxRecentApps = 5;
+      battery = {
+        warning_threshold = 20;
       };
     };
 
-    colors = {
-      mPrimary = p.gray3;
-      mOnPrimary = p.bg;
-      mSecondary = p.gray4;
-      mOnSecondary = p.bg;
-      mTertiary = p.gray4;
-      mOnTertiary = p.bg;
-      mError = p.red;
-      mOnError = p.bg;
-      mSurface = p.bg;
-      mOnSurface = p.gray2;
-      mSurfaceVariant = p.bg_alt;
-      mOnSurfaceVariant = p.gray4;
-      mOutline = p.gray5;
-      mShadow = p.bg;
-      mHover = p.bg_alt;
-      mOnHover = p.gray2;
+    customPalettes.mono = {
+      dark = {
+        mPrimary = p.gray3;
+        mOnPrimary = p.bg;
+        mSecondary = p.gray4;
+        mOnSecondary = p.bg;
+        mTertiary = p.gray4;
+        mOnTertiary = p.bg;
+        mError = p.red;
+        mOnError = p.bg;
+        mSurface = p.bg;
+        mOnSurface = p.gray2;
+        mSurfaceVariant = p.bg_alt;
+        mOnSurfaceVariant = p.gray4;
+        mOutline = p.gray5;
+        mShadow = p.bg;
+        mHover = p.bg_alt;
+        mOnHover = p.gray2;
+      };
     };
   };
 }
