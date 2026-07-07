@@ -67,7 +67,7 @@ let
     ansible
     steampipe
     osv-scanner
-    docker
+    docker_29
     ollama
     gh
     claude-code
