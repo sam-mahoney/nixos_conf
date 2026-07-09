@@ -27,6 +27,9 @@ in
         scale = 0.95;
         widget_spacing = 4;
         padding = 6;
+        margin_h = 0;
+        margin_v = 0;
+        radius = 0;
         capsule = true;
         capsule_fill = "surface_variant";
         capsule_opacity = 0.4;
@@ -85,6 +88,34 @@ in
         mShadow = p.bg;
         mHover = p.bg_alt;
         mOnHover = p.gray2;
+        terminal = {
+          normal = {
+            black = p.bg;
+            red = p.red;
+            green = p.gray3;
+            yellow = p.gray2;
+            blue = p.gray3;
+            magenta = p.gray4;
+            cyan = p.gray2;
+            white = p.gray1;
+          };
+          bright = {
+            black = p.gray5;
+            red = p.red;
+            green = p.fg;
+            yellow = p.fg_bright;
+            blue = p.fg;
+            magenta = p.gray2;
+            cyan = p.fg_bright;
+            white = p.white;
+          };
+          foreground = p.fg;
+          background = p.bg;
+          cursor = p.fg_bright;
+          cursorText = p.bg;
+          selectionFg = p.bg;
+          selectionBg = p.gray2;
+        };
       };
     };
   };

@@ -78,7 +78,7 @@ in
       };
 
       startup = [
-        { command = "noctalia-shell"; }
+        { command = "noctalia --daemon"; }
         { command = "nm-applet --indicator"; }
         { command = "blueman-applet"; }
       ];
@@ -99,7 +99,7 @@ in
           # Launchers
           "${mod}+Return" = "exec ${terminal}";
           "${mod}+Shift+b" = "exec firefox";
-          "${mod}+d" = "exec noctalia-shell ipc call launcher toggle";
+          "${mod}+d" = "exec noctalia msg panel-toggle launcher";
 
           # Window management
           "${mod}+q" = "kill";
@@ -187,9 +187,9 @@ in
           "${mod}+r" = "mode resize";
 
           # Noctalia shell panels
-          "${mod}+n" = "exec noctalia-shell ipc call notifications toggleHistory";
-          "${mod}+o" = "exec noctalia-shell ipc call controlCenter toggle";
-          "${mod}+p" = "exec noctalia-shell ipc call sessionMenu toggle";
+          "${mod}+n" = "exec noctalia msg panel-toggle control-center notifications";
+          "${mod}+o" = "exec noctalia msg panel-toggle control-center";
+          "${mod}+p" = "exec noctalia msg panel-toggle session";
         };
 
       modes = {
