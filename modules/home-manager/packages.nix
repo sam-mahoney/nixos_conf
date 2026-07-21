@@ -74,7 +74,7 @@ let
     opencode
 
     # Language servers (shared by opencode + neovim)
-    nodePackages.typescript-language-server
+    typescript-language-server
     pyright
     basedpyright
     gopls
@@ -85,7 +85,7 @@ let
     ast-grep
     universal-ctags
     vale
-    nodePackages.prettier
+    prettier
 
     # Apps
     anki-bin

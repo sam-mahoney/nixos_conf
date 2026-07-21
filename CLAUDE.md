@@ -76,7 +76,7 @@ This is a **Nix flakes** repository managing three machines with a shared module
 
 ### Key Flake Inputs
 
-nixpkgs (nixos-25.11), home-manager (release-25.11), nix-darwin (25.11), nixos-hardware, noctalia-shell, noctalia-qs, peon-ping, caveman, mac-app-util, firefox-addons
+nixpkgs (nixos-26.05), home-manager (release-26.05), nix-darwin (26.05), nixos-hardware, noctalia-shell, noctalia-qs, peon-ping, caveman, mac-app-util, firefox-addons
 
 ## Tests
 
