@@ -6,7 +6,6 @@ let
     hidden-bar
     spotify
     discord
-    logseq
     _1password-cli
   ];
 in

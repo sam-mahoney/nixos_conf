@@ -87,14 +87,6 @@
     alt-shift-l = ['join-with right', 'mode main']
 
     [[on-window-detected]]
-    if.app-id = 'org.alacritty'
-    run = 'move-node-to-workspace 1'
-
-    [[on-window-detected]]
-    if.app-id = 'org.logseq'
-    run = 'move-node-to-workspace 3'
-
-    [[on-window-detected]]
     if.app-id = 'org.mozilla.firefox'
     run = 'move-node-to-workspace 4'
 
