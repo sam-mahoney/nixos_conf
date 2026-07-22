@@ -43,7 +43,7 @@ let
     gawk
     gnupg
     nh
-    nixfmt-rfc-style
+    nixfmt
     stylua
     shfmt
     shellcheck
