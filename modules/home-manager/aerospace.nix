@@ -2,7 +2,13 @@
 
 {
   home.file.".aerospace.toml".text = ''
+    config-version = 2
+
     start-at-login = true
+
+    # config-version = 2 no longer infers persistent workspaces from keybindings,
+    # so declare the 1-9 set that the workspace/move-node bindings below rely on.
+    persistent-workspaces = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 
     enable-normalization-flatten-containers = true
     enable-normalization-opposite-orientation-for-nested-containers = true
