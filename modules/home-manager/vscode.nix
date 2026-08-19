@@ -16,10 +16,7 @@ in
     profiles.default = {
       extensions = with pkgs.vscode-extensions; [
         eamodio.gitlens
-        gruntfuggly.todo-tree
-        alefragnani.bookmarks
         usernamehw.errorlens
-        aaron-bond.better-comments
         pkief.material-icon-theme
         jnoortheen.nix-ide
         vscodevim.vim
@@ -143,9 +140,6 @@ in
         "gitlens.hovers.enabled" = true;
         "gitlens.statusBar.enabled" = true;
         "gitlens.blame.format" = "\${author|10} • \${agoOrDate|14-+}";
-
-        "todo-tree.tree.scanMode" = "workspace";
-        "todo-tree.general.tags" = [ "TODO" "FIXME" "XXX" "HACK" "NOTE" "BUG" ];
 
         "nix.enableLanguageServer" = true;
         "nix.serverPath" = "nil";
