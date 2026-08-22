@@ -215,9 +215,18 @@ in
       require("nvim-surround").setup()
       require("nvim-autopairs").setup()
 
-      require("nvim-treesitter.configs").setup({
-        highlight = { enable = true },
-        indent = { enable = true },
+      -- nvim-treesitter's "main" branch dropped the nvim-treesitter.configs
+      -- module: highlighting now lives in Neovim core (vim.treesitter.start) and
+      -- indent is opt-in per buffer. Parsers are supplied by Nix via withPlugins,
+      -- so we only enable highlight + indent per FileType, guarded so buffers
+      -- without a grammar fall back to Neovim defaults instead of erroring.
+      vim.api.nvim_create_autocmd("FileType", {
+        callback = function(args)
+          local buf = args.buf
+          if pcall(vim.treesitter.start, buf) then
+            vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end,
       })
 
       -- Completion
