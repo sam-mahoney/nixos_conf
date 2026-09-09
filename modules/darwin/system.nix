@@ -152,6 +152,7 @@ in
       "balenaetcher"
       "cold-turkey-blocker"
       "1password"
+      "wifiman"
     ];
     taps = [ ];
     masApps = { };
