@@ -9,7 +9,7 @@ in
 {
   services.swayidle = {
     enable = true;
-    systemdTarget = "sway-session.target";
+    systemdTargets = [ "sway-session.target" ];
 
     timeouts = [
       {
@@ -32,11 +32,8 @@ in
       }
     ];
 
-    events = [
-      {
-        event = "before-sleep";
-        command = "${swaylock} -f";
-      }
-    ];
+    events = {
+      before-sleep = "${swaylock} -f";
+    };
   };
 }

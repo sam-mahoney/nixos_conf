@@ -18,6 +18,7 @@
   home.stateVersion = "25.11";
 
   programs.firefox.enable = pkgs.stdenv.isLinux;
+  programs.firefox.configPath = ".mozilla/firefox";
 
   home.file.".steampipe/config/aws.spc".text = ''
     connection "default" {
