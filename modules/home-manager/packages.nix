@@ -96,6 +96,7 @@ let
   # swayidle, brightnessctl) live in nixos/desktop.nix at the system level.
   linuxOnlyPackages = with pkgs; [
     spotify
+    zed-editor
     iotop
     iftop
     nvtopPackages.nvidia

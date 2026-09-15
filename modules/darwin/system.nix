@@ -153,6 +153,7 @@ in
       "cold-turkey-blocker"
       "1password"
       "wifiman"
+      "zed"
     ];
     taps = [ ];
     masApps = { };
