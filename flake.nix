@@ -67,6 +67,7 @@
           };
         in
         {
+          claude-code = pkgsUnstable.claude-code;
           opencode = pkgsUnstable.opencode;
           ollama = pkgsUnstable.ollama;
           aerospace = pkgsUnstable.aerospace;
