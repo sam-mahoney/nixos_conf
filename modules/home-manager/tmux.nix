@@ -38,6 +38,10 @@ in
       set -g pane-active-border-style "fg=${p.blue}"
       setw -g window-status-style "bg=default,fg=${p.gray4}"
       setw -g window-status-current-style "bg=default,fg=${p.blue},bold"
+      # Windows double as terminal tabs (see ghostty.nix), so style them like a tab bar
+      setw -g window-status-format " #I #W "
+      setw -g window-status-current-format " #I #W "
+      set -g window-status-separator ""
       set -g status-left "#[fg=${p.purple}]#S #[fg=${p.gray4}]| "
       set -g status-right "#[fg=${p.gray4}]%Y-%m-%d #[fg=${p.gray2}]%H:%M "
       set -g status-left-length 30
@@ -76,6 +80,8 @@ in
 
       # Windows
       bind c new-window -c "#{pane_current_path}"
+      # Keep numbering gap-free so Cmd+1-9 in Ghostty always hits the Nth tab
+      set -g renumber-windows on
 
       # Reload
       bind r source-file ~/.config/tmux/tmux.conf \; display "Config reloaded!"

@@ -1,4 +1,4 @@
-{ lib, pkgs, theme, ... }:
+{ config, lib, pkgs, theme, ... }:
 
 let
   p = theme.palette;
@@ -8,6 +8,49 @@ let
   ansiOrder = [ "black" "red" "green" "yellow" "blue" "magenta" "cyan" "white" ];
   ansiColours =
     map (c: theme.ansi.normal.${c}) ansiOrder ++ map (c: theme.ansi.bright.${c}) ansiOrder;
+
+  # Every window opens into tmux, which provides the tabs. The first window takes the
+  # persistent "main" session (the one `ta` attaches to), so closing it keeps your tabs;
+  # extra windows get throwaway sessions that are destroyed when the window closes.
+  tmux = lib.getExe config.programs.tmux.package;
+  tmuxLauncher = pkgs.writeShellScript "ghostty-tmux" ''
+    if [ -z "$(${tmux} list-clients -t main 2>/dev/null)" ]; then
+      exec ${tmux} new-session -A -s main
+    fi
+    exec ${tmux} new-session \; set-option destroy-unattached on
+  '';
+
+  # Ghostty's own tabs stay unused: AeroSpace tiles each native macOS tab as a
+  # separate window. The usual tab shortcuts send tmux keys instead (prefix Ctrl+a = \x01).
+  tmuxKey = k: "text:\\x01${k}";
+  tabKeybinds =
+    [
+      "ctrl+tab=${tmuxKey "n"}"
+      "ctrl+shift+tab=${tmuxKey "p"}"
+    ]
+    ++ lib.optionals isDarwin (
+      [
+        "super+t=${tmuxKey "c"}"
+        "super+shift+]=${tmuxKey "n"}"
+        "super+shift+[=${tmuxKey "p"}"
+      ]
+      # Ghostty binds both the character and the physical key, so override both
+      ++ lib.concatMap (
+        n:
+        let
+          k = toString n;
+        in
+        [
+          "super+${k}=${tmuxKey k}"
+          "super+digit_${k}=${tmuxKey k}"
+        ]
+      ) (lib.range 1 9)
+    )
+    ++ lib.optionals isLinux [
+      "ctrl+shift+t=${tmuxKey "c"}"
+      "ctrl+page_down=${tmuxKey "n"}"
+      "ctrl+page_up=${tmuxKey "p"}"
+    ];
 in
 {
   programs.ghostty = {
@@ -42,7 +85,15 @@ in
 
       window-padding-x = 4;
       window-padding-y = 4;
+      # Frameless. On macOS this also disables native tabs, which is what we want (see tabKeybinds).
       window-decoration = "none";
+      split-divider-color = p.gray5;
+
+      # The first surface of each window runs tmux; Ghostty splits get a plain shell
+      initial-command = "${tmuxLauncher}";
+      # Linux defaults to one shared process, which would skip initial-command for new windows
+      gtk-single-instance = false;
+      keybind = tabKeybinds;
 
       copy-on-select = "clipboard";
 
