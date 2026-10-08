@@ -5,6 +5,8 @@ let
     aerospace
     ghostty-bin # config lives in modules/home-manager/ghostty.nix
     hidden-bar
+    slack
+    anki-bin
     spotify
     discord
     _1password-cli
@@ -155,6 +157,7 @@ in
       "1password"
       "wifiman"
       "zed"
+      "firefox" # Home Manager's programs.firefox is Linux-only (common.nix)
     ];
     taps = [ ];
     masApps = { };

@@ -67,6 +67,7 @@ This is a **Nix flakes** repository managing three machines with a shared module
 - **User-level (cross-platform):** `modules/home-manager/packages.nix` -> `sharedPackages` or `linuxOnlyPackages`
 - **System-wide (Linux):** `modules/nixos/packages.nix` -> `environment.systemPackages`
 - **macOS Homebrew casks:** `modules/darwin/system.nix` -> `homebrew.casks`
+- **macOS Nix GUI apps:** `modules/darwin/system.nix` -> `nixGuiApps`. Never `home.packages`: Home Manager app linking is off on darwin, so `.app` bundles from there never reach `/Applications` and `open -a` can't find them.
 - **Neovim plugins:** `modules/home-manager/neovim.nix` -> `plugins`
 
 ### Overlays
