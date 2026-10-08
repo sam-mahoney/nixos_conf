@@ -2,6 +2,8 @@
 
 let
   p = theme.palette;
+  # These binds load after tmux-yank and replace its auto-detected command, so pick per platform
+  copyCmd = if pkgs.stdenv.isDarwin then "pbcopy" else "wl-copy";
 in
 {
   programs.tmux = {
@@ -90,11 +92,11 @@ in
       setw -g monitor-activity on
       set -g visual-activity off
 
-      # Copy mode (vi-style, wl-copy for Wayland)
+      # Copy mode (vi-style; pbcopy on macOS, wl-copy on Wayland)
       bind -T copy-mode-vi v send -X begin-selection
-      bind -T copy-mode-vi y send -X copy-pipe-and-cancel "wl-copy"
+      bind -T copy-mode-vi y send -X copy-pipe-and-cancel "${copyCmd}"
       bind -T copy-mode-vi q send -X cancel
-      bind -T copy-mode-vi MouseDragEnd1Pane send -X copy-pipe-and-cancel "wl-copy"
+      bind -T copy-mode-vi MouseDragEnd1Pane send -X copy-pipe-and-cancel "${copyCmd}"
 
       # Send prefix to nested tmux
       bind a send-prefix
