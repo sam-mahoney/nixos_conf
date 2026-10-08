@@ -20,14 +20,21 @@ in
       };
 
       colors = {
-        primary = { background = p.bg; foreground = p.fg; };
-        cursor = { text = p.bg; cursor = p.gray1; };
-        selection = { text = p.bg; background = p.gray3; };
+        # Brighter foreground keeps text legible over a see-through background
+        primary = { background = p.bg; foreground = p.fg_bright; };
+        cursor = { text = p.bg; cursor = p.blue; };
+        selection = { text = "CellForeground"; background = p.gray5; };
+        normal = theme.ansi.normal;
+        bright = theme.ansi.bright;
       };
 
       window = {
         padding = { x = 4; y = 4; };
-        opacity = 1.0;
+        # Only the default background goes translucent; apps that paint their
+        # own bg (nvim, tmux) must use NONE/default to stay see-through.
+        opacity = 0.6;
+        # Honoured on macOS; stock Sway has no blur protocol so it's ignored there
+        blur = true;
         decorations = "None";
       };
     };

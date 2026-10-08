@@ -51,7 +51,7 @@ This is a **Nix flakes** repository managing three machines with a shared module
 
 ### Module Layout
 
-- **`modules/theme.nix`** — Shared monochrome color palette. All UI modules import this; change a color once, it updates everywhere.
+- **`modules/theme.nix`** — Shared Oxocarbon color palette (plus `ansi` 16-colour terminal set). All UI modules import this; change a color once, it updates everywhere.
 - **`modules/nixos/`** — NixOS system modules (boot, networking, desktop, hardware, services)
 - **`modules/nixos/hosts/`** — Host-specific hardware (GPU drivers, kernel flags, LUKS encryption)
 - **`modules/darwin/`** — nix-darwin system module and macOS defaults

@@ -30,14 +30,15 @@ in
       set -g status-position bottom
       set -g status-justify left
       set -g status-interval 5
-      set -g status-style "bg=${p.bg},fg=${p.gray1}"
-      set -g message-style "bg=${p.bg},fg=${p.fg_bright}"
-      set -g message-command-style "bg=${p.bg},fg=${p.fg_bright}"
+      # bg=default keeps the bar transparent in a translucent terminal
+      set -g status-style "bg=default,fg=${p.gray1}"
+      set -g message-style "bg=default,fg=${p.fg_bright}"
+      set -g message-command-style "bg=default,fg=${p.fg_bright}"
       set -g pane-border-style "fg=${p.gray5}"
-      set -g pane-active-border-style "fg=${p.gray2}"
-      setw -g window-status-style "bg=${p.bg},fg=${p.gray4}"
-      setw -g window-status-current-style "bg=${p.bg},fg=${p.white},bold"
-      set -g status-left "#[fg=${p.gray2}]#S #[fg=${p.gray4}]| "
+      set -g pane-active-border-style "fg=${p.blue}"
+      setw -g window-status-style "bg=default,fg=${p.gray4}"
+      setw -g window-status-current-style "bg=default,fg=${p.blue},bold"
+      set -g status-left "#[fg=${p.purple}]#S #[fg=${p.gray4}]| "
       set -g status-right "#[fg=${p.gray4}]%Y-%m-%d #[fg=${p.gray2}]%H:%M "
       set -g status-left-length 30
       set -g status-right-length 50

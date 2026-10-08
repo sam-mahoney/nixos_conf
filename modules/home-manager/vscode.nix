@@ -84,7 +84,7 @@ in
         "workbench.iconTheme" = "material-icon-theme";
         "workbench.colorTheme" = "Default Dark Modern";
 
-        # Monochrome palette from modules/theme.nix layered onto the base
+        # Shared palette from modules/theme.nix layered onto the base
         # dark theme so colour edits flow through the whole desktop.
         "workbench.colorCustomizations" = {
           "editor.background" = p.bg;

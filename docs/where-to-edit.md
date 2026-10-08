@@ -6,7 +6,8 @@ Quick lookup. "I want to change X" -> edit this file.
 
 | What | File |
 |------|------|
-| Monochrome palette (all UI) | `modules/theme.nix` |
+| Oxocarbon palette (all UI) | `modules/theme.nix` |
+| Terminal opacity / blur | `modules/home-manager/alacritty.nix` |
 | Swaylock lock screen colors | `modules/home-manager/swaylock.nix` (intentionally different — noir/blue accent) |
 
 ## Packages

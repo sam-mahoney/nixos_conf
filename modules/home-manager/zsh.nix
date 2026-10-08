@@ -10,16 +10,16 @@ in
       format = "$directory$git_branch$git_status$status$character";
       directory = {
         truncation_length = 3;
-        style = "bold ${p.gray1}";
+        style = "bold ${p.cyan}";
       };
-      git_branch.style = p.gray3;
-      git_status.style = p.gray4;
+      git_branch.style = p.purple;
+      git_status.style = p.red;
       status = {
         disabled = false;
         format = "[$status](bold ${p.red})";
       };
       character = {
-        success_symbol = "[❯](bold ${p.fg_bright})";
+        success_symbol = "[❯](bold ${p.green})";
         error_symbol = "[❯](bold ${p.red})";
       };
     };

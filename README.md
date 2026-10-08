@@ -8,7 +8,7 @@ NixOS and nix-darwin flake managing three machines:
 | `apollo` | AMD 9950X + RTX 5080 | NixOS (x86_64) | Desktop, gaming stack |
 | `halcyon` | MacBook Pro 16 | nix-darwin (aarch64) | Homebrew integration |
 
-Desktop: Sway (Linux) / AeroSpace (macOS). Terminal: Alacritty + tmux. Editor: Neovim. Theme: monochrome black/grey/white (defined once in `modules/theme.nix`).
+Desktop: Sway (Linux) / AeroSpace (macOS). Terminal: Alacritty + tmux. Editor: Neovim. Theme: Oxocarbon with a translucent terminal (defined once in `modules/theme.nix`).
 
 ## Rebuild
 
@@ -44,7 +44,7 @@ git diff flake.lock                       # review before rebuilding
 - Home Manager: `home.nix` (Linux) and `home-darwin.nix` (macOS) — both import `modules/home-manager/common.nix`
 
 **Modules** (the building blocks):
-- `modules/theme.nix` — shared monochrome palette imported by all UI modules
+- `modules/theme.nix` — shared Oxocarbon palette imported by all UI modules
 - `modules/nixos/` — system-level: boot, networking, desktop (Sway + greetd), hardware (PipeWire, Bluetooth), services (Docker, SSH, TLP)
 - `modules/nixos/hosts/` — per-machine hardware quirks (GPU drivers, kernel flags, LUKS)
 - `modules/darwin/` — macOS system defaults, Homebrew, keyboard remapping

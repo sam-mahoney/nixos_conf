@@ -40,7 +40,7 @@ For markdown, text, and gitcommit buffers: wrapping, spell check, and textwidth=
 
 ## Theme
 
-Custom monochrome colorscheme (`terminal_mono`) — black background, grey/white foreground, no colour syntax highlighting. Matches the rest of the desktop.
+Custom Oxocarbon colorscheme (`terminal_oxocarbon`) built from `modules/theme.nix` — blue keywords, pink functions, purple strings. Editor backgrounds are transparent so the translucent terminal shows through; floats and menus stay opaque.
 
 ## Keymaps
 
