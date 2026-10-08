@@ -10,7 +10,7 @@ Config: `modules/home-manager/sway.nix`
 
 | Key | Action |
 |-----|--------|
-| `Mod+Return` | Terminal (Alacritty) |
+| `Mod+Return` | Terminal (Ghostty) |
 | `Mod+d` | App launcher (Noctalia) |
 | `Mod+q` | Close window |
 | `Mod+Shift+c` | Reload Sway |
@@ -83,12 +83,11 @@ Same Alt+hjkl muscle memory as Sway, with these differences:
 
 | Key | Action |
 |-----|--------|
-| `Alt+Shift+Enter` | Open Alacritty |
+| `Alt+Enter` | Open Ghostty |
 | `Alt+Shift+b` | Open Firefox |
-| `Alt+m` | Fullscreen (not Alt+f) |
 | `Alt+Shift+;` | Service mode (reload config, flatten tree, close all but current) |
 
-Auto-assigns: Alacritty→1, Logseq→3, Firefox→4, Tor Browser→4 (floating), Slack→9.
+Auto-assigns: Firefox→4, Tor Browser→4 (floating), Slack→9.
 
 ## tmux
 

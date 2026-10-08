@@ -14,7 +14,7 @@ in
     enable = true;
     config = rec {
       modifier = "Mod1"; # Alt key
-      terminal = "alacritty";
+      terminal = "ghostty";
       defaultWorkspace = "workspace number 1";
 
       fonts = {

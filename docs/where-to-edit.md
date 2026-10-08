@@ -7,7 +7,7 @@ Quick lookup. "I want to change X" -> edit this file.
 | What | File |
 |------|------|
 | Oxocarbon palette (all UI) | `modules/theme.nix` |
-| Terminal opacity / blur | `modules/home-manager/alacritty.nix` |
+| Terminal opacity / blur | `modules/home-manager/ghostty.nix` |
 | Swaylock lock screen colors | `modules/home-manager/swaylock.nix` (intentionally different — noir/blue accent) |
 
 ## Packages
@@ -36,7 +36,7 @@ Quick lookup. "I want to change X" -> edit this file.
 
 | What | File |
 |------|------|
-| Terminal appearance / font | `modules/home-manager/alacritty.nix` |
+| Terminal appearance / font | `modules/home-manager/ghostty.nix` |
 | Shell (zsh, aliases, completion) | `modules/home-manager/zsh.nix` |
 | Shell prompt (Starship) | `modules/home-manager/zsh.nix` |
 | tmux config | `modules/home-manager/tmux.nix` |

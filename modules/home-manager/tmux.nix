@@ -23,7 +23,7 @@ in
     extraConfig = ''
       # True color support
       set -ag terminal-overrides ",xterm-256color:RGB"
-      set -ag terminal-overrides ",alacritty:RGB"
+      set -ag terminal-overrides ",xterm-ghostty:RGB"
 
       # Theme
       set -g status on

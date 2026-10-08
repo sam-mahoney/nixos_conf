@@ -57,7 +57,7 @@ This is a **Nix flakes** repository managing three machines with a shared module
 - **`modules/darwin/`** — nix-darwin system module and macOS defaults
 - **`modules/home-manager/`** — User-level modules:
   - `common.nix` — baseline imports for all platforms (also inlines firefox and steampipe config)
-  - Terminal: `alacritty.nix`, `zsh.nix` (shell + starship + direnv + fzf), `tmux.nix`
+  - Terminal: `ghostty.nix`, `zsh.nix` (shell + starship + direnv + fzf), `tmux.nix`
   - Editor: `neovim.nix`
   - Desktop: `sway.nix`, `kanshi.nix` (monitor profiles), `noctalia.nix`, `swaylock.nix`, `aerospace.nix`
   - Tools: `git.nix`, `opencode.nix`, `peon-ping.nix`, `packages.nix`
