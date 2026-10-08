@@ -4,7 +4,7 @@
   # === Swaylock Configuration ===
   # Screen locker for Sway with blur effects (swaylock-effects)
   # Screen locker for Sway with blur effects and a noir terminal palette
-  # that matches the monochrome desktop while pushing it toward a colder,
+  # that sits alongside the desktop theme while pushing it toward a colder,
   # more cinematic control-panel feel.
 
   home.file.".config/swaylock/config".text = ''

@@ -9,6 +9,7 @@
     wireguard-tools
     polkit_gnome
     brightnessctl
+    ghostty.terminfo # Lets root shells and sudo resolve TERM=xterm-ghostty
   ];
 
   environment.shellAliases = {

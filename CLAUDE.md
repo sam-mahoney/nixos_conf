@@ -51,13 +51,13 @@ This is a **Nix flakes** repository managing three machines with a shared module
 
 ### Module Layout
 
-- **`modules/theme.nix`** — Shared monochrome color palette. All UI modules import this; change a color once, it updates everywhere.
+- **`modules/theme.nix`** — Shared Oxocarbon color palette (plus `ansi` 16-colour terminal set). All UI modules import this; change a color once, it updates everywhere.
 - **`modules/nixos/`** — NixOS system modules (boot, networking, desktop, hardware, services)
 - **`modules/nixos/hosts/`** — Host-specific hardware (GPU drivers, kernel flags, LUKS encryption)
 - **`modules/darwin/`** — nix-darwin system module and macOS defaults
 - **`modules/home-manager/`** — User-level modules:
   - `common.nix` — baseline imports for all platforms (also inlines firefox and steampipe config)
-  - Terminal: `alacritty.nix`, `zsh.nix` (shell + starship + direnv + fzf), `tmux.nix`
+  - Terminal: `ghostty.nix`, `zsh.nix` (shell + starship + direnv + fzf), `tmux.nix`
   - Editor: `neovim.nix`
   - Desktop: `sway.nix`, `kanshi.nix` (monitor profiles), `noctalia.nix`, `swaylock.nix`, `aerospace.nix`
   - Tools: `git.nix`, `opencode.nix`, `peon-ping.nix`, `packages.nix`
@@ -67,6 +67,7 @@ This is a **Nix flakes** repository managing three machines with a shared module
 - **User-level (cross-platform):** `modules/home-manager/packages.nix` -> `sharedPackages` or `linuxOnlyPackages`
 - **System-wide (Linux):** `modules/nixos/packages.nix` -> `environment.systemPackages`
 - **macOS Homebrew casks:** `modules/darwin/system.nix` -> `homebrew.casks`
+- **macOS Nix GUI apps:** `modules/darwin/system.nix` -> `nixGuiApps`. Never `home.packages`: Home Manager app linking is off on darwin, so `.app` bundles from there never reach `/Applications` and `open -a` can't find them.
 - **Neovim plugins:** `modules/home-manager/neovim.nix` -> `plugins`
 
 ### Overlays

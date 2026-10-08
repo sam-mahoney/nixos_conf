@@ -2,6 +2,8 @@
 
 let
   p = theme.palette;
+  # These binds load after tmux-yank and replace its auto-detected command, so pick per platform
+  copyCmd = if pkgs.stdenv.isDarwin then "pbcopy" else "wl-copy";
 in
 {
   programs.tmux = {
@@ -23,21 +25,26 @@ in
     extraConfig = ''
       # True color support
       set -ag terminal-overrides ",xterm-256color:RGB"
-      set -ag terminal-overrides ",alacritty:RGB"
+      set -ag terminal-overrides ",xterm-ghostty:RGB"
 
       # Theme
       set -g status on
       set -g status-position bottom
       set -g status-justify left
       set -g status-interval 5
-      set -g status-style "bg=${p.bg},fg=${p.gray1}"
-      set -g message-style "bg=${p.bg},fg=${p.fg_bright}"
-      set -g message-command-style "bg=${p.bg},fg=${p.fg_bright}"
+      # bg=default keeps the bar transparent in a translucent terminal
+      set -g status-style "bg=default,fg=${p.gray1}"
+      set -g message-style "bg=default,fg=${p.fg_bright}"
+      set -g message-command-style "bg=default,fg=${p.fg_bright}"
       set -g pane-border-style "fg=${p.gray5}"
-      set -g pane-active-border-style "fg=${p.gray2}"
-      setw -g window-status-style "bg=${p.bg},fg=${p.gray4}"
-      setw -g window-status-current-style "bg=${p.bg},fg=${p.white},bold"
-      set -g status-left "#[fg=${p.gray2}]#S #[fg=${p.gray4}]| "
+      set -g pane-active-border-style "fg=${p.blue}"
+      setw -g window-status-style "bg=default,fg=${p.gray4}"
+      setw -g window-status-current-style "bg=default,fg=${p.blue},bold"
+      # Windows double as terminal tabs (see ghostty.nix), so style them like a tab bar
+      setw -g window-status-format " #I #W "
+      setw -g window-status-current-format " #I #W "
+      set -g window-status-separator ""
+      set -g status-left "#[fg=${p.purple}]#S #[fg=${p.gray4}]| "
       set -g status-right "#[fg=${p.gray4}]%Y-%m-%d #[fg=${p.gray2}]%H:%M "
       set -g status-left-length 30
       set -g status-right-length 50
@@ -75,6 +82,8 @@ in
 
       # Windows
       bind c new-window -c "#{pane_current_path}"
+      # Keep numbering gap-free so Cmd+1-9 in Ghostty always hits the Nth tab
+      set -g renumber-windows on
 
       # Reload
       bind r source-file ~/.config/tmux/tmux.conf \; display "Config reloaded!"
@@ -83,11 +92,11 @@ in
       setw -g monitor-activity on
       set -g visual-activity off
 
-      # Copy mode (vi-style, wl-copy for Wayland)
+      # Copy mode (vi-style; pbcopy on macOS, wl-copy on Wayland)
       bind -T copy-mode-vi v send -X begin-selection
-      bind -T copy-mode-vi y send -X copy-pipe-and-cancel "wl-copy"
+      bind -T copy-mode-vi y send -X copy-pipe-and-cancel "${copyCmd}"
       bind -T copy-mode-vi q send -X cancel
-      bind -T copy-mode-vi MouseDragEnd1Pane send -X copy-pipe-and-cancel "wl-copy"
+      bind -T copy-mode-vi MouseDragEnd1Pane send -X copy-pipe-and-cancel "${copyCmd}"
 
       # Send prefix to nested tmux
       bind a send-prefix

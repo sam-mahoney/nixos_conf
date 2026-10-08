@@ -86,17 +86,17 @@ let
     universal-ctags
     vale
     prettier
-
-    # Apps
-    anki-bin
-    slack
   ];
 
   # Wayland desktop tools (wl-clipboard, grim, slurp, swaylock-effects,
   # swayidle, brightnessctl) live in nixos/desktop.nix at the system level.
+  # GUI apps here have macOS counterparts in modules/darwin/system.nix
+  # (nixGuiApps or homebrew.casks): home.packages never surfaces .app bundles on darwin.
   linuxOnlyPackages = with pkgs; [
     spotify
     zed-editor
+    slack
+    anki-bin
     iotop
     iftop
     nvtopPackages.nvidia

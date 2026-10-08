@@ -3,7 +3,7 @@
 {
   imports = [
     ./packages.nix
-    ./alacritty.nix
+    ./ghostty.nix
     ./zsh.nix
     ./tmux.nix
     ./neovim.nix

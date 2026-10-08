@@ -18,7 +18,7 @@ in
       theme = {
         mode = "dark";
         source = "custom";
-        custom_palette = "mono";
+        custom_palette = "oxocarbon";
       };
 
       bar.main = {
@@ -70,51 +70,32 @@ in
       };
     };
 
-    customPalettes.mono = {
+    customPalettes.oxocarbon = {
       dark = {
-        mPrimary = p.gray3;
+        mPrimary = p.blue;
         mOnPrimary = p.bg;
-        mSecondary = p.gray4;
+        mSecondary = p.purple;
         mOnSecondary = p.bg;
-        mTertiary = p.gray4;
+        mTertiary = p.cyan;
         mOnTertiary = p.bg;
         mError = p.red;
         mOnError = p.bg;
         mSurface = p.bg;
-        mOnSurface = p.gray2;
+        mOnSurface = p.fg;
         mSurfaceVariant = p.bg_alt;
-        mOnSurfaceVariant = p.gray4;
+        mOnSurfaceVariant = p.gray3;
         mOutline = p.gray5;
         mShadow = p.bg;
         mHover = p.bg_alt;
-        mOnHover = p.gray2;
+        mOnHover = p.fg_bright;
         terminal = {
-          normal = {
-            black = p.bg;
-            red = p.red;
-            green = p.gray3;
-            yellow = p.gray2;
-            blue = p.gray3;
-            magenta = p.gray4;
-            cyan = p.gray2;
-            white = p.gray1;
-          };
-          bright = {
-            black = p.gray5;
-            red = p.red;
-            green = p.fg;
-            yellow = p.fg_bright;
-            blue = p.fg;
-            magenta = p.gray2;
-            cyan = p.fg_bright;
-            white = p.white;
-          };
-          foreground = p.fg;
+          inherit (theme.ansi) normal bright;
+          foreground = p.fg_bright;
           background = p.bg;
-          cursor = p.fg_bright;
+          cursor = p.blue;
           cursorText = p.bg;
-          selectionFg = p.bg;
-          selectionBg = p.gray2;
+          selectionFg = p.fg_bright;
+          selectionBg = p.gray5;
         };
       };
     };

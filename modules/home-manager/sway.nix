@@ -14,7 +14,7 @@ in
     enable = true;
     config = rec {
       modifier = "Mod1"; # Alt key
-      terminal = "alacritty";
+      terminal = "ghostty";
       defaultWorkspace = "workspace number 1";
 
       fonts = {
@@ -40,8 +40,8 @@ in
 
       colors = {
         focused = {
-          border = p.gray1; background = p.bg; text = p.fg;
-          indicator = p.gray1; childBorder = p.gray1;
+          border = p.blue; background = p.bg; text = p.fg;
+          indicator = p.blue; childBorder = p.blue;
         };
         focusedInactive = {
           border = p.gray3; background = p.bg; text = p.gray1;

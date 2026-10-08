@@ -36,7 +36,7 @@
     outer.bottom = 0
 
     [mode.main.binding]
-    alt-enter = 'exec-and-forget open -na alacritty'
+    alt-enter = 'exec-and-forget open -na Ghostty'
     alt-shift-b = 'exec-and-forget open -a Firefox'
 
     alt-q = 'close'
