@@ -55,8 +55,9 @@ in
 {
   programs.ghostty = {
     enable = true;
-    # nixpkgs only builds Ghostty from source on Linux; macOS gets the upstream .app
-    package = if isDarwin then pkgs.ghostty-bin else pkgs.ghostty;
+    # On macOS nix-darwin installs Ghostty.app (nixGuiApps in modules/darwin/system.nix) so it
+    # lands in /Applications/Nix Apps; Home Manager app linking is off there, so only write config.
+    package = if isDarwin then null else pkgs.ghostty;
     # Sway launches a fresh process per window, so skip the background daemon
     systemd.enable = false;
 

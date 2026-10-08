@@ -3,6 +3,7 @@
 let
   nixGuiApps = with pkgs; [
     aerospace
+    ghostty-bin # config lives in modules/home-manager/ghostty.nix
     hidden-bar
     spotify
     discord
