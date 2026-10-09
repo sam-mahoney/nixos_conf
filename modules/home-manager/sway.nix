@@ -23,7 +23,8 @@ in
         size = 11.0;
       };
 
-      gaps = { inner = 0; outer = 0; };
+      # Sway adds outer on top of inner at screen edges, so subtract to match AeroSpace
+      gaps = { inner = theme.gaps.inner; outer = theme.gaps.outer - theme.gaps.inner; };
 
       window = {
         titlebar = false;

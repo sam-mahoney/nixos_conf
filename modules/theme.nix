@@ -43,4 +43,11 @@ in
   fonts = {
     mono = "JetBrainsMono Nerd Font";
   };
+
+  # Tiling gaps in pixels, shared by Sway and AeroSpace.
+  # inner: between windows. outer: between windows and the screen edge.
+  gaps = {
+    inner = 6;
+    outer = 6;
+  };
 }

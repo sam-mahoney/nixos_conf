@@ -1,4 +1,4 @@
-{ ... }:
+{ theme, ... }:
 
 {
   home.file.".aerospace.toml".text = ''
@@ -27,13 +27,13 @@
     preset = 'qwerty'
 
     [gaps]
-    # AeroSpace treats omitted values as defaults, so keep the full zeroed set.
-    inner.horizontal = 0
-    inner.vertical = 0
-    outer.left = 0
-    outer.right = 0
-    outer.top = 0
-    outer.bottom = 0
+    # AeroSpace treats omitted values as defaults, so keep the full set (sizes from theme.nix).
+    inner.horizontal = ${toString theme.gaps.inner}
+    inner.vertical = ${toString theme.gaps.inner}
+    outer.left = ${toString theme.gaps.outer}
+    outer.right = ${toString theme.gaps.outer}
+    outer.top = ${toString theme.gaps.outer}
+    outer.bottom = ${toString theme.gaps.outer}
 
     [mode.main.binding]
     alt-enter = 'exec-and-forget open -na Ghostty'

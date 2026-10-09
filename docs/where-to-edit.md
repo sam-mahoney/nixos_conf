@@ -7,6 +7,7 @@ Quick lookup. "I want to change X" -> edit this file.
 | What | File |
 |------|------|
 | Oxocarbon palette (all UI) | `modules/theme.nix` |
+| Tiling gaps (Sway and AeroSpace) | `modules/theme.nix` -> `gaps` |
 | Terminal opacity / blur | `modules/home-manager/ghostty.nix` |
 | Swaylock lock screen colors | `modules/home-manager/swaylock.nix` (intentionally different — noir/blue accent) |
 
