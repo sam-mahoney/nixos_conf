@@ -8,6 +8,7 @@
 
 let
   p = theme.palette;
+  wallpaper = import ../wallpaper.nix { inherit pkgs lib theme; };
 in
 {
   wayland.windowManager.sway = {
@@ -57,7 +58,8 @@ in
         };
       };
 
-      output = { "*" = { bg = "${p.bg} solid_color"; }; };
+      output."*".bg =
+        if wallpaper != null then "${wallpaper} fill" else "${p.bg} solid_color";
 
       input = {
         "type:keyboard" = {
