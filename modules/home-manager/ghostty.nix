@@ -81,8 +81,9 @@ in
       # Only the default background goes translucent; apps that paint their
       # own bg (nvim, tmux) must use NONE/default to stay see-through.
       background-opacity = 0.6;
-      # Blur radius, honoured on macOS (Alacritty's was fixed at 80). Stock Sway can't blur.
-      background-blur = 40;
+      # Blur intensity, honoured on macOS (20 is Ghostty's default; Alacritty's was fixed at 80).
+      # Stock Sway can't blur.
+      background-blur = 20;
 
       window-padding-x = 4;
       window-padding-y = 4;
