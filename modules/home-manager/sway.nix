@@ -223,10 +223,10 @@ in
       hide_edge_borders --i3 smart
 
       # SwayFX blur behind translucent windows (Ghostty's background-opacity).
-      # Spread is roughly radius * 2^passes, so ~20 to match Ghostty's macOS blur.
+      # Spread is roughly radius * 2^passes, so ~28 (a touch stronger than Ghostty's macOS 20).
       blur enable
       blur_passes 2
-      blur_radius 5
+      blur_radius 7
 
       bindswitch --reload --locked lid:on output eDP-1 disable
       bindswitch --reload --locked lid:off output eDP-1 enable
