@@ -3,6 +3,7 @@
   pkgs,
   lib,
   theme,
+  osConfig,
   ...
 }:
 
@@ -13,6 +14,11 @@ in
 {
   wayland.windowManager.sway = {
     enable = true;
+    # Same SwayFX build as the system (modules/nixos/desktop.nix); this one wins on PATH
+    package = osConfig.programs.sway.package;
+    # SwayFX's --validate needs a GPU for its renderer, which the build sandbox lacks.
+    # Check by hand instead: sway --validate --config ~/.config/sway/config
+    checkConfig = false;
     config = rec {
       modifier = "Mod1"; # Alt key
       terminal = "ghostty";
@@ -215,6 +221,12 @@ in
       seat seat0 xcursor_theme Vanilla-DMZ 24
       default_border pixel 2
       hide_edge_borders --i3 smart
+
+      # SwayFX blur behind translucent windows (Ghostty's background-opacity).
+      # Spread is roughly radius * 2^passes, so ~20 to match Ghostty's macOS blur.
+      blur enable
+      blur_passes 2
+      blur_radius 5
 
       bindswitch --reload --locked lid:on output eDP-1 disable
       bindswitch --reload --locked lid:off output eDP-1 enable

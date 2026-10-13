@@ -6,6 +6,9 @@
   # https://swaywm.org/
   programs.sway = {
     enable = true;
+    # SwayFX: Sway fork that adds blur, rounded corners and shadows
+    # https://github.com/WillPower3309/swayfx
+    package = pkgs.swayfx;
     wrapperFeatures.gtk = true;  # Fix GTK apps under Sway
     extraPackages = with pkgs; [
       swaylock-effects  # Screen locker with blur/effects

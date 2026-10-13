@@ -83,7 +83,7 @@ in
       # macOS only applies a change after Ghostty fully restarts (close and reopen windows)
       background-opacity = 0.4;
       # Blur intensity, honoured on macOS (20 is Ghostty's default; Alacritty's was fixed at 80).
-      # Stock Sway can't blur.
+      # On Linux SwayFX does the blur instead (modules/home-manager/sway.nix).
       background-blur = 20;
 
       window-padding-x = 4;

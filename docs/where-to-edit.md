@@ -8,7 +8,7 @@ Quick lookup. "I want to change X" -> edit this file.
 |------|------|
 | Oxocarbon palette (all UI) | `modules/theme.nix` |
 | Tiling gaps (Sway and AeroSpace) | `modules/theme.nix` -> `gaps` |
-| Terminal opacity / blur | `modules/home-manager/ghostty.nix` |
+| Terminal opacity / blur | `modules/home-manager/ghostty.nix` (Linux blur strength: `modules/home-manager/sway.nix`) |
 | Swaylock lock screen colors | `modules/home-manager/swaylock.nix` (intentionally different — noir/blue accent) |
 
 ## Packages
