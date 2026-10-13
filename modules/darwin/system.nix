@@ -157,6 +157,7 @@ in
       "1password"
       "wifiman"
       "zed"
+      "timing"
       "firefox" # Home Manager's programs.firefox is Linux-only (common.nix)
     ];
     taps = [ ];
