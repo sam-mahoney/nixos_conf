@@ -31,7 +31,9 @@ in
     ];
   };
   
-  services.ssh-agent.enable = true;
+  # Linux only: on darwin this agent would shadow macOS's Keychain-backed
+  # ssh-agent, which is what remembers key passphrases across logins.
+  services.ssh-agent.enable = pkgs.stdenv.isLinux;
 
   programs.ssh = lib.mkIf pkgs.stdenv.isLinux {
     enable = true;

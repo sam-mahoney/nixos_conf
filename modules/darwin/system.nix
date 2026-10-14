@@ -161,7 +161,9 @@ in
       "firefox" # Home Manager's programs.firefox is Linux-only (common.nix)
     ];
     taps = [ ];
-    masApps = { };
+    masApps = {
+      Xcode = 497799835;
+    };
   };
 
   # === Cleanup unwanted login items ===
