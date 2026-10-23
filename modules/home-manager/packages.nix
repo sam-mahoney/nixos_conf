@@ -72,6 +72,7 @@ let
     gh
     claude-code
     opencode
+    pi-coding-agent
 
     # Language servers (shared by opencode + neovim)
     typescript-language-server

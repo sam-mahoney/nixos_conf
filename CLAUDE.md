@@ -73,11 +73,12 @@ This is a **Nix flakes** repository managing three machines with a shared module
 ### Overlays
 
 - `opencodeOverlay` — pins opencode from nixos-unstable while rest uses stable
+- `piOverlay` — exposes the pi coding agent from its upstream flake as `pkgs.pi-coding-agent`
 - `darwinBuildFixesOverlay` — fixes direnv compilation on Darwin
 
 ### Key Flake Inputs
 
-nixpkgs (nixos-26.05), home-manager (release-26.05), nix-darwin (26.05), nixos-hardware, noctalia-shell, noctalia-qs, peon-ping, caveman, mac-app-util, firefox-addons
+nixpkgs (nixos-26.05), home-manager (release-26.05), nix-darwin (26.05), nixos-hardware, noctalia-shell, noctalia-qs, peon-ping, caveman, mac-app-util, firefox-addons, pi
 
 ## Tests
 

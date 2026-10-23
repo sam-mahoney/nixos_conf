@@ -29,6 +29,10 @@
     };
 
     mac-app-util.url = "github:hraban/mac-app-util";
+
+    # Pi coding agent. Tracks the stable branch; nixpkgs is left unfollowed so
+    # it builds against the toolchain upstream tested.
+    pi.url = "github:earendil-works/pi/stable";
   };
 
   outputs =
@@ -73,6 +77,10 @@
           aerospace = pkgsUnstable.aerospace;
         };
 
+      piOverlay = final: prev: {
+        pi-coding-agent = inputs.pi.packages.${final.stdenv.hostPlatform.system}.pi;
+      };
+
       darwinBuildFixesOverlay = final: prev: {
         direnv = prev.direnv.overrideAttrs (_: {
           doCheck = false;
@@ -102,7 +110,10 @@
             home-manager.nixosModules.home-manager
             hmCommon
             {
-              nixpkgs.overlays = [ unstableOverlay ];
+              nixpkgs.overlays = [
+                unstableOverlay
+                piOverlay
+              ];
               home-manager.users.${user} = import homeModule;
             }
           ];
@@ -121,6 +132,7 @@
             {
               nixpkgs.overlays = [
                 unstableOverlay
+                piOverlay
                 darwinBuildFixesOverlay
               ];
               nixpkgs.config.allowUnfreePredicate =
