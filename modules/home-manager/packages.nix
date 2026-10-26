@@ -123,13 +123,20 @@ let
   apolloOnlyPackages = with pkgs; [
     wineWowPackages.stable
   ];
+
+  # Local LLM inference (Metal on Apple Silicon); managed as a launchd agent
+  # in modules/darwin/llama-cpp.nix.
+  darwinOnlyPackages = with pkgs; [
+    llama-cpp
+  ];
 in
 
 {
   home.packages =
     sharedPackages
     ++ lib.optionals pkgs.stdenv.isLinux linuxOnlyPackages
-    ++ lib.optionals isApollo apolloOnlyPackages;
+    ++ lib.optionals isApollo apolloOnlyPackages
+    ++ lib.optionals pkgs.stdenv.isDarwin darwinOnlyPackages;
 
   programs.chromium = lib.mkIf pkgs.stdenv.isLinux {
     enable = true;

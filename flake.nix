@@ -74,6 +74,7 @@
           claude-code = pkgsUnstable.claude-code;
           opencode = pkgsUnstable.opencode;
           ollama = pkgsUnstable.ollama;
+          llama-cpp = pkgsUnstable.llama-cpp;
           aerospace = pkgsUnstable.aerospace;
         };
 

@@ -6,6 +6,7 @@ in
 {
   imports = [
     ../system.nix
+    ../llama-cpp.nix
   ];
 
   networking = {
