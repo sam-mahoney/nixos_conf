@@ -1,4 +1,8 @@
-{ pkgs, user, ... }:
+{
+  pkgs,
+  user,
+  ...
+}:
 
 # llama.cpp router server for local models, driven by pi's /llama and /model
 # commands. The router discovers GGUF files in /Users/${user}/models and loads
@@ -11,24 +15,29 @@
 #   └── large-model-Q4_K_M/
 #       ├── large-model-Q4_K_M-00001-of-00003.gguf
 #       └── ...
+let
+  modelsDir = "/Users/${user}/models";
+
+  # The wrapper ensures the models dir exists before the server starts
+  # (the server exits immediately if it is missing) and runs as the user,
+  # so HF downloads land with correct ownership.
+  router = pkgs.writeShellScript "llama-cpp-router" ''
+    set -eu
+    mkdir -p "${modelsDir}"
+    exec ${pkgs.llama-cpp}/bin/llama-server \
+      --models-dir "${modelsDir}" \
+      --no-models-autoload \
+      --jinja \
+      --host 127.0.0.1 \
+      --port 8080 \
+      -ngl 999 \
+      -c 32768
+  '';
+in
 {
   launchd.user.agents.llama-cpp = {
     serviceConfig = {
-      ProgramArguments = [
-        "${pkgs.llama-cpp}/bin/llama-server"
-        "--models-dir"
-        "/Users/${user}/models"
-        "--no-models-autoload"
-        "--jinja"
-        "--host"
-        "127.0.0.1"
-        "--port"
-        "8080"
-        "-ngl"
-        "999"
-        "-c"
-        "32768"
-      ];
+      ProgramArguments = [ (toString router) ];
       RunAtLoad = true;
       KeepAlive = true;
       ProcessType = "Background";
@@ -36,8 +45,4 @@
       StandardErrorPath = "/tmp/llama-cpp.log";
     };
   };
-
-  system.activationScripts.llamaModelsDir.text = ''
-    mkdir -p "/Users/${user}/models"
-  '';
 }
