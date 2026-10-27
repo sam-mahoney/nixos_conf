@@ -92,6 +92,9 @@ in
       setw -g monitor-activity on
       set -g visual-activity off
 
+      # Enable extended-keys for better key handling
+      set -g extended-keys on
+
       # Copy mode (vi-style; pbcopy on macOS, wl-copy on Wayland)
       bind -T copy-mode-vi v send -X begin-selection
       bind -T copy-mode-vi y send -X copy-pipe-and-cancel "${copyCmd}"
