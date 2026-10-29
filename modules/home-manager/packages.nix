@@ -128,6 +128,8 @@ let
   # in modules/darwin/llama-cpp.nix.
   darwinOnlyPackages = with pkgs; [
     llama-cpp
+    # Lightweight Linux VMs (Virtualization.framework); `limactl start`, then `lima` or ssh.
+    lima
   ];
 in
 
