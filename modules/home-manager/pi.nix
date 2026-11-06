@@ -50,6 +50,9 @@ let
     "bash-guard" = mkNpmExt "bash-guard";
     "web-fetch" = mkNpmExt "web-fetch";
     "browser" = browserExt;
+    # Stubs in pi-config; the code lives in their own repos. Peer deps only.
+    "interactive-subagents" = inputs.pi-interactive-subagents;
+    "observational-memory" = inputs.pi-observational-memory;
   };
 
   skills = {
