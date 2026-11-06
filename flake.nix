@@ -28,6 +28,11 @@
       flake = false;
     };
 
+    pi-config = {
+      url = "github:amosblomqvist/pi-config";
+      flake = false;
+    };
+
     mac-app-util.url = "github:hraban/mac-app-util";
 
     # Pi coding agent. Tracks the stable branch; nixpkgs is left unfollowed so

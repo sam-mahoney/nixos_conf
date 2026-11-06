@@ -371,6 +371,22 @@
         "type": "github"
       }
     },
+    "pi-config": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787610192,
+        "narHash": "sha256-G3q+6YO3CvwkpUwx+qYitrWJB8HSUF6WJ66LRjujmVY=",
+        "owner": "amosblomqvist",
+        "repo": "pi-config",
+        "rev": "f82da563ab05d66729492d64c7ed4e96db3663f3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "amosblomqvist",
+        "repo": "pi-config",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "caveman": "caveman",
@@ -381,7 +397,8 @@
         "nixpkgs": "nixpkgs_6",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "noctalia": "noctalia",
-        "pi": "pi"
+        "pi": "pi",
+        "pi-config": "pi-config"
       }
     },
     "systems": {

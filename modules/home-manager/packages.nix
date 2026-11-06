@@ -56,6 +56,10 @@ let
     lsof
     fastfetch
 
+    # Media (pi youtube-transcript skill)
+    yt-dlp
+    ffmpeg
+
     # Python
     python313
     python313Packages.pip
