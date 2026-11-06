@@ -80,6 +80,7 @@ Quick lookup. "I want to change X" -> edit this file.
 |------|------|
 | OpenCode config / LSP / model | `modules/home-manager/opencode.nix` |
 | Caveman style directive | `modules/home-manager/opencode.nix` -> `cavemanDirective` |
+| Pi extensions / skills (pi-config) | `modules/home-manager/pi.nix` |
 | Peon Ping (agent notifications) | `modules/home-manager/peon-ping.nix` |
 
 ## Flake inputs

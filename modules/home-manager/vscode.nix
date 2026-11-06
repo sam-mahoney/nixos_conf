@@ -70,7 +70,8 @@ in
           comments = "off";
           strings = "off";
         };
-        "editor.suggestOnTriggerCharacters" = false;
+        # Member completion after "." etc.; as-you-type suggestions stay off.
+        "editor.suggestOnTriggerCharacters" = true;
         "editor.parameterHints.enabled" = false;
         "editor.acceptSuggestionOnEnter" = "off";
         "editor.tabCompletion" = "off";
@@ -82,7 +83,9 @@ in
         "terminal.integrated.fontFamily" = "'${monoFont}'";
 
         "workbench.iconTheme" = "material-icon-theme";
-        "workbench.colorTheme" = "Default Dark Modern";
+        # Newer VSCode renamed "Default Dark Modern"; the old ID triggers a
+        # migration write to the read-only settings.json on every launch.
+        "workbench.colorTheme" = "Dark Modern";
 
         # Shared palette from modules/theme.nix layered onto the base
         # dark theme so colour edits flow through the whole desktop.
