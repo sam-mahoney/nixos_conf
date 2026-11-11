@@ -94,6 +94,7 @@ in
 
       # Enable extended-keys for better key handling
       set -g extended-keys on
+      set -g extended-keys-format csi-u
 
       # Copy mode (vi-style; pbcopy on macOS, wl-copy on Wayland)
       bind -T copy-mode-vi v send -X begin-selection

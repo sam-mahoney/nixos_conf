@@ -28,6 +28,21 @@
       flake = false;
     };
 
+    pi-config = {
+      url = "github:amosblomqvist/pi-config";
+      flake = false;
+    };
+
+    pi-interactive-subagents = {
+      url = "github:amosblomqvist/pi-interactive-subagents";
+      flake = false;
+    };
+
+    pi-observational-memory = {
+      url = "github:amosblomqvist/pi-observational-memory";
+      flake = false;
+    };
+
     mac-app-util.url = "github:hraban/mac-app-util";
 
     # Pi coding agent. Tracks the stable branch; nixpkgs is left unfollowed so

@@ -10,6 +10,7 @@
     ./vscode.nix
     ./git.nix
     ./opencode.nix
+    ./pi.nix
   ];
 
   home.username = user;
