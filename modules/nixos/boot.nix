@@ -2,6 +2,8 @@
 
 {
   boot.loader.systemd-boot.enable = true;
+  # Cap boot menu entries so /boot doesn't fill with old generations' kernels.
+  boot.loader.systemd-boot.configurationLimit = 10;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.timeout = 0;
 

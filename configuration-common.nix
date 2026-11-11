@@ -27,6 +27,18 @@
     download-buffer-size = 256 * 1024 * 1024; # 256 MiB
   };
 
+  # === Nix Store Cleanup ===
+  # Weekly GC keeping the last 3 system generations, plus hard-link dedup of the store.
+  # nix-collect-garbage only prunes by age, so trim the system profile by count first.
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+  };
+  systemd.services.nix-gc.preStart = ''
+    ${config.nix.package}/bin/nix-env --profile /nix/var/nix/profiles/system --delete-generations +3
+  '';
+  nix.optimise.automatic = true;
+
   # === Foreign Binary Compatibility ===
   # Allow selected upstream Linux binaries to run on NixOS.
   # Needed for tools like Steampipe that download their own embedded runtime.
