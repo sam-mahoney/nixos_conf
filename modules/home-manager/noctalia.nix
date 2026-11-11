@@ -27,8 +27,9 @@ in
         scale = 0.95;
         widget_spacing = 4;
         padding = 6;
-        margin_h = 0;
-        margin_v = 0;
+        # Float the bar with the same gap Sway leaves around windows
+        margin_ends = theme.gaps.outer;
+        margin_edge = theme.gaps.outer;
         radius = 0;
         capsule = true;
         capsule_fill = "surface_variant";
@@ -45,6 +46,12 @@ in
 
       widget.clock = {
         format = "{:%a %H:%M}";
+      };
+
+      # Square, solid block behind the workspaces (also squares the workspace pills)
+      widget.workspaces = {
+        capsule_radius = 0.0;
+        capsule_opacity = 1.0;
       };
 
       notification = {
