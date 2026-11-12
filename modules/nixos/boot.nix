@@ -17,4 +17,8 @@
 
   boot.consoleLogLevel = 0;
   boot.initrd.verbose = false;
+
+  # Live systemd job tree on the boot console, from the initrd (incl. the
+  # LUKS prompt) through to greetd, and again on shutdown.
+  services.bootvine.enable = true;
 }

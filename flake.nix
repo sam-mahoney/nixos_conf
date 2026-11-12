@@ -48,6 +48,12 @@
     # Pi coding agent. Tracks the stable branch; nixpkgs is left unfollowed so
     # it builds against the toolchain upstream tested.
     pi.url = "github:earendil-works/pi/stable";
+
+    # Live tree of systemd jobs on the boot console (NixOS module).
+    bootvine = {
+      url = "git+https://codeberg.org/wvhulle/bootvine";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -124,6 +130,7 @@
           modules = extraModules ++ [
             hostModule
             home-manager.nixosModules.home-manager
+            inputs.bootvine.nixosModules.default
             hmCommon
             {
               nixpkgs.overlays = [
