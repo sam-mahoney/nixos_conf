@@ -1,7 +1,7 @@
 { pkgs, theme, ... }:
 
 # VSCode setup tuned for reading first, light editing second. Autosave is on
-# but format-on-save and aggressive suggestions stay off so the editor still
+# but format-on-save stays off and suggestions are limited to code so the editor still
 # behaves like a code browser. Add language servers per-project via direnv
 # rather than enabling them globally here.
 let
@@ -21,7 +21,7 @@ in
         jnoortheen.nix-ide
         vscodevim.vim
         ms-python.python
-        ms-pyright.pyright
+        ms-python.vscode-pylance
       ];
 
       userSettings = {
@@ -65,12 +65,14 @@ in
         "editor.formatOnSave" = false;
         "editor.formatOnPaste" = false;
         "editor.formatOnType" = false;
+        # "other" covers code identifiers — locals, constants and params only
+        # ever surface through this path, never via trigger characters.
         "editor.quickSuggestions" = {
-          other = "off";
+          other = "on";
           comments = "off";
           strings = "off";
         };
-        # Member completion after "." etc.; as-you-type suggestions stay off.
+        # Member completion after "." etc.
         "editor.suggestOnTriggerCharacters" = true;
         "editor.parameterHints.enabled" = false;
         "editor.acceptSuggestionOnEnter" = "off";
