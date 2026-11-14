@@ -1,97 +1,60 @@
 # Nix Configuration
 
-NixOS and nix-darwin flake managing three machines:
+One flake, three machines.
 
-| Host | Machine | OS | Notes |
-|------|---------|-----|-------|
-| `helios` | Dell Precision 5570 | NixOS (x86_64) | Laptop, Intel+NVIDIA hybrid GPU |
-| `apollo` | AMD 9950X + RTX 5080 | NixOS (x86_64) | Desktop, gaming stack |
-| `halcyon` | MacBook Pro 16 | nix-darwin (aarch64) | Homebrew integration |
+| Host | Machine | System | Rebuild |
+|------|---------|--------|---------|
+| `helios` | Dell Precision 5570 laptop | NixOS | `sudo nixos-rebuild switch --flake .#helios` |
+| `apollo` | AMD 9950X + RTX 5080 desktop | NixOS | `sudo nixos-rebuild switch --flake .#apollo` |
+| `halcyon` | MacBook Pro 16 | nix-darwin | `darwin-rebuild switch --flake .#halcyon` |
 
-Desktop: Sway (Linux) / AeroSpace (macOS). Terminal: Ghostty + tmux. Editor: Neovim. Theme: Oxocarbon with a translucent terminal (defined once in `modules/theme.nix`).
+Sway on Linux, AeroSpace on macOS. Ghostty + tmux, Neovim, Oxocarbon theme.
 
-## Rebuild
-
-```bash
-# NixOS
-sudo nixos-rebuild switch --flake .#helios
-sudo nixos-rebuild switch --flake .#apollo
-
-# macOS
-darwin-rebuild switch --flake .#halcyon
-
-# Test without switching
-sudo nixos-rebuild test --flake .#helios
-
-# Validate
-nix flake check
-```
-
-## Update inputs
+## Commands
 
 ```bash
-nix flake update                          # all inputs
-nix flake lock --update-input nixpkgs     # single input
-git diff flake.lock                       # review before rebuilding
+sudo nixos-rebuild test --flake .#helios   # try without switching (macOS: darwin-rebuild build)
+sudo nixos-rebuild switch --rollback       # undo
+nix flake check                            # run tests/ and the gitleaks secret scan
+nix flake update && git diff flake.lock    # update inputs, review before rebuilding
+git config core.hooksPath .githooks        # once per clone: gitleaks pre-commit hook
 ```
 
-## How it fits together
+## Layout
 
-`flake.nix` defines `mkLinuxHost` and `mkDarwinHost` helper functions that compose each machine's config.
-
-**System configs** (what gets built):
-- `configuration.nix` -> helios, `configuration-apollo.nix` -> apollo — both import `configuration-common.nix` for shared NixOS settings
-- Home Manager: `home.nix` (Linux) and `home-darwin.nix` (macOS) — both import `modules/home-manager/common.nix`
-
-**Modules** (the building blocks):
-- `modules/theme.nix` — shared Oxocarbon palette imported by all UI modules
-- `modules/nixos/` — system-level: boot, networking, desktop (Sway + greetd), hardware (PipeWire, Bluetooth), services (Docker, SSH, TLP)
-- `modules/nixos/hosts/` — per-machine hardware quirks (GPU drivers, kernel flags, LUKS)
-- `modules/darwin/` — macOS system defaults, Homebrew, keyboard remapping
-- `modules/home-manager/` — user-level config, shared baseline in `common.nix`:
-  - Terminal: `ghostty.nix`, `zsh.nix` (shell + prompt + direnv), `tmux.nix`
-  - Editor: `neovim.nix`
-  - Desktop: `sway.nix`, `kanshi.nix` (monitors), `noctalia.nix`, `swaylock.nix`, `aerospace.nix`
-  - Tools: `git.nix`, `opencode.nix`, `peon-ping.nix`, `packages.nix`
-
-**Overlays:**
-- `opencodeOverlay` — pins opencode from nixos-unstable
-- `darwinBuildFixesOverlay` — fixes direnv on Darwin
+| Path | Contents |
+|------|----------|
+| `flake.nix` | Inputs, overlays, `mkLinuxHost` / `mkDarwinHost` |
+| `configuration*.nix`, `home*.nix` | Per-host entrypoints. They only import modules |
+| `modules/theme.nix` | The palette and gaps. Every UI module reads its colours from here |
+| `modules/nixos/` | Linux system config. Hardware quirks are in `hosts/<host>.nix` |
+| `modules/darwin/` | macOS system config, defaults and Homebrew |
+| `modules/home-manager/` | User config, one file per tool. `common.nix` is the cross-platform baseline |
+| `tests/` | Assertions on helios kernel params |
 
 ## Adding packages
 
-System-wide (all users): edit `modules/nixos/packages.nix` -> `environment.systemPackages`
+| Kind | Where |
+|------|-------|
+| User, any platform | `modules/home-manager/packages.nix` -> `sharedPackages` (or `linuxOnlyPackages` / `darwinOnlyPackages`) |
+| Linux system-wide | `modules/nixos/packages.nix` |
+| macOS GUI app from Nix | `modules/darwin/system.nix` -> `nixGuiApps` |
+| macOS Homebrew cask | `modules/darwin/system.nix` -> `homebrew.casks` |
+| Newer than stable | add to `unstableOverlay` in `flake.nix` |
 
-User-level: edit `modules/home-manager/packages.nix` -> `home.packages`
+## Things to know
 
-macOS Homebrew casks: edit `modules/darwin/system.nix` -> `homebrew.casks`
+- Flakes only see files tracked by git. `git add` a new file before rebuilding.
+- Homebrew cleanup is `zap`: anything installed with `brew` by hand is removed on the next rebuild.
+- macOS GUI apps must go in `nixGuiApps`, not `home.packages`, or they never reach `/Applications`.
+- helios forces the `i915` GPU driver over `xe` (external displays break otherwise) and sets `btusb.reset=0`. `tests/` guards both.
+- On helios, run GPU-heavy programs with `nvidia-offload <command>`.
+- Alt is the modifier in Sway, AeroSpace and tmux's prefixless binds. tmux prefix is `Ctrl+a`, Neovim leader is `Space`.
+- Ghostty opens straight into tmux, so terminal tabs are tmux windows.
+- swaylock has its own palette on purpose. Everything else uses `modules/theme.nix`.
 
-## Tests
+## New machine
 
-Tests live in `tests/` as Nix derivations that assert config properties. Run with `nix flake check`.
+NixOS: install as usual, clone this repo, replace the host's `hardware-configuration*.nix` with the output of `nixos-generate-config --show-hardware-config`, then `sudo nixos-install --flake .#<host>`.
 
-## Secret scanning
-
-CI runs gitleaks on PRs via GitHub Actions. For local scanning:
-
-```bash
-git config core.hooksPath .githooks    # enable pre-commit hook
-nix build .#checks.x86_64-linux.secret-scan  # run manually
-```
-
-## Rollback
-
-```bash
-sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
-sudo nixos-rebuild switch --rollback
-```
-
-## Other docs
-
-All in `docs/`:
-
-- [where-to-edit.md](docs/where-to-edit.md) — "I want to change X" -> edit this file
-- [machines.md](docs/machines.md) — host-specific hardware details and quirks
-- [keybinds.md](docs/keybinds.md) — all keybindings for Sway, AeroSpace, tmux, Neovim
-- [neovim.md](docs/neovim.md) — editor setup and keymaps
-- [new-machine.md](docs/new-machine.md) — bootstrapping a fresh machine
+macOS: install Nix, clone, `darwin-rebuild switch --flake .#halcyon`.

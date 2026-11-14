@@ -1,107 +1,12 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+@README.md
 
-## Build & Deploy Commands
+## Rules
 
-```bash
-# NixOS rebuild (laptop / desktop)
-sudo nixos-rebuild switch --flake .#helios
-sudo nixos-rebuild switch --flake .#apollo
-
-# macOS rebuild
-darwin-rebuild switch --flake .#halcyon
-
-# Test build without switching
-sudo nixos-rebuild test --flake .#helios
-darwin-rebuild build --flake .#halcyon
-
-# Update flake inputs
-nix flake update
-nix flake lock --update-input nixpkgs
-git diff flake.lock   # review changes before rebuilding
-
-# Validate configuration
-nix flake check
-
-# Secret scan check
-nix build .#checks.x86_64-linux.secret-scan
-
-# Rollback
-sudo nixos-rebuild switch --rollback
-
-# Enable pre-commit hooks (gitleaks secret scanning)
-git config core.hooksPath .githooks
-```
-
-## Architecture
-
-This is a **Nix flakes** repository managing three machines with a shared module system:
-
-- **helios** — Dell Precision 5570 laptop (NixOS, x86_64-linux)
-- **apollo** — AMD 9950X desktop (NixOS, x86_64-linux, RTX 5080, gaming stack)
-- **halcyon** — MacBook Pro 16 (nix-darwin, aarch64-darwin)
-
-### Entrypoints
-
-`flake.nix` defines two helper functions (`mkLinuxHost`, `mkDarwinHost`) that compose the system configurations. Each host has a root config file:
-
-- `configuration.nix` -> helios, `configuration-apollo.nix` -> apollo (both import `configuration-common.nix`)
-- `home.nix` -> Linux Home Manager, `home-darwin.nix` -> Darwin Home Manager (both import `modules/home-manager/common.nix`)
-
-### Module Layout
-
-- **`modules/theme.nix`** — Shared Oxocarbon color palette (plus `ansi` 16-colour terminal set). All UI modules import this; change a color once, it updates everywhere.
-- **`modules/nixos/`** — NixOS system modules (boot, networking, desktop, hardware, services)
-- **`modules/nixos/hosts/`** — Host-specific hardware (GPU drivers, kernel flags, LUKS encryption)
-- **`modules/darwin/`** — nix-darwin system module and macOS defaults
-- **`modules/home-manager/`** — User-level modules:
-  - `common.nix` — baseline imports for all platforms (also inlines firefox and steampipe config)
-  - Terminal: `ghostty.nix`, `zsh.nix` (shell + starship + direnv + fzf), `tmux.nix`
-  - Editor: `neovim.nix`
-  - Desktop: `sway.nix`, `kanshi.nix` (monitor profiles), `noctalia.nix`, `swaylock.nix`, `aerospace.nix`
-  - Tools: `git.nix`, `opencode.nix`, `peon-ping.nix`, `packages.nix`
-
-### Where to Add Packages
-
-- **User-level (cross-platform):** `modules/home-manager/packages.nix` -> `sharedPackages` or `linuxOnlyPackages`
-- **System-wide (Linux):** `modules/nixos/packages.nix` -> `environment.systemPackages`
-- **macOS Homebrew casks:** `modules/darwin/system.nix` -> `homebrew.casks`
-- **macOS Nix GUI apps:** `modules/darwin/system.nix` -> `nixGuiApps`. Never `home.packages`: Home Manager app linking is off on darwin, so `.app` bundles from there never reach `/Applications` and `open -a` can't find them.
-- **Neovim plugins:** `modules/home-manager/neovim.nix` -> `plugins`
-
-### Overlays
-
-- `opencodeOverlay` — pins opencode from nixos-unstable while rest uses stable
-- `piOverlay` — exposes the pi coding agent from its upstream flake as `pkgs.pi-coding-agent`
-- `darwinBuildFixesOverlay` — fixes direnv compilation on Darwin
-
-### Key Flake Inputs
-
-nixpkgs (nixos-26.05), home-manager (release-26.05), nix-darwin (26.05), nixos-hardware, noctalia-shell, noctalia-qs, peon-ping, caveman, mac-app-util, firefox-addons, pi
-
-## Tests
-
-Tests live in `tests/` as Nix derivations that assert configuration properties. They are evaluated as part of `nix flake check`. Currently: kernel param validation for helios GPU and Bluetooth stability.
-
-## CI
-
-GitHub Actions (`.github/workflows/secret-scan.yml`) runs gitleaks on PRs and pushes to master.
-
-## Conventions
-
-- **Theme**: All UI colors come from `modules/theme.nix`. Only swaylock uses its own palette (intentional noir accent).
-- Host-specific hardware config goes in `modules/nixos/hosts/<hostname>.nix` or `modules/darwin/hosts/<hostname>.nix`
-- Shared cross-platform Home Manager config goes through `modules/home-manager/common.nix`
-- Wayland desktop packages (wl-clipboard, grim, slurp, swaylock, swayidle) are installed system-level in `modules/nixos/desktop.nix`, not in home-manager
-- Alt-based keybindings are consistent between Sway (Linux) and AeroSpace (macOS)
-- SSH keys are split work/personal with conditional git includes (see `modules/home-manager/git.nix`)
-
-## Additional Docs
-
-Detailed documentation lives in `docs/`:
-- `where-to-edit.md` — "I want to change X" -> edit this file (comprehensive lookup table)
-- `machines.md` — host-specific hardware details and quirks
-- `keybinds.md` — all keybindings for Sway, AeroSpace, tmux, Neovim
-- `neovim.md` — editor setup and keymaps
-- `new-machine.md` — bootstrapping a fresh machine
+- Colours come from `modules/theme.nix`. Don't hardcode hex values in a module (swaylock is the one exception).
+- Host-specific hardware goes in `modules/nixos/hosts/<host>.nix` or `modules/darwin/hosts/<host>.nix`, not in shared modules.
+- Wayland desktop packages (wl-clipboard, grim, slurp, swaylock, swayidle) are installed system-level in `modules/nixos/desktop.nix`, not through Home Manager.
+- Keep Alt keybindings consistent between `sway.nix` and `aerospace.nix`.
+- Git identity and SSH keys are split work/personal by directory in `modules/home-manager/git.nix`.
+- Validate with `nix flake check`. Don't run `switch` unless asked.
