@@ -1,9 +1,8 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   environment.systemPackages = with pkgs; [
     vim # Available before home-manager activates; useful for emergency recovery
-    wget
     git
     inotify-tools
     wireguard-tools

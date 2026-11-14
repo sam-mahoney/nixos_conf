@@ -1,8 +1,12 @@
 { config, ... }:
 
+# Apollo: AMD 9950X + RTX 5080 desktop.
+
 {
   imports = [
-    ./apollo-gaming.nix
+    ./hardware.nix
+    ./gaming.nix
+    ../../modules/nixos
   ];
 
   networking.hostName = "apollo";

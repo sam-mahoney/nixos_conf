@@ -7,14 +7,14 @@
   imports = [
     # === Modular Configuration ===
     # System configuration split into logical modules
-    ./modules/nixos/boot.nix # Bootloader and disk encryption
-    ./modules/nixos/networking.nix # Network configuration
-    ./modules/nixos/locale.nix # Timezone and language settings
-    ./modules/nixos/desktop.nix # Desktop environment and display manager
-    ./modules/nixos/hardware.nix # Audio, printing, and input devices
-    ./modules/nixos/users.nix # User accounts and groups
-    ./modules/nixos/packages.nix # System-wide packages and fonts
-    ./modules/nixos/services.nix # System services (SSH, etc.)
+    ./boot.nix # Bootloader and disk encryption
+    ./networking.nix # Network configuration
+    ./locale.nix # Timezone and language settings
+    ./desktop.nix # Desktop environment and display manager
+    ./hardware.nix # Audio, printing, and input devices
+    ./users.nix # User accounts and groups
+    ./packages.nix # System-wide packages and fonts
+    ./services.nix # System services (SSH, etc.)
   ];
 
   # === Nix Configuration ===

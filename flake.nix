@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
-    nixos-hardware.url = "github:NixOS/nixos-hardware";
 
     # Secondary nixpkgs channel for fast-moving or broken-in-stable packages.
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -21,11 +20,6 @@
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    caveman = {
-      url = "github:JuliusBrussee/caveman";
-      flake = false;
     };
 
     pi-config = {
@@ -61,7 +55,6 @@
       self,
       nixpkgs,
       nixpkgs-unstable,
-      nixos-hardware,
       home-manager,
       darwin,
       mac-app-util,
@@ -73,15 +66,6 @@
 
       user = "mahoney";
       theme = import ./modules/theme.nix;
-
-      mkPkgs =
-        system:
-        import nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-        };
-
-      pkgs = mkPkgs linuxSystem;
 
       unstableOverlay =
         final: prev:
@@ -118,17 +102,14 @@
         home-manager.extraSpecialArgs = hmSpecialArgs;
       };
 
+      # Each host's system config is hosts/<host>/default.nix.
       mkLinuxHost =
-        {
-          hostModule,
-          homeModule ? ./home.nix,
-          extraModules ? [ ],
-        }:
+        host:
         nixpkgs.lib.nixosSystem {
           system = linuxSystem;
           specialArgs = { inherit inputs user theme; };
-          modules = extraModules ++ [
-            hostModule
+          modules = [
+            ./hosts/${host}
             home-manager.nixosModules.home-manager
             inputs.bootvine.nixosModules.default
             hmCommon
@@ -137,18 +118,18 @@
                 unstableOverlay
                 piOverlay
               ];
-              home-manager.users.${user} = import homeModule;
+              home-manager.users.${user} = import ./modules/home-manager/linux.nix;
             }
           ];
         };
 
       mkDarwinHost =
-        { hostModule, homeModule }:
+        host:
         darwin.lib.darwinSystem {
           system = darwinSystem;
           specialArgs = { inherit inputs user theme; };
           modules = [
-            hostModule
+            ./hosts/${host}
             home-manager.darwinModules.home-manager
             mac-app-util.darwinModules.default
             hmCommon
@@ -158,18 +139,13 @@
                 piOverlay
                 darwinBuildFixesOverlay
               ];
-              nixpkgs.config.allowUnfreePredicate =
-                pkg:
-                builtins.elem (nixpkgs.lib.getName pkg) [
-                  "onepassword-password-manager"
-                ];
 
               users.users.${user} = {
                 name = user;
                 home = "/Users/${user}";
               };
 
-              home-manager.users.${user} = import homeModule;
+              home-manager.users.${user} = import ./modules/home-manager/darwin.nix;
               home-manager.sharedModules = [
                 mac-app-util.homeManagerModules.default
               ];
@@ -178,36 +154,34 @@
         };
     in
     {
-      checks.${linuxSystem}.secret-scan =
-        pkgs.runCommand "secret-scan"
-          {
-            nativeBuildInputs = [ pkgs.gitleaks ];
-          }
-          ''
-            export HOME="$TMPDIR"
-            cd ${self}
-            gitleaks detect \
-              --source . \
-              --no-git \
-              --redact \
-              --exit-code 1
-            touch "$out"
-          '';
+      # Defined for both systems so `nix flake check` scans on the Mac too.
+      checks = nixpkgs.lib.genAttrs [ linuxSystem darwinSystem ] (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          secret-scan =
+            pkgs.runCommand "secret-scan"
+              {
+                nativeBuildInputs = [ pkgs.gitleaks ];
+              }
+              ''
+                export HOME="$TMPDIR"
+                cd ${self}
+                gitleaks detect \
+                  --source . \
+                  --no-git \
+                  --redact \
+                  --exit-code 1
+                touch "$out"
+              '';
+        }
+      );
 
-      nixosConfigurations.helios = mkLinuxHost {
-        hostModule = ./configuration.nix;
-        extraModules = [
-          nixos-hardware.nixosModules.dell-precision-5570
-        ];
-      };
+      nixosConfigurations.helios = mkLinuxHost "helios";
+      nixosConfigurations.apollo = mkLinuxHost "apollo";
 
-      nixosConfigurations.apollo = mkLinuxHost {
-        hostModule = ./configuration-apollo.nix;
-      };
-
-      darwinConfigurations.halcyon = mkDarwinHost {
-        hostModule = ./modules/darwin/hosts/halcyon.nix;
-        homeModule = ./home-darwin.nix;
-      };
+      darwinConfigurations.halcyon = mkDarwinHost "halcyon";
     };
 }

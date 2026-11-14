@@ -1,9 +1,10 @@
-{ pkgs, ... }:
+{ pkgs, osConfig, ... }:
 
 let
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
   swaylock = "${pkgs.swaylock-effects}/bin/swaylock";
-  swaymsg = "${pkgs.sway}/bin/swaymsg";
+  # The system's SwayFX build, so stock sway isn't pulled in just for swaymsg
+  swaymsg = "${osConfig.programs.sway.package}/bin/swaymsg";
   systemctl = "${pkgs.systemd}/bin/systemctl";
 in
 {

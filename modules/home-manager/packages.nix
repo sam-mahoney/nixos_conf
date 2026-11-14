@@ -71,7 +71,6 @@ let
     ansible
     steampipe
     osv-scanner
-    docker_29
     ollama
     gh
     claude-code
@@ -94,7 +93,7 @@ let
   ];
 
   # Wayland desktop tools (wl-clipboard, grim, slurp, swaylock-effects,
-  # swayidle, brightnessctl) live in nixos/desktop.nix at the system level.
+  # swayidle, wlsunset, brightnessctl) live in modules/nixos at the system level.
   # GUI apps here have macOS counterparts in modules/darwin/system.nix
   # (nixGuiApps or homebrew.casks): home.packages never surfaces .app bundles on darwin.
   linuxOnlyPackages = with pkgs; [
@@ -116,7 +115,6 @@ let
     _1password-gui
     _1password-cli
     libnotify
-    wlsunset
     imagemagick
     networkmanagerapplet
     pavucontrol
@@ -132,6 +130,8 @@ let
   # in modules/darwin/llama-cpp.nix.
   darwinOnlyPackages = with pkgs; [
     llama-cpp
+    # Docker CLI; on Linux virtualisation.docker (modules/nixos/services.nix) provides it.
+    docker_29
     # Lightweight Linux VMs (Virtualization.framework); `limactl start`, then `lima` or ssh.
     lima
   ];

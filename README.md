@@ -37,7 +37,7 @@ Sway on Linux, AeroSpace on macOS. Ghostty + tmux, Neovim, Oxocarbon theme.
 ```bash
 sudo nixos-rebuild test --flake .#helios   # try without switching (macOS: darwin-rebuild build)
 sudo nixos-rebuild switch --rollback       # undo
-nix flake check                            # run tests/ and the gitleaks secret scan
+nix flake check                            # evaluate every host and run the gitleaks secret scan
 nix flake update && git diff flake.lock    # update inputs, review before rebuilding
 git config core.hooksPath .githooks        # once per clone: gitleaks pre-commit hook
 ```
@@ -47,12 +47,11 @@ git config core.hooksPath .githooks        # once per clone: gitleaks pre-commit
 | Path | Contents |
 |------|----------|
 | `flake.nix` | Inputs, overlays, `mkLinuxHost` / `mkDarwinHost` |
-| `configuration*.nix`, `home*.nix` | Per-host entrypoints. They only import modules |
+| `hosts/<host>/` | Per-host system config. `default.nix` is the entrypoint and holds hardware quirks, `hardware.nix` is the generated hardware config |
 | `modules/theme.nix` | The palette and gaps. Every UI module reads its colours from here |
-| `modules/nixos/` | Linux system config. Hardware quirks are in `hosts/<host>.nix` |
+| `modules/nixos/` | Linux system config shared by helios and apollo |
 | `modules/darwin/` | macOS system config, defaults and Homebrew |
-| `modules/home-manager/` | User config, one file per tool. `common.nix` is the cross-platform baseline |
-| `tests/` | Assertions on helios kernel params |
+| `modules/home-manager/` | User config, one file per tool. `common.nix` is the cross-platform baseline, `linux.nix` and `darwin.nix` are the per-platform entrypoints |
 
 ## Adding packages
 
@@ -69,7 +68,7 @@ git config core.hooksPath .githooks        # once per clone: gitleaks pre-commit
 - Flakes only see files tracked by git. `git add` a new file before rebuilding.
 - Homebrew cleanup is `zap`: anything installed with `brew` by hand is removed on the next rebuild.
 - macOS GUI apps must go in `nixGuiApps`, not `home.packages`, or they never reach `/Applications`.
-- helios forces the `i915` GPU driver over `xe` (external displays break otherwise) and sets `btusb.reset=0`. `tests/` guards both.
+- helios forces the `i915` GPU driver over `xe` (external displays break otherwise) and sets `btusb.reset=0`.
 - On helios, run GPU-heavy programs with `nvidia-offload <command>`.
 - Alt is the modifier in Sway, AeroSpace and tmux's prefixless binds. tmux prefix is `Ctrl+a`, Neovim leader is `Space`.
 - Ghostty opens straight into tmux, so terminal tabs are tmux windows.
@@ -77,6 +76,6 @@ git config core.hooksPath .githooks        # once per clone: gitleaks pre-commit
 
 ## New machine
 
-NixOS: install as usual, clone this repo, replace the host's `hardware-configuration*.nix` with the output of `nixos-generate-config --show-hardware-config`, then `sudo nixos-install --flake .#<host>`.
+NixOS: install as usual, clone this repo, replace `hosts/<host>/hardware.nix` with the output of `nixos-generate-config --show-hardware-config`, then `sudo nixos-install --flake .#<host>`.
 
 macOS: install Nix, clone, `darwin-rebuild switch --flake .#halcyon`.

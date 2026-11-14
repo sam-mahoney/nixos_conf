@@ -1,12 +1,12 @@
 { lib, pkgs, theme, ... }:
 
 let
-  wallpaper = import ./modules/wallpaper.nix { inherit pkgs lib theme; };
+  wallpaper = import ../wallpaper.nix { inherit pkgs lib theme; };
 in
 {
   imports = [
-    ./modules/home-manager/common.nix
-    ./modules/home-manager/aerospace.nix
+    ./common.nix
+    ./aerospace.nix
   ];
 
   home.sessionPath = [

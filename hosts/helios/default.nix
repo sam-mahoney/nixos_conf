@@ -1,29 +1,21 @@
-{
-  config,
-  lib,
-  inputs,
-  ...
-}:
+{ config, ... }:
+
+# Helios: Dell Precision 5570 laptop.
 
 {
+  imports = [
+    ./hardware.nix
+    ../../modules/nixos
+  ];
+
   networking.hostName = "helios";
 
-  # The nixos-hardware Precision 5570 module prefers xe for device 46a6.
-  # Override so helios keeps the stable i915 path for external displays.
-  disabledModules = [ "${inputs.nixos-hardware}/dell/precision/5570" ];
-
-  imports = [
-    (
-      { ... }:
-      {
-        boot.kernelParams = [
-          "i915.force_probe=46a6"
-          "xe.force_probe=!46a6"
-          # Stabilise Intel Bluetooth controller (8087:0033) during firmware handoff
-          "btusb.reset=0"
-        ];
-      }
-    )
+  # Keep device 46a6 on the stable i915 path: external displays break under xe.
+  boot.kernelParams = [
+    "i915.force_probe=46a6"
+    "xe.force_probe=!46a6"
+    # Stabilise Intel Bluetooth controller (8087:0033) during firmware handoff
+    "btusb.reset=0"
   ];
 
   # spd5118 causes wake-up instability on this platform
@@ -82,8 +74,8 @@
     prime = {
       offload.enable = true;
       offload.enableOffloadCmd = true;
-      intelBusId = lib.mkForce "PCI:0:2:0";
-      nvidiaBusId = lib.mkForce "PCI:1:0:0";
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:1:0:0";
     };
   };
 }

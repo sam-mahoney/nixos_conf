@@ -5,8 +5,8 @@ let
 in
 {
   imports = [
-    ../system.nix
-    ../llama-cpp.nix
+    ../../modules/darwin/system.nix
+    ../../modules/darwin/llama-cpp.nix
   ];
 
   networking = {

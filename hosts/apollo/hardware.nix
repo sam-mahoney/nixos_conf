@@ -9,7 +9,7 @@
   boot.extraModulePackages = [ ];
 
   # Replace this file with machine-generated values on Apollo:
-  #   sudo nixos-generate-config --show-hardware-config > hardware-configuration-apollo.nix
+  #   sudo nixos-generate-config --show-hardware-config > hosts/apollo/hardware.nix
   fileSystems."/" = {
     device = "/dev/disk/by-label/nixos";
     fsType = "ext4";

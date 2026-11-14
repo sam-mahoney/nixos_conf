@@ -2,14 +2,14 @@
 
 {
   imports = [
-    ./modules/home-manager/common.nix
-    ./modules/home-manager/sway.nix
-    ./modules/home-manager/swayidle.nix
-    ./modules/home-manager/kanshi.nix
-    ./modules/home-manager/noctalia.nix
-    ./modules/home-manager/services.nix
-    ./modules/home-manager/swaylock.nix
-    ./modules/home-manager/battery-notifier.nix
+    ./common.nix
+    ./sway.nix
+    ./swayidle.nix
+    ./kanshi.nix
+    ./noctalia.nix
+    ./services.nix
+    ./swaylock.nix
+    ./battery-notifier.nix
   ];
 
   gtk = {
