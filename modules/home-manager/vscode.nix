@@ -101,7 +101,7 @@ in
           "editorCursor.foreground" = p.gray1;
           "editor.selectionBackground" = p.gray5;
           "editor.lineHighlightBackground" = p.bg_alt;
-          "editor.wordHighlightBackground" = p.bg_alt;
+          "editor.wordHighlightBackground" = p.bg_alt + "cc";
           "editorWhitespace.foreground" = p.gray5;
           "editorIndentGuide.background1" = p.bg_alt;
           "editorIndentGuide.activeBackground1" = p.gray5;
@@ -147,6 +147,9 @@ in
         "gitlens.hovers.enabled" = true;
         "gitlens.statusBar.enabled" = true;
         "gitlens.blame.format" = "\${author|10} • \${agoOrDate|14-+}";
+
+        "claudeCode.preferredLocation" = "sidebar";
+        "claudeCode.hideOnboarding" = true;
 
         "nix.enableLanguageServer" = true;
         "nix.serverPath" = "nil";
