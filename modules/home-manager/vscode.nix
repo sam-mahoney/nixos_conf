@@ -91,8 +91,9 @@ in
 
         # Shared palette from modules/theme.nix layered onto the base
         # dark theme so colour edits flow through the whole desktop.
+        # Surfaces use true black rather than p.bg so OLED pixels switch off.
         "workbench.colorCustomizations" = {
-          "editor.background" = p.bg;
+          "editor.background" = p.black;
           "editor.foreground" = p.fg;
           "editorLineNumber.foreground" = p.gray5;
           "editorLineNumber.activeForeground" = p.gray2;
@@ -106,27 +107,27 @@ in
           "editorBracketMatch.background" = p.bg_alt;
           "editorBracketMatch.border" = p.gray3;
 
-          "sideBar.background" = p.bg;
+          "sideBar.background" = p.black;
           "sideBar.foreground" = p.fg;
-          "sideBarSectionHeader.background" = p.bg;
-          "activityBar.background" = p.bg;
+          "sideBarSectionHeader.background" = p.black;
+          "activityBar.background" = p.black;
           "activityBar.foreground" = p.fg;
           "activityBar.inactiveForeground" = p.gray4;
-          "titleBar.activeBackground" = p.bg;
+          "titleBar.activeBackground" = p.black;
           "titleBar.activeForeground" = p.fg;
-          "titleBar.inactiveBackground" = p.bg;
-          "statusBar.background" = p.bg;
+          "titleBar.inactiveBackground" = p.black;
+          "statusBar.background" = p.black;
           "statusBar.foreground" = p.fg;
-          "statusBar.noFolderBackground" = p.bg;
-          "panel.background" = p.bg;
+          "statusBar.noFolderBackground" = p.black;
+          "panel.background" = p.black;
           "panel.border" = p.gray5;
           "editorGroup.border" = p.gray5;
           "tab.activeBackground" = p.bg_alt;
-          "tab.inactiveBackground" = p.bg;
+          "tab.inactiveBackground" = p.black;
           "tab.activeForeground" = p.fg_bright;
           "tab.inactiveForeground" = p.gray3;
-          "tab.border" = p.bg;
-          "terminal.background" = p.bg;
+          "tab.border" = p.black;
+          "terminal.background" = p.black;
           "terminal.foreground" = p.fg;
           "errorForeground" = p.red;
           "editorError.foreground" = p.red;

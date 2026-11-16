@@ -5,6 +5,7 @@ let
   palette = {
     bg        = "#161616"; # base00
     bg_alt    = "#262626"; # base01
+    black     = "#000000"; # true black, for OLED panels
     fg        = "#dde1e6"; # base04
     fg_bright = "#f2f4f8"; # base05
     white     = "#ffffff"; # base06
