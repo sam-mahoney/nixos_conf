@@ -1,5 +1,10 @@
-{ ... }:
+{ pkgs, osConfig, ... }:
 
+let
+  grep = "${pkgs.gnugrep}/bin/grep";
+  # The system's SwayFX build, so stock sway isn't pulled in just for swaymsg
+  swaymsg = "${osConfig.programs.sway.package}/bin/swaymsg";
+in
 {
   services.kanshi = {
     enable = true;
@@ -17,8 +22,13 @@
         ];
       }
       {
-        profile.name = "docked-open";
-        profile.exec = [ ];
+        profile.name = "docked";
+        # kanshi can't match on lid state, so the profile always enables eDP-1
+        # and this turns it back off if the lid is shut when the profile applies.
+        # sway's bindswitch handles the lid moving after that.
+        profile.exec = [
+          "${grep} -q closed /proc/acpi/button/lid/*/state && ${swaymsg} output eDP-1 disable"
+        ];
         profile.outputs = [
           {
             criteria = "Dell Inc. DELL U2723QE 9P79FH3";
@@ -39,28 +49,6 @@
             position = "4800,2160";
           }
         ];
-      }
-      {
-        profile.name = "docked-closed";
-        profile.outputs = [
-          {
-            criteria = "Dell Inc. DELL U2723QE 9P79FH3";
-            status = "enable";
-            mode = "3840x2160@59.997Hz";
-            position = "0,0";
-          }
-          {
-            criteria = "ASUSTek COMPUTER INC PG27UCDM W2LMAS000406";
-            status = "enable";
-            mode = "3840x2160@120.000Hz";
-            position = "3840,0";
-          }
-          {
-            criteria = "eDP-1";
-            status = "disable";
-          }
-        ];
-        profile.exec = [ ];
       }
     ];
   };
