@@ -60,6 +60,7 @@ let
     "web-debug" = "${src}/skills/web-debug";
     "youtube-transcript" = "${src}/skills/youtube-transcript";
     "pdf-reader" = pdfReaderSkill;
+    "socratic-tutor" = "${inputs.agent-skills}/socratic-tutor";
   };
 
   link =

@@ -37,6 +37,11 @@
       flake = false;
     };
 
+    agent-skills = {
+      url = "github:janestreet/agent_skills";
+      flake = false;
+    };
+
     mac-app-util.url = "github:hraban/mac-app-util";
 
     # Pi coding agent. Tracks the stable branch; nixpkgs is left unfollowed so
