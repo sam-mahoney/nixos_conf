@@ -49,7 +49,10 @@
     bs-hl-color=ff6b6b
 
     font=${theme.fonts.mono}
-    font-size=24
+    # No font-size: an explicit one is taken in raw pixels and ignores output
+    # scale. Left unset the text is a third of the ring radius, which does scale,
+    # so radius 72 gives the same 24px text at any scale.
+    indicator-radius=72
 
     timestr=%H:%M
     datestr=%Y-%m-%d
