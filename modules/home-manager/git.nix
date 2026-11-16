@@ -8,7 +8,7 @@ in
   programs.git = {
     enable = true;
 
-    ignores = [ ".DS_Store" ];
+    ignores = [ ".DS_Store" "**/.claude/settings.local.json" ];
 
     settings = {
       user = {

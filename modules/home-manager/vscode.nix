@@ -154,6 +154,8 @@ in
         "nix.enableLanguageServer" = true;
         "nix.serverPath" = "nil";
 
+        "python.analysis.typeCheckingMode" = "standard";
+
         "files.trimTrailingWhitespace" = false;
         "files.insertFinalNewline" = false;
         "explorer.compactFolders" = false;
