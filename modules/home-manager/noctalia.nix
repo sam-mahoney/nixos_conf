@@ -27,9 +27,10 @@ in
         scale = 0.95;
         widget_spacing = 4;
         padding = 6;
-        # Float the bar with the same gap Sway leaves around windows
+        # Ends line up with the gap Sway leaves around windows; the top sits
+        # flush with the screen so no strip of wallpaper shows above the bar
         margin_ends = theme.gaps.outer;
-        margin_edge = theme.gaps.outer;
+        margin_edge = 0;
         radius = 0;
         capsule = true;
         capsule_fill = "surface_variant";
@@ -87,18 +88,19 @@ in
         mOnTertiary = p.bg;
         mError = p.red;
         mOnError = p.bg;
-        mSurface = p.bg;
+        # True black surfaces so OLED pixels switch off behind the bar and panels
+        mSurface = p.black;
         mOnSurface = p.fg;
         mSurfaceVariant = p.bg_alt;
         mOnSurfaceVariant = p.gray3;
         mOutline = p.gray5;
-        mShadow = p.bg;
+        mShadow = p.black;
         mHover = p.bg_alt;
         mOnHover = p.fg_bright;
         terminal = {
           inherit (theme.ansi) normal bright;
           foreground = p.fg_bright;
-          background = p.bg;
+          background = p.black;
           cursor = p.blue;
           cursorText = p.bg;
           selectionFg = p.fg_bright;

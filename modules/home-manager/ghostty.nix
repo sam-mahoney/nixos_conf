@@ -62,7 +62,8 @@ in
     systemd.enable = false;
 
     themes.oxocarbon = {
-      background = p.bg;
+      # True black so OLED pixels switch off where the terminal is opaque
+      background = p.black;
       # Brighter foreground keeps text legible over a see-through background
       foreground = p.fg_bright;
       cursor-color = p.blue;

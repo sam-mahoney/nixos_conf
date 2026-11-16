@@ -48,25 +48,25 @@ in
 
       colors = {
         focused = {
-          border = p.blue; background = p.bg; text = p.fg;
+          border = p.blue; background = p.black; text = p.fg;
           indicator = p.blue; childBorder = p.blue;
         };
         focusedInactive = {
-          border = p.gray3; background = p.bg; text = p.gray1;
+          border = p.gray3; background = p.black; text = p.gray1;
           indicator = p.gray3; childBorder = p.gray3;
         };
         unfocused = {
-          border = p.gray5; background = p.bg; text = p.gray3;
+          border = p.gray5; background = p.black; text = p.gray3;
           indicator = p.gray5; childBorder = p.gray5;
         };
         urgent = {
-          border = p.red; background = p.bg; text = p.fg;
+          border = p.red; background = p.black; text = p.fg;
           indicator = p.red; childBorder = p.red;
         };
       };
 
       output."*".bg =
-        if wallpaper != null then "${wallpaper} fill" else "${p.bg} solid_color";
+        if wallpaper != null then "${wallpaper} fill" else "${p.black} solid_color";
 
       input = {
         "type:keyboard" = {
@@ -90,6 +90,13 @@ in
         { command = "noctalia --daemon"; }
         { command = "nm-applet --indicator"; }
         { command = "blueman-applet"; }
+        # A sway reload (every rebuild that changes this config) resets outputs to
+        # defaults, so make kanshi re-apply its profile. Fails harmlessly at login,
+        # before kanshi is up.
+        {
+          command = "${config.services.kanshi.package}/bin/kanshictl reload";
+          always = true;
+        }
       ];
 
       assigns = {
