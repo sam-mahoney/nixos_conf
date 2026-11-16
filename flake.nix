@@ -81,6 +81,11 @@
           ollama = pkgsUnstable.ollama;
           llama-cpp = pkgsUnstable.llama-cpp;
           aerospace = pkgsUnstable.aerospace;
+          vscode-extensions = prev.vscode-extensions // {
+            anthropic = prev.vscode-extensions.anthropic // {
+              claude-code = pkgsUnstable.vscode-extensions.anthropic.claude-code;
+            };
+          };
         };
 
       piOverlay = final: prev: {

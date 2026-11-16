@@ -22,6 +22,7 @@ in
         vscodevim.vim
         ms-python.python
         ms-python.vscode-pylance
+        anthropic.claude-code
       ];
 
       userSettings = {
