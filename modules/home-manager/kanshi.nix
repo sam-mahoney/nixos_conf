@@ -1,4 +1,9 @@
-{ pkgs, osConfig, ... }:
+{
+  config,
+  pkgs,
+  osConfig,
+  ...
+}:
 
 let
   grep = "${pkgs.gnugrep}/bin/grep";
@@ -6,6 +11,12 @@ let
   swaymsg = "${osConfig.programs.sway.package}/bin/swaymsg";
 in
 {
+  # The unit doesn't reference the config file, so without this a rebuild
+  # that only changes profiles leaves the old kanshi running.
+  systemd.user.services.kanshi.Unit.X-Restart-Triggers = [
+    "${config.xdg.configFile."kanshi/config".source}"
+  ];
+
   services.kanshi = {
     enable = true;
     systemdTarget = "sway-session.target";
