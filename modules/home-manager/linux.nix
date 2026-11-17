@@ -10,6 +10,7 @@
     ./services.nix
     ./swaylock.nix
     ./battery-notifier.nix
+    ./commit-mirror.nix
   ];
 
   gtk = {
