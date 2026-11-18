@@ -1,6 +1,7 @@
-{ pkgs, osConfig, ... }:
+{ config, pkgs, osConfig, ... }:
 
 let
+  kanshictl = "${config.services.kanshi.package}/bin/kanshictl";
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
   swaylock = "${pkgs.swaylock-effects}/bin/swaylock";
   # The system's SwayFX build, so stock sway isn't pulled in just for swaymsg
@@ -43,6 +44,11 @@ in
 
     events = {
       before-sleep = "${swaylock} -f";
+      # The keypress that wakes the machine doesn't count as activity, so the
+      # resumeCommands above don't run and the displays stay off. With the lid
+      # shut the externals also come back wrong until the outputs are fully
+      # reconfigured (what opening the lid did), so re-apply the kanshi profile.
+      after-resume = "${swaymsg} 'output * power on'; ${kanshictl} reload";
     };
   };
 }
