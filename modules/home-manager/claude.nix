@@ -17,6 +17,7 @@ let
       "typescript-lsp@claude-plugins-official" = true;
       "gopls-lsp@claude-plugins-official" = true;
       "cc-plugin-you-should-know@builtin" = true;
+      "explanatory-output-style@claude-plugins-official" = true;
     };
   };
 
